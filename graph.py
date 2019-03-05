@@ -16,16 +16,27 @@ class Graph:
             self.nodes[node.label]=node
     def addEdge(self,startL,endL):
         #se i nodi non esistono li creo
-        #if startL in self.nodes:
-
+        n1=0
+        n2=0
+        if startL in self.nodes:
+            n1=self.nodes[startL]
+        else:
+            n1=Node(startL)
+            self.nodes[startL]=n1
+        if endL in self.nodes:
+            n2=self.nodes[endL]
+        else:
+            n2=Node(endL)
+            self.nodes[endL]=n2
+        self.nodes[startL].addEdge(endL)
     def plotGraph(self):
         G = nx.Graph()
         
         for node in self.nodes:
-            G.add_node(node.label)
+            G.add_node(self.nodes[node].label)
         for node in self.nodes:
-            for tail in node.adj: 
-                G.add_edge(node.label,tail)
+            for tail in self.nodes[node].adj: 
+                G.add_edge(self.nodes[node].label,tail)
         
         nx.draw(G, with_labels=True, font_weight='bold')
         plt.show()
