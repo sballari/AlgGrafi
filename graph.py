@@ -7,7 +7,7 @@ class Node:
         self.adj = []
     def addEdge(self,label):
         self.adj.append(label)
-
+    
 class Graph:
     def __init__(self):
         self.nodes={}
