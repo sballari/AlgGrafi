@@ -1,27 +1,6 @@
 import random
 import graph
 
-
-# nodes : urna iniziale 
-# setta l'urna con m volte ogni nodo
-def DPATrial(nodes):
-    V=[]
-    for i in range(len(nodes)-1): #len corrisponde a m
-        V+=nodes
-    return V
-
-# urn : urna
-# nodeLabel : nodo che esegue la pescata
-# m : numero di estrazioni da fare
-def RunTrial(urn,node_label,m): #estrazione di nodeLabel
-    Vi=[] #nodi pescati
-    for i in range(m):
-        Vi.append(random.choice(urn))
-    urn.append(node_label) #biglietto bianco
-    urn+=Vi #amplio l'urna con i cloni, biglietti gialli
-    return Vi
-
-
 def DpaGraph(m,nodesL):
     G=graph.Graph() #empty own graph
     for i in nodesL:
@@ -39,3 +18,22 @@ def DpaGraph(m,nodesL):
         for node2 in Vi: #man mano che pesco creo il grafo
             G.addEdge(node1,node2)
     return G
+
+# nodes : urna iniziale 
+# setta l'urna con m volte ogni nodo
+def DPATrial(nodes):
+    V=[]
+    for i in range(len(nodes)): #len corrisponde a m
+        V+=nodes
+    return V
+
+# urn : urna
+# nodeLabel : nodo che esegue la pescata
+# m : numero di estrazioni da fare
+def RunTrial(urn,node_label,m): #estrazione di nodeLabel
+    Vi=[] #nodi pescati
+    for i in range(m):
+        Vi.append(random.choice(urn))
+    urn.append(node_label) #biglietto bianco
+    urn+=Vi #amplio l'urna con i cloni, biglietti gialli
+    return Vi

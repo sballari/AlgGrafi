@@ -13,7 +13,7 @@ def ERGraph(nodeL,p):
     for node1 in G.nodes:
         for node2 in G.nodes:
             a=random.randint(0,100)
-            if a<p and node1.label!=node2.label:
-                G.addEdge(node1.label,node2.label)
+            if a<p and node1!=node2:
+                G.addEdge(node1,node2)
 
     return G
