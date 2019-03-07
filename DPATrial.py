@@ -2,13 +2,13 @@ import random
 import graph
 
 def DpaGraph(m,nodesL):
-    G=graph.Graph() #empty own graph
+    G=graph.NotOrientedGraph() #empty own graph
     for i in nodesL:
         G.addNode(graph.Node(i))
 
     urn_nodes=[]  #scelta urna iniziale da nodi iniziali
     for i in range(m):
-        label=random.choice([i for i in G.nodes])
+        label=random.sample(G.nodesLabel,1)[0]
         urn_nodes.append(label)
 
     urn_nodes =DPATrial(urn_nodes)

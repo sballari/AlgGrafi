@@ -4,55 +4,73 @@ import networkx as nx
 class Node:
     def __init__(self,n):
         self.label=n
-        self.adj = []
+        self.adj = set()
     def addEdge(self,label):
-        self.adj.append(label)
+        self.adj.add(label)
     def subEdge(self,label):
         if label in self.adj: self.adj.remove(label)
     
-class Graph:
+class Graph(object):
     def __init__(self):
+        self.nodesLabel=set()
         self.nodes={}
+
     def addNode(self,node):
         if node.label not in self.nodes:
             self.nodes[node.label]=node
-    def addEdge(self,startL,endL):
-        #se i nodi non esistono li creo
-        n1=0
-        n2=0
-        if startL in self.nodes:
-            n1=self.nodes[startL]
-        else:
-            n1=Node(startL)
-            self.nodes[startL]=n1
-        if endL in self.nodes:
-            n2=self.nodes[endL]
-        else:
-            n2=Node(endL)
-            self.nodes[endL]=n2
-        self.nodes[startL].addEdge(endL)
-    def addDoubleEdge(self,startL,endL):
-        #se i nodi non esistono li creo
-        self.addEdge(startL,endL)
-        self.nodes[endL].addEdge(startL)
+            self.nodesLabel.add(node.label)
+    
+    def checkNode(self,label):
+        if label not in self.nodes: 
+            self.nodes[label]=Node(label)
+        return self.nodes[label]
+    
     def subNode(self,label):
         if label in self.nodes:
             self.nodes.pop(label)
+            self.nodesLabel.remove(label)
             for i in self.nodes:
-                self.nodes[i].subEdge(label)
-    def plotGraph(self):
-        G = nx.Graph()
-        
+                self.nodes[i].subEdge(label)   
+
+    def buildGraph(self,G):
         for node in self.nodes:
             G.add_node(self.nodes[node].label)
         for node in self.nodes:
             for tail in self.nodes[node].adj: 
                 G.add_edge(self.nodes[node].label,tail)
-        
+        return G
+
+
+class NotOrientedGraph(Graph):
+    def __init__(self):
+        Graph.__init__(self)
+
+    def addEdge(self,n1L,n2L):
+        #se i nodi non esistono li creo
+        self.checkNode(n1L).adj.add(n2L)
+        self.checkNode(n2L).adj.add(n1L)
+
+    def plotGraph(self):
+        G=self.buildGraph(nx.Graph())
         nx.draw(G, with_labels=True, font_weight='bold')
         plt.show()
 
+class OrientedGraph(Graph):
+    def __init__(self):
+        Graph.__init__(self)
 
+    def addEdge(self,n1L,n2L):
+        #se i nodi non esistono li creo
+        self.checkNode(n1L).adj.add(n2L)
+
+    def plotGraph(self):
+        G=self.buildGraph(nx.DiGraph())
+        nx.draw(G, with_labels=True, font_weight='bold')        
+        plt.show()
+        
+        
+        
+        
         # for i in range(1,10) -> intervallo [1,10]
         # for i in range(10) -> intervallo [0,10]
         # [i for i in range(10)]
