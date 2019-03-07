@@ -8,7 +8,7 @@ class Node:
     def addEdge(self,label):
         self.adj.append(label)
     def subEdge(self,label):
-        self.adj.remove(label)
+        if label in self.adj: self.adj.remove(label)
     
 class Graph:
     def __init__(self):
@@ -31,9 +31,13 @@ class Graph:
             n2=Node(endL)
             self.nodes[endL]=n2
         self.nodes[startL].addEdge(endL)
+    def addDoubleEdge(self,startL,endL):
+        #se i nodi non esistono li creo
+        self.addEdge(startL,endL)
+        self.nodes[endL].addEdge(startL)
     def subNode(self,label):
         if label in self.nodes:
-            del self.nodes[label]
+            self.nodes.pop(label)
             for i in self.nodes:
                 self.nodes[i].subEdge(label)
     def plotGraph(self):

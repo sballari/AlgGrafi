@@ -9,11 +9,11 @@ def ERGraph(nodeL,p):
 
     for label in nodeL:
         G.addNode(graph.Node(label))
-
-    for node1 in G.nodes:
-        for node2 in G.nodes:
-            a=random.randint(0,100)
-            if a<p and node1!=node2:
-                G.addEdge(node1,node2)
+    label=G.nodes.keys()
+    for i in range(len(label)):
+        for j in range(len(label)):
+            a=random.randint(0,10)
+            if a<p and i<j:
+                G.addDoubleEdge(label[i],label[j])
 
     return G
