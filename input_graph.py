@@ -27,6 +27,3 @@ def IOGraph(file,isDirected):
         G.addEdge(s[i][0],s[i][1])
     
     return G
-
-    
-

@@ -14,15 +14,11 @@ dim_CC_maxs=[] #dimensione della componente connessa massima al variare del temp
 tm=time.time()
 #simulazione attacco casuale
 while len(G.nodesLabel) != 0:
-    nodeOff.randomOffNode(G)
+    nodeOff.MaxDegreeOffNode(G)
     arrayCC=CC.ConnectedComponets(G)
     dim_CC_maxs.append(CC.dim_CC_max(arrayCC))
 print time.time()-tm
 
-
-    
-
-
 df=pd.DataFrame(data={'dim max CC': resilienza,'index': [i for i in range(len(dim_CC_maxs))]})
 
-df.plot.scatter(x='index',y='dim max CC');
+df.plot.scatter(x='index',y='dim max CC')
