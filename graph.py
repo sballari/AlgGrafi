@@ -2,6 +2,7 @@
 # /2 se e' orientato
 import matplotlib.pyplot as plt
 import networkx as nx
+import random
 
 class Node:
     def __init__(self,n):
