@@ -12,7 +12,7 @@ def ERNotOrientedGraph(nodeL,p):
     label=G.nodes.keys()
     for i in range(len(label)):
         for j in range(len(label)):
-            a=random.randint(0,10)
+            a=random.uniform(0,1)
             if a<p and i<j:
                 G.addEdge(label[i],label[j])
 
@@ -26,7 +26,7 @@ def EROrientedGraph(nodeL,p):
     label=G.nodes.keys()
     for i in range(len(label)):
         for j in range(len(label)):
-            a=random.randint(0,10)
+            a=random.uniform(0,1)
             if a<p and i!=j:
                 G.addEdge(label[i],label[j])
 
