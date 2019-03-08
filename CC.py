@@ -24,6 +24,8 @@ def DFS_visited(G,u,color):
     return visited
 
 def resilienza(CC):
-    Cmax=len(max(CC, key=lambda coll: len(coll)))
-    V=sum([len(i) for i in CC])
-    return float(Cmax)/V
+    if(len(CC) > 0):
+        Cmax=len(max(CC, key=lambda coll: len(coll)))
+        V=sum([len(i) for i in CC])
+        return float(Cmax)/V
+    return 0    

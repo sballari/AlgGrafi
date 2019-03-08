@@ -15,14 +15,14 @@ class Graph(object):
         self.nodesLabel=set()
         self.nodes={}
 
-    def addNode(self,node):
-        if node.label not in self.nodes:
-            self.nodes[node.label]=node
-            self.nodesLabel.add(node.label)
+    def addNode(self,label):
+        if label not in self.nodes:
+            self.nodes[label]=Node(label)
+            self.nodesLabel.add(label)
     
     def checkNode(self,label):
         if label not in self.nodes: 
-            self.nodes[label]=Node(label)
+            self.addNode(label)
         return self.nodes[label]
     
     def subNode(self,label):
