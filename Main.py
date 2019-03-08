@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 #G =IOG.IOGraph ('as20000102.txt', False)
 
-G = ER.ERNotOrientedGraph([i for i in range(6474)], 0.0003)
+G = ER.ERNotOrientedGraph([i for i in range(6474)], 0.00003)
 
 dim_CC_maxs=[] #dimensione della componente connessa massima al variare del tempo
 tm=time.time()
