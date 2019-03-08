@@ -8,7 +8,7 @@ def ERNotOrientedGraph(nodeL,p):
     G=graph.NotOrientedGraph() #empty own graph
 
     for label in nodeL:
-        G.addNode(graph.Node(label))
+        G.addNode(label)
     label=G.nodes.keys()
     for i in range(len(label)):
         for j in range(len(label)):
@@ -22,7 +22,7 @@ def EROrientedGraph(nodeL,p):
     G=graph.OrientedGraph() #empty own graph
 
     for label in nodeL:
-        G.addNode(graph.Node(label))
+        G.addNode(label)
     label=G.nodes.keys()
     for i in range(len(label)):
         for j in range(len(label)):

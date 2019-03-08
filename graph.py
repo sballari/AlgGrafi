@@ -70,8 +70,9 @@ class NotOrientedGraph(Graph):
         nx.draw(G, with_labels=True, font_weight='bold')
         plt.show()
 
-    def get_Max_Degree_Node(self):
-        max_label=random.sample(self.nodesLabel,1)
+    def get_Max_Degree_Node(self):  
+        max_label=random.sample(self.nodesLabel,1)[0]
+        print self.nodes
         for label in self.nodes:
             if len(self.nodes[max_label].adj) < len(self.nodes[label].adj):
                 max_label=label
