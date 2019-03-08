@@ -9,11 +9,20 @@ import input_graph as IOG
 import time
 import pandas as pd
 import matplotlib.pyplot as plt
+import sys
 
-
+sys.setrecursionlimit(10000)
 #G =IOG.IOGraph ('as20000102.txt', False)
+#G = ER.ERNotOrientedGraph(rangeL, 0.0003)
+rangeL = [i for i in range(6474)]
+G = DPA.DpaGraph(1,rangeL)
 
-G = ER.ERNotOrientedGraph([i for i in range(6474)], 0.00003)
+avg = str(G.avg_degree())
+print "degree IOG: "+str(avg)
+
+#print "fine generazione [0..6474]"
+# print "fine ER"
+
 
 dim_CC_maxs=[] #dimensione della componente connessa massima al variare del tempo
 tm=time.time()

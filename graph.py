@@ -15,6 +15,9 @@ class Node:
         # se non esiste non fa niente
         # tempo: O(1)
         if label in self.adj: self.adj.remove(label)
+
+    def out_degree(self):
+        return len(self.adj)
     
 class Graph(object):
     def __init__(self):
@@ -53,6 +56,8 @@ class Graph(object):
     def get_Max_Degree_Node(self):
         pass
 
+    def avg_out_degree(self):
+        return sum([self.nodes[label].out_degree() for label in self.nodes])/len(self.nodes)
 
 class NotOrientedGraph(Graph):
     def __init__(self):
@@ -77,7 +82,8 @@ class NotOrientedGraph(Graph):
                 max_label=label
         return max_label
 
-
+    def avg_degree(self):
+        return self.avg_out_degree()
 
 class OrientedGraph(Graph):
     def __init__(self):

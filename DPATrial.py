@@ -1,6 +1,7 @@
 import random
 import graph
 
+# dpa crea un grafo non orientato
 def DpaGraph(m,nodesL):
     G=graph.NotOrientedGraph() #empty own graph
     for i in nodesL:
