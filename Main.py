@@ -5,10 +5,11 @@ import ER
 import nodeOff
 import CC
 import networkx as nx
-import input_graph
+import input_graph as IOG
+import time
+import pandas as pd
 
-
-G =IOGraph ('as20000102.txt', false)
+G =IOG.IOGraph ('as20000102.txt', False)
 dim_CC_maxs=[] #dimensione della componente connessa massima al variare del tempo
 tm=time.time()
 #simulazione attacco casuale

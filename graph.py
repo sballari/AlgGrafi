@@ -70,12 +70,12 @@ class NotOrientedGraph(Graph):
         plt.show()
 
     def get_Max_Degree_Node(self):
-        max_label=''
+        max_label=random.sample(self.nodesLabel,1)
         for label in self.nodes:
-            if max_label == '':
+            if len(self.nodes[max_label].adj) < len(self.nodes[label].adj):
                 max_label=label
-            
-            
+        return max_label
+
 
 
 class OrientedGraph(Graph):
@@ -90,7 +90,7 @@ class OrientedGraph(Graph):
 
     def plotGraph(self):
         G=self.buildGraph(nx.DiGraph())
-        nx.draw(G, with_labels=True, font_weight='bold')        
+        nx.draw(G, with_labels=True, font_weight='bold')
         plt.show()
         
         # for i in range(1,10) -> intervallo [1,10]
