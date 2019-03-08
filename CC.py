@@ -1,6 +1,8 @@
 import graph
 import random
 
+# return: lista di liste in cui ogni sottolista contiene le label di una componente connessa
+# del grafo iniziale
 def ConnectedComponets(G):
     color={}
     for node in G.nodes:
@@ -29,3 +31,8 @@ def resilienza(CC):
         V=sum([len(i) for i in CC])
         return float(Cmax)/V
     return 0    
+
+def dim_CC_max(CCs):
+    if(len(CCs) > 0):
+        return len(max(CCs, key=lambda coll: len(coll)))
+    return 0   

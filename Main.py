@@ -5,14 +5,23 @@ import ER
 import nodeOff
 import CC
 import networkx as nx
+import input_graph
 
 
-m=1
-nodes = [i for i in range(10)]
+G =IOGraph ('as20000102.txt', false)
+dim_CC_maxs=[] #dimensione della componente connessa massima al variare del tempo
+tm=time.time()
+#simulazione attacco casuale
+while len(G.nodesLabel) != 0:
+    nodeOff.randomOffNode(G)
+    arrayCC=CC.ConnectedComponets(G)
+    dim_CC_maxs.append(CC.dim_CC_max(arrayCC))
+print time.time()-tm
 
-#G=DPA.DpaGraph(m,nodes)
-G1 = ER.ERGraph(nodes,4)
-print CC.ConnectedComponets(G1)
+
+    
 
 
-G1.plotGraph()
+df=pd.DataFrame(data={'dim max CC': resilienza,'index': [i for i in range(len(dim_CC_maxs))]})
+
+df.plot.scatter(x='index',y='dim max CC');
