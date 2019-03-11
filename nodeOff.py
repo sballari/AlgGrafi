@@ -8,6 +8,6 @@ def randomOffNode(G):
 
 def MaxDegreeOffNode(G):
     if len(G.nodes) > 0:
-        off=G.get_Max_Degree_Node()
         #print len(G.nodes[off].adj)
-        G.subNode(off)
+        G.subNode(G.maxDegree)
+        G.maxDegree=''
