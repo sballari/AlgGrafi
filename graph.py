@@ -28,10 +28,12 @@ class Graph(object):
     def __init__(self):
         self.nodesLabel=set()
         self.nodes={} #dict
+        self.maxDegree=''
 
     def addNode(self,label):
         # tempo: O(1)
         if label not in self.nodes:
+            self.maxDegree=label
             self.nodes[label]=Node(label)
             self.nodesLabel.add(label)
     

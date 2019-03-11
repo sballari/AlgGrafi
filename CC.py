@@ -9,6 +9,8 @@ def ConnectedComponets(G):
         color[node]='white'
     CC=[]
     for node in G.nodes:
+        if len(G.nodes[G.maxDegree].adj_out) < len(G.nodes[node].adj_out):
+            G.maxDegree=node.label
         if color[node] == 'white':
             comp = DFS_visited(G,node,color)
             if len(comp) > 0:
