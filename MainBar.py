@@ -38,15 +38,12 @@ NumNodes=6474
 
 #simulazione attacco casuale
 for g in G:
-    tm=time.time()
-    print g+':',
-    for i in range(NumNodes):
+    for i in tqdm(range(NumNodes),desc=g):
         nodeOff.MaxDegreeOffNode(G[g])
         arrayCC=CC.ConnectedComponets(G[g])
         dim_CC_maxs.append(CC.dim_CC_max(arrayCC))
         index.append(i)
         keys.append(g)
-    print time.time()-tm
         
 df=pd.DataFrame(data={'dim_CC_maxs': dim_CC_maxs,'index': index, 'key': keys})
 

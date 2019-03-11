@@ -5,7 +5,7 @@ import graph
 def DpaGraph(m,nodesL):
     G=graph.NotOrientedGraph() #empty own graph
     for i in nodesL:
-        G.addNode(graph.Node(i))
+        G.addNode(i)
 
     urn_nodes=[]  #scelta urna iniziale da nodi iniziali
     for i in range(m):

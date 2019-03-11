@@ -67,6 +67,12 @@ class Graph(object):
     def avg_out_degree(self):
         return sum([self.nodes[label].out_degree() for label in self.nodes])/len(self.nodes)
 
+    def writeOnFile(self,nm):
+        f=open(nm+'.txt','a')
+        for l in self.nodes:
+            for out in self.nodes[l].adj_out:
+                f.write(str(l)+'\t'+str(out)+'\n')
+
 class NotOrientedGraph(Graph):
     def __init__(self):
         Graph.__init__(self)
