@@ -14,14 +14,14 @@ import seaborn as sns
 plot_kws={"s": 3}
 sys.setrecursionlimit(10000)
 rangeL = [i for i in range(6474)]
-G1 =IOG.IOGraph ('as20000102.txt', False)
+#G1 =IOG.IOGraph ('as20000102.txt', False)
 G2 = ER.ERNotOrientedGraph(rangeL, 0.0006)
-G3 = DPA.DpaGraph(2,rangeL)
+#G3 = DPA.DpaGraph(2,rangeL)
 
 G={
-    'real': G1,
-    'ER': G2,
-    'UPA': G3
+#    'real': G1,
+    'ER': G2
+#    'UPA': G3
 }
 
 nodes=0

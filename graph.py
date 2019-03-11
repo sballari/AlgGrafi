@@ -41,7 +41,9 @@ class Graph(object):
     
     def subNode(self,label):
         if label in self.nodes:
-            for l in self.nodes[label]:
+            for l in self.nodes[label].adj_out:
+                self.nodes[l].subEdge(label)
+            for l in self.nodes[label].adj_in:
                 self.nodes[l].subEdge(label)
             self.nodes.pop(label)
             self.nodesLabel.remove(label)
