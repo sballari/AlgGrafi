@@ -90,6 +90,12 @@ class NotOrientedGraph(Graph):
     def avg_degree(self):
         return self.avg_out_degree()
 
+    def getEdgeNumber(self):
+        edge=0
+        for label in self.nodes:
+            edge+=self.nodes[label].out_degree()
+        return edge/2
+
 class OrientedGraph(Graph):
     def __init__(self):
         Graph.__init__(self)
