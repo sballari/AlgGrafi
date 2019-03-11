@@ -18,7 +18,7 @@ def ConnectedComponets(G):
 def DFS_visited(G,u,color):
     color[u]='gray'
     visited=[]
-    for node in G.nodes[u].adj:
+    for node in G.nodes[u].adj_out:
         if color[node] == 'white':
             visited+=DFS_visited(G,node,color)
     visited.append(u)
