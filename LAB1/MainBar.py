@@ -56,10 +56,10 @@ for g in G:
     for i in range(1,NumNodes+1):
         
         #strategia random
-        #nodeOff.randomStrategy(G[g])
+        nodeOff.randomStrategy(G[g])
         
         #strategia max degree
-        nodeOff.maxDegreeStrategy(G[g])
+        #nodeOff.maxDegreeStrategy(G[g])
 
         arrayCC=CC.ConnectedComponets(G[g])
         dim_CC_maxs.append(CC.dim_CC_max(arrayCC))
