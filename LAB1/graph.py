@@ -29,17 +29,15 @@ class Node:
         if n2L in self.adj: self.adj.remove(n2L)
 
     def degree(self):
-        # desc : grado del nodo, numero di archi con cui è connesso
+        # desc : grado del nodo, numero di archi con cui e' connesso
         # tempo : O(1)
-        return len(self.adj)
+        return len(self.adj) 
     
 class Graph(object):
     def __init__(self):
         # desc : costruttore della classe grafo
         # tempo : O(1)
 
-        #nodesLabel : insieme delle label presenti nel grafo
-        self.nodesLabel=set()
         # nodes : dizionario label -> oggetto nodo
         self.nodes={} 
 
@@ -49,10 +47,9 @@ class Graph(object):
         # tempo: O(1)
         if label not in self.nodes:
             self.nodes[label]=Node(label)
-            self.nodesLabel.add(label)
     
     def checkNode(self,label):
-        # desc : verifica se un nodo è già presente nel grafo,
+        # desc : verifica se un nodo e' gia' presente nel grafo,
         #        in caso non lo sia lo aggiunge
         # label : label del nodo che si vuole verificare
         # tempo: O(1)
@@ -67,7 +64,6 @@ class Graph(object):
             for l in self.nodes[label].adj:
                 self.nodes[l].subEdge(label)
             self.nodes.pop(label)
-            self.nodesLabel.remove(label)
 
     def buildGraph(self,G):
         # desc : popola G con nodi e archi
@@ -83,7 +79,7 @@ class Graph(object):
     def avg_degree(self):
         # desc : calcola il grado medio del grafo
         # tempo : O(len(nodes))
-        return sum([self.nodes[label].degree() for label in self.nodes])/len(self.nodes)
+        return float(sum([self.nodes[label].degree() for label in self.nodes]))/len(self.nodes)
 
     def writeOnFile(self,nm):
         # desc : crea un file con le tabelle delle adiacenze del grafo
@@ -124,7 +120,7 @@ class NotOrientedGraph(Graph):
     def get_Max_Degree_Node(self):  
         # desc : restituisce la label del nodo di grado maggiore
         # tempo : O (len(nodes))
-        max_label=random.sample(self.nodesLabel,1)[0]
+        max_label=random.choice(self.nodes.keys())
         for label in self.nodes:
             if len(self.nodes[max_label].adj) < len(self.nodes[label].adj):
                 max_label=label
@@ -137,3 +133,19 @@ class NotOrientedGraph(Graph):
         for label in self.nodes:
             edge+=self.nodes[label].out_degree()
         return edge/2
+
+    @staticmethod
+    def inputGraph(f):
+        # desc: crea un grafo non orientato 
+        #       preso dal file indicato
+        # f : nome del file da cui attingere
+        
+        f=open(f,'r')
+        s = f.read()
+        s=s.split('\n')
+        for i in range(len(s)):
+            s[i]=s[i].split('\t')
+        G = NotOrientedGraph()
+        for i in range(len(s)-1):
+            G.addEdge(s[i][0],s[i][1])
+        return G

@@ -15,6 +15,6 @@ from tqdm import tqdm
 
 sys.setrecursionlimit(10000)
 
-G1 =IOG.IOGraph ('test/as20000102.txt', False)
-G1.plotGraph()
-
+G1 =IOG.IOGraph ('as20000102.txt', False)
+m=round(G1.avg_degree()/2,5)
+print m

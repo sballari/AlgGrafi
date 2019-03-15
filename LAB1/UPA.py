@@ -2,7 +2,7 @@ import random
 import graph
 
 
-def UpaGraph(m,nodesL):
+def UpaGraph(nodesL,m):
     # desc : Crea un grafo non orientato casuale con numero di 
     #        estrazioni a turno pari a m
     # nodesL : lista delle label dei nodi da usare per costruire il grafo
@@ -16,9 +16,10 @@ def UpaGraph(m,nodesL):
     # inizializzo l'urna  :
     # scelgo m nodi casuali da nodesL e
     # metto dei nodi scelti m-volte nell'urna 
-    label = random.sample(G.nodesLabel,m)
+
+    label=[random.choice(G.nodes.keys()) for i in range(m)]
     for i in label:
-        for j in m:
+        for j in range(m):
             urn_nodes.append(label[i])
     
 

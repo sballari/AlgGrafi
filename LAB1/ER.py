@@ -2,7 +2,7 @@ import graph
 import random
 
 def ERNotOrientedGraph(nodeL,p):
-    # desc : Crea un grafo non orientato casuale con probabilità
+    # desc : Crea un grafo non orientato casuale con probabilita'
     #        di presenza di ogni arco pari a p
     # nodeL : array con le label iniziali 
     # p : probabilita' di pescare un nodo p in [0,100)

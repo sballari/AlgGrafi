@@ -23,7 +23,7 @@ class Node:
         if label in self.adj_in: self.adj_in.remove(label)
         if label in self.adj_out: self.adj_out.remove(label)
 
-    def out_degree(self):
+    def degree(self):
         return len(self.adj_out)
     def in_degree(self):
         return len(self.adj_in)
@@ -69,7 +69,7 @@ class Graph(object):
         pass
 
     def avg_out_degree(self):
-        return sum([self.nodes[label].out_degree() for label in self.nodes])/len(self.nodes)
+        return float(sum([self.nodes[label].degree() for label in self.nodes]))/len(self.nodes)
 
     def writeOnFile(self,nm):
         f=open(nm+'.txt','a')
