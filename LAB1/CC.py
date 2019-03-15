@@ -13,23 +13,24 @@ def ConnectedComponets(G):
     CC=[]
     for node in G.nodes:
         if color[node] == 'white':
-            comp = DFS_visited(G,node,color)
+            comp = DFS_visited(G,node,[],color)
             if len(comp) > 0:
                 CC.append(comp)
     return CC
 
-def DFS_visited(G,u,color):
+def DFS_visited(G,u,visited,color):
     # desc: attua la ricerca in profondita' a partire dal nodo u percorrendo
     #       archi che portano solo verso nodi bianchi
     # G : grafo non orientato
+    # visited : lista label nodi visitati
     # color : dizionario label -> colore
-    
+    #print G.nodes
     color[u]='gray'
-    visited=[]
-    for node in G.nodes[u].adj:
-        if color[node] == 'white':
-            visited+=DFS_visited(G,node,color)
     visited.append(u)
+    for node in G.nodes[u].adj:
+        
+        if color[node] == 'white':
+            visited=DFS_visited(G,node,visited,color)
     color[u]='black'
     return visited
 

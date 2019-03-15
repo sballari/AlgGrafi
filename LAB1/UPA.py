@@ -11,7 +11,7 @@ def UpaGraph(nodesL,m):
     G=graph.NotOrientedGraph() #empty own graph
     for i in nodesL:
         G.addNode(i)
-
+ 
     urn_nodes=[]  
     # inizializzo l'urna  :
     # scelgo m nodi casuali da nodesL e
@@ -20,7 +20,7 @@ def UpaGraph(nodesL,m):
     label=[random.choice(G.nodes.keys()) for i in range(m)]
     for i in label:
         for j in range(m):
-            urn_nodes.append(label[i])
+            urn_nodes.append(i)
     
 
     for node1 in G.nodes:

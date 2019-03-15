@@ -30,7 +30,7 @@ G2 =ER.ERNotOrientedGraph(labels,p)
 
 #definisco la m
 m=int(round(G1.avg_degree()/2))
-print m
+
 G3 =UPA.UpaGraph(labels,m)
 
 G={
@@ -67,7 +67,7 @@ for g in G:
         keys.append(g)
 
 df=pd.DataFrame(data={'dim_CC_maxs': dim_CC_maxs,'index': index, 'key': keys})
-df.to_csv('maxdegree', sep='\n', encoding='utf-8')
+df.to_csv('maxdegree', sep='\t', encoding='utf-8',index=False)
 
 sns.pairplot(x_vars=["index"], y_vars=["dim_CC_maxs"], data=df, hue="key",plot_kws=dict(s=50), markers="+",height=10)
 plt.show()

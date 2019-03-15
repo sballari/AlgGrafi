@@ -104,8 +104,8 @@ class NotOrientedGraph(Graph):
         if n1L != n2L:
             self.checkNode(n1L)
             self.checkNode(n2L)
-            self.nodes[n1L].addEdge(self.nodes[n2L])
-            self.nodes[n2L].addEdge(self.nodes[n1L])
+            self.nodes[n1L].addEdge(self.nodes[n2L].label)
+            self.nodes[n2L].addEdge(self.nodes[n1L].label)
 
     def plotGraph(self):
         # desc : crea una struttura networkX e la usa per plottare il grafo
@@ -148,4 +148,5 @@ class NotOrientedGraph(Graph):
         G = NotOrientedGraph()
         for i in range(len(s)-1):
             G.addEdge(s[i][0],s[i][1])
+    
         return G

@@ -17,4 +17,4 @@ def maxDegreeStrategy(G):
     # G : grafo su cui effettuare l'attacco
     # tempo : O(len(G.nodes))
     if len(G.nodes) > 0:
-        G.subNode(G.maxDegree)
+        G.subNode(G.get_Max_Degree_Node())
