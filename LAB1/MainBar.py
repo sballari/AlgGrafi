@@ -53,7 +53,7 @@ for g in G:
 
 #simulazione attacco casuale
 for g in G:
-    for i in range(1,NumNodes+1):
+    for i in tqdm(range(1,NumNodes+1),desc=g):
         
         #strategia random
         nodeOff.randomStrategy(G[g])
