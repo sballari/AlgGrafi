@@ -9,6 +9,5 @@ def randomOffNode(G):
 
 def MaxDegreeOffNode(G):
     if len(G.nodes) > 0:
-        #print len(G.nodes[off].adj)
         G.subNode(G.maxDegree)
         G.maxDegree=''

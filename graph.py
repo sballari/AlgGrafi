@@ -52,10 +52,10 @@ class Graph(object):
 
     def buildGraph(self,G):
         for node in self.nodes:
-            G.add_node(self.nodes[node].label)
+            G.add_node(self.nodes[node].label,size=self.nodes[node].out_degree()/100)
         for node in self.nodes:
             for tail in self.nodes[node].adj_in: 
-                G.add_edge(self.nodes[node].label,tail)
+                G.add_edge(self.nodes[node].label,tail,width=0.0001)
         return G
 
     def get_Nodes_N (self):
@@ -87,7 +87,11 @@ class NotOrientedGraph(Graph):
             self.nodes[n2L].addEdge(self.nodes[n1L])
     def plotGraph(self):
         G=self.buildGraph(nx.Graph())
-        nx.draw(G, with_labels=True, font_weight='bold')
+        d={}
+        for (node, val) in G.degree():
+            d[node]=val
+
+        nx.draw(G, nodelist=d.keys(),node_size=d.values())
         plt.show()
 
     def get_Max_Degree_Node(self):  
@@ -120,7 +124,10 @@ class OrientedGraph(Graph):
 
     def plotGraph(self):
         G=self.buildGraph(nx.DiGraph())
-        nx.draw(G, with_labels=True, font_weight='bold')
+        d={}
+        for (node, val) in G.degree():
+            d[node]=val
+        nx.draw(G, nodelist=d.keys(),node_size=d.values())
         plt.show()
         
         # for i in range(1,10) -> intervallo [1,10]
