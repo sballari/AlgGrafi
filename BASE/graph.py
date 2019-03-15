@@ -7,13 +7,17 @@ import random
 class Node:
     def __init__(self,n):
         self.label=n
-        self.adj_in = set()
         self.adj_out = set()
+        #la lista delle adiacenze in entrata non e' necessaria
+        #essa e' ridondante, dublica le informazioni presenti in adj_out
+        #e' stata inserita per permettere un'eliminazione efficiente dei nodi in un
+        #grafo orientato
+        self.adj_in = set()
     def addEdge(self,n2):
         self.adj_out.add(n2.label)
         n2.adj_in.add(self.label)
     def subEdge(self,label):
-        # elimina arco dal grafo,
+        # elimina l'arco dal grafo,
         # se non esiste non fa niente
         # tempo: O(1)
         if label in self.adj_in: self.adj_in.remove(label)
@@ -85,6 +89,7 @@ class NotOrientedGraph(Graph):
             self.checkNode(n2L)
             self.nodes[n1L].addEdge(self.nodes[n2L])
             self.nodes[n2L].addEdge(self.nodes[n1L])
+
     def plotGraph(self):
         G=self.buildGraph(nx.Graph())
         d={}
