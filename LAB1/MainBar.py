@@ -63,7 +63,7 @@ for g in G:
 
         arrayCC=CC.ConnectedComponets(G[g])
         dim_CC_maxs.append(CC.dim_CC_max(arrayCC))
-        index.append(i+1)
+        index.append(i)
         keys.append(g)
 
 df=pd.DataFrame(data={'dim_CC_maxs': dim_CC_maxs,'index': index, 'key': keys})
