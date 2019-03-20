@@ -131,7 +131,7 @@ class NotOrientedGraph(Graph):
         # tempo : O(len(nodes))
         edge=0
         for label in self.nodes:
-            edge+=self.nodes[label].out_degree()
+            edge+=self.nodes[label].degree()
         return edge/2
 
     @staticmethod

@@ -14,6 +14,7 @@ from tqdm import tqdm
 sys.setrecursionlimit(10000)
 
 G1 =graph.NotOrientedGraph.inputGraph('as20000102.txt')
+print G1.getEdgeNumber()
 
 # se vuole abbiamo scritto su file dei grafi di esempio generati 
 # con i due algoritmi senza bisogno che se li ricalcoli.
@@ -24,8 +25,8 @@ G1 =graph.NotOrientedGraph.inputGraph('as20000102.txt')
 labels=[i for i in range(len(G1.nodes))]
 
 #definisco la probabilita' p
-p=0.0006
-
+p=(float(G1.getEdgeNumber())*2)/(len(labels)*(len(labels)-1))
+print p
 G2 =ER.ERNotOrientedGraph(labels,p)
 
 #definisco la m
@@ -35,8 +36,8 @@ G3 =UPA.UpaGraph(labels,m)
 
 G={
     'real': G1,
-    'ER': G2,
-    'UPA': G3
+    'ER p: '+str(p): G2,
+    'UPA m: '+str(m): G3
 }
 
 dim_CC_maxs=[] #dimensione della componente connessa massima al variare del tempo
@@ -56,10 +57,10 @@ for g in G:
     for i in tqdm(range(1,NumNodes+1),desc=g):
         
         #strategia random
-        nodeOff.randomStrategy(G[g])
+        #nodeOff.randomStrategy(G[g])
         
         #strategia max degree
-        #nodeOff.maxDegreeStrategy(G[g])
+        nodeOff.maxDegreeStrategy(G[g])
 
         arrayCC=CC.ConnectedComponets(G[g])
         dim_CC_maxs.append(CC.dim_CC_max(arrayCC))
@@ -67,7 +68,7 @@ for g in G:
         keys.append(g)
 
 df=pd.DataFrame(data={'dim_CC_maxs': dim_CC_maxs,'index': index, 'key': keys})
-df.to_csv('maxdegree.csv', sep='\t', encoding='utf-8',index=False)
+df.to_csv('maxdegree.csv', encoding='utf-8',index=False)
 
 sns.pairplot(x_vars=["index"], y_vars=["dim_CC_maxs"], data=df, hue="key",plot_kws=dict(s=50), markers="+",height=10)
 plt.show()
