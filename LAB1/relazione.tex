@@ -1,0 +1,25 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Lab1}
+\author{Ballarin Simone }
+\date{March 2019}
+
+\begin{document}
+
+
+\maketitle
+
+\section{Introduction}
+\section{Domanda 1}
+Il grafo reale era formato da un numero di nodi pari a 6474, inoltre vi erano presenti circa 13000 archi. Il grafo fornito era non orientato. 
+Ci viene richiesto di generare grafi casuali con medisime caratteristiche di cardinalitlà del grafo reale utilizzando gli algoritmi ER e UPA.
+Al fine di attuare la richiesta abbiamo dovuto calcolare la probabilità p per l'algoritmo ER, mentre il parametro m dell'algoritmo UPA è stato fornito nella domanda stessa.
+La probabilità p è stata calcolata come segue:
+Sia X una variabile aleatoria come segue X=Bin((n*(n-1)/2,p), questa varibile descrive il numero di successi dell'algoritmo ER (archi scelto), il quale effettua n*(n-1)/2 scelte che rappresenano la creazione di un arco tra due nodi non identici con probabilita' p ignota.
+Volendo avere una media di archi generati da ER pari a quella del grafico reale (che significa E(X)=13xxx) e inoltre sapendo E(X)=n*(n-1)/2*p, possiamo dedurre p=13xxx/n*(n-1)*2.
+
+
+\section{Domanda 2}
+Osservando il grafico dell'attacco casuale, si piu' osservare che dopo aver rimosso il 20 percento dei
+\end{document}
