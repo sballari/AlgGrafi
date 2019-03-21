@@ -60,7 +60,7 @@ for g in G:
         #nodeOff.randomStrategy(G[g])
         
         #strategia max degree
-        nodeOff.maxDegreeStrategy(G[g])
+        nodeOff.randomStrategy(G[g])
 
         arrayCC=CC.ConnectedComponets(G[g])
         dim_CC_maxs.append(CC.dim_CC_max(arrayCC))
@@ -68,7 +68,7 @@ for g in G:
         keys.append(g)
 
 df=pd.DataFrame(data={'dim_CC_maxs': dim_CC_maxs,'index': index, 'key': keys})
-df.to_csv('maxdegree.csv', encoding='utf-8',index=False)
+df.to_csv('random.csv', encoding='utf-8',index=False)
 
 sns.pairplot(x_vars=["index"], y_vars=["dim_CC_maxs"], data=df, hue="key",plot_kws=dict(s=50), markers="+",height=10)
 plt.show()
