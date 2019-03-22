@@ -42,10 +42,7 @@ for t_file in onlyfiles:
                     stazione2=fermate[len(fermate)-1]
                     coppia.append([stazione1[0],stazione2[0],stazione1[2],stazione2[1],corsa,linea])
     f.close()
-
-for i in coppia:
-    print i
-
+    
 f=open("/home/rossidaniel/ownCloud/viaggi.csv","w")
 for i in coppia:
     for j in i:
