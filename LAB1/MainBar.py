@@ -36,8 +36,8 @@ G3 =UPA.UpaGraph(labels,m)
 
 G={
     'real': G1,
-    'ER p: '+str(p): G2,
-    'UPA m: '+str(m): G3
+    'ER p: 0.0006': G2,
+    'UPA m: 2': G3
 }
 
 dim_CC_maxs=[] #dimensione della componente connessa massima al variare del tempo

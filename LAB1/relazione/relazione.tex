@@ -4,6 +4,8 @@
 \usepackage{amsmath}
 \usepackage{titling}
 \usepackage{pdflscape}
+\usepackage[export]{adjustbox}
+\usepackage{float}
 
 \setlength{\droptitle}{-10em}
 \pagestyle{empty}
@@ -45,7 +47,7 @@ Da cui otteniamo la probabilità $p = 2\frac{12572}{|V|(|V|-1)} = 0.000600006652
 \begin{landscape}
 	\begin{figure}
 		\centering
-		\includegraphics[width=1.8\textwidth]{../grafici/Figure_4}
+		\includegraphics[width=1.4\textwidth]{figures/figure_maxdree}
 		\caption{Grafico resilienza attacco casuale.}
 	\end{figure}
 \end{landscape}
@@ -61,19 +63,17 @@ Come si può osservare, dopo la rimozione del 20\% dei nodi, tutti e tre i grupp
 Dato che la natura dell'attacco è casuale la riesecuzione dello stesso porterebbe ad ottenere risultati leggermente diversi, osservando però i gruppi di punti globalmente possiamo constatare una forte similarità in termini di linearità della diminuzione della resilienza.\\
 In conclusione possiamo dire che i gruppi di punti sono essenzialmente comparabili, l'unica differenza riscontrabile si può apprezzare nella parte finale dell'asse orrizzontale in cui le varie resilienze si discostano significativamente.
 
-\includegraphics[width=1.0\textwidth]{../grafici/Figure_2}
+\includegraphics[width=1.1\textwidth]{figures/figure_maxdree_line}
 
 \newpage
-\begin{landscape}
-    \section*{Domanda 3}
-Abbiamo effettuato l'attacco con strategia max-degree. Il seguente grafico presenta la correlazione tra nodi rimossi e dimensione della componente connessa massima come richiesto dalla domanda.
+	\section*{Domanda 3}
+	Abbiamo effettuato l'attacco con strategia max-degree. Il seguente grafico presenta la correlazione tra nodi rimossi e dimensione della componente connessa massima come richiesto dalla domanda.
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=1.25\textwidth]{../grafici/Figure_3}
+		\includegraphics[width=1.25\textwidth]{figures/figure_random}
 		\caption{Grafico resilienza attacco max-degree.}
 	\end{figure}
-\end{landscape}
-
+\newpage
 \section*{Domanda 4}
 In maniera analoga a quanto fatto precedentemente, si sono inserite due rette:
 \begin{itemize}
@@ -85,16 +85,45 @@ Il grafo reale è quello che presenta il comportamento peggiore, in quanto prese
 Il grafo UPA invece ha una caduta meno rapida comparata al grafo reale, ma comunque veloce infatti la resilienza si annulla quasi completamente già dopo 700 rimozioni.
 Il grafo ER risulta invece quello più resistente: nonostante non riesca a mantenersi sopra la soglia dopo il 20\% delle rimozioni è quello che si avvicina maggiormente. Fino a quasi 1000 rimozioni ha una decrescita quasi lineare, mentra tra 1000 e 1200 rimozioni il tasso di decrescita aumenta fino a diventare esponenziale dopo aver superato il limite delle 1200 rimozioni.\\
 Queste differenze le imputiamo alle diverse topologie che i tre grafi presentano, infatti dato che la scelta non è più casuale, queste influenzano gli effetti dell'attacco.\\
-ER avendo una varianza del grado più bassa rispetto agli altri è quello che si comporta meglio.\\
-UPA invece per come lavora l'algoritmo tende a creare pochi nodi con grado alto e tanti nodi con grado basso che si collegano a questi.\\
-L'attacco intelligente, rimuovendo i pochi nodi a grado alto, ottiene dei buoni risultati nell'abbassamento della resilienza.\\
-Il grafo reale, invece, intuiamo essere caratterizzato da un basso numero di nodi ad alto grado (le città più importanti) ai quali sono collegati un certo numero di nodi a basso grado non condivisi (le periferie delle città). A differenza di UPA questi nodi di grado alto non sono collegati a meno nodi (per motivi geografici) e quindi per questa ragione presenta una robustezza inferiore.
 
-Al fine di avere una maggiore comprensione della topologia abbiamo deciso di realizzare tre rappresentazioni grafiche dei vari grafi. Si rappresentano i nodi con cerchi di raggio proporzionale al grado.
+\includegraphics[width=0.9\textwidth]{figures/figure_random_line}
+\newpage
+\noindent La grandezza dei nodi è relativa per ciascun grafo, la cosa interessante da osservare è la variazione di dimensione dei nodi nei diversi grafi.
 
-\includegraphics[width=0.9\textwidth]{../grafici/Figure_1}
+\begin{figure}[H]
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[width=0.9\linewidth, valign=t]{figures/ER}
+	\end{minipage}
+	\begin{minipage}{0.55\linewidth}
+		\textbf{ER:}\\
+		ER avendo una varianza del grado più bassa rispetto agli altri è quello che si comporta meglio.\\
+	\end{minipage}
+\end{figure}
+\begin{figure}[H]
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[width=0.9\linewidth, valign=t]{figures/UPA}
+	\end{minipage}
+	\begin{minipage}{0.55\linewidth}
+		\textbf{UPA:}\\
+		UPA invece per come lavora l'algoritmo tende a creare pochi nodi con grado alto e tanti nodi con grado basso che si collegano a questi.\\
+		L'attacco intelligente, rimuovendo i pochi nodi a grado alto, ottiene dei buoni risultati nell'abbassamento della resilienza.\\
+	\end{minipage}
+\end{figure}
+\begin{figure}[H]
+	\begin{minipage}{0.5\linewidth}
+		\centering
+		\includegraphics[width=0.9\linewidth, valign=t]{figures/real}
+	\end{minipage}
+	\begin{minipage}{0.55\linewidth}
+		\textbf{REAL:}\\
+		Il grafo reale, invece, intuiamo essere caratterizzato da un basso numero di nodi ad alto grado (le città più importanti) ai quali sono collegati un certo numero di nodi a basso grado non condivisi (le periferie delle città). A differenza di UPA questi nodi di grado alto non sono collegati a meno nodi (per motivi geografici) e quindi per questa ragione presenta una robustezza inferiore.\\
+	\end{minipage}
+\end{figure}
 
+\newpage
 \section*{Domanda 5}
 In allegato alla consegna sono stati inseriti i codice sorgente Python.
-    
+
 \end{document}
