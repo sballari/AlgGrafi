@@ -1,9 +1,15 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{titling}
+\usepackage{pdflscape}
 
-\title{Lab1}
-\author{Ballarin Simone }
+\setlength{\droptitle}{-10em}
+\pagestyle{empty}
+
+\title{Lab. 1 - Resilienza di una rete di comunicazione}
+\author{Ballarin Simone, Gobbo Alessio, Rossi Daniel}
 \date{March 2019}
 
 \begin{document}
@@ -12,49 +18,70 @@
 \section*{Domanda 1}
 Il grafo reale, che appartiene alla famiglia dei grafi non orientati, è formato da un numero di nodi pari a 6474 collegati tra loro da 12572 archi, non considerando eventuali cappi ( arco con uguali estremi ).\\
 Ci viene richiesto di generare grafi non orientati casuali con medisime caratteristiche di cardinalità del grafo reale utilizzando gli algoritmi ER e UPA.\\
-Al tal fine si è reso necessario calcolare la probabilità \textit{p} per l'algoritmo ER, mentre per quanto riguarda il parametro \textit{m} dell'algoritmo UPA ci è stato fornito nella consegna.\\
+Al tal fine si è reso necessario calcolare la probabilità \textit{p} per l'algoritmo ER, mentre per quanto riguarda il parametro \textit{m} dell'algoritmo UPA ci è stato fornito nella consegna.
 \subsection*{Calcolo probabilità \textit{p}}
-Il grafo ER da generare dovrà avere le seguenti caratteristiche:
+Dato il grafo $ER(V,E)$ da generare esso dovrà avere le seguenti caratteristiche:
 \begin{itemize}
-    \item $|V|= 6474$
-    \item $|E| \approx 12572$
+	\item $|V|= 6474$
+	\item $|E| \approx 12572$
 \end{itemize}
-La probabilità \textit{p} è stata calcolata come segue dato il grafo $ER(V,E)$:\\
-Sia data una variabile aleatoria binomiale $Bin(n,p)$, dove:
+Sia $X$ una variabile aleatoria binomiale $X=Bin(\frac{|V|(|V|-1)}{2},p)$:
 \begin{itemize}
-    \item $n$: numero di prove effettuate;
-    \item $p$: probabilità che una prova abbia successo.
+	\item $\frac{|V|(|V|-1)}{2}$: numero massimo di possibili archi creabili;
+	\item $p$ : probabilità che venga creato un arco.
 \end{itemize} 
-Sia $X$ una variabile aleatoria binomiale come segue $X=Bin(\frac{|V|(|V|-1)}{2},p)$:
-\begin{itemize}
-    \item $\frac{|V|(|V|-1)}{2}$: corrisponde al numero di prove da effettuare, 
-\end{itemize}
- 
-
-
-Sia $X$ una variabile aleatoria così definita $X=Bin(\frac{|V|(|V|-1)}{2},p)$, questa varibile descrive il numero di successi dell'algoritmo ER (archi scelto), il quale effettua n*(n-1)/2 scelte che rappresenano la creazione di un arco tra due nodi non identici con probabilita' p ignota.
-Volendo avere una media di archi generati da ER pari a quella del grafico reale (che significa E(X)=13xxx) e inoltre sapendo E(X)=n*(n-1)/2*p, possiamo dedurre p=13xxx/n*(n-1)*2.
-
-\includegraphics[width=0.9\textwidth]{Figure_4}
+Questa varibile descrive il numero di successi (archi scelti) nella creazione del grafo $ER(V,E)$.\\
+Vengono effettuate $\frac{|V|(|V|-1)}{2}$ scelte, ciascuna delle quali corrispondente alla possibile creazione di un arco tra due nodi non identici con probabilità \textit{p} ignota.\\
+Volendo avere mediamente un numero di archi $|E| \approx 12572$, questo ci porta ad aspettarci che il valore atteso $E(X) = 12572$.\\
+Sappiamo inoltre che il valore atteso di una variabile aleatoria binomiale può essere espressa come  $E(X)=\frac{|V|(|V|-1)}{2}p$.\\
+Possiamo ora impostare il seguente sistema:
+$$
+\begin{cases}
+	E(X) = 12572               \\ 
+	E(X)=\frac{|V|(|V|-1)}{2}p 
+\end{cases}
+$$
+Da otteniamo la probabilità $p = 2\frac{12572}{|V|(|V|-1)} = 0.000600006652953 \approx 0.0006$
+\begin{landscape}
+	\begin{figure}
+		\centering
+		\includegraphics[width=1.8\textwidth]{../grafici/Figure_4}
+		\caption{Grafico resilienza attacco casuale.}
+	\end{figure}
+\end{landscape}
 
 \newpage
 \section*{Domanda 2}
-Al fine di valutare i comportamenti dei tre grafi ad un attacco casuale abbiamo inserito nel grafico due rette: quella orizzonatale corrispondete al limite di resilienza del 75\% (4576 nodi); mentre la retta verticale indica il superamento del 20\% (1295 nodi) dei nodi rimossi. 
-Osservando i tre gruppi di punti rispetto a queste due rette nella prima figura, si può osservare che dopo aver rimosso il 20\% dei nodi tutte e tre i grafi sono oltre il limite di resilienza fissato al 75\%, con il grafo UPA in leggere vantaggio, mentre ER e quello reale presentano differenze non apprezzabili.
-Il test è stato rieffettuato e nella seconda figura si presentano i risultati. Si può notare come anche in questo caso tutti i tre grafi dopo l'eliminazine del 20\% dei nodi si presentino praticamente con lo stessa resilienza.
-In conclusione notiamo che i gruppi di punti sono essenzialmente comparabili, l'unica differenza riscontrabile si puo' apprezzare nella parte finale dell'asse orrizzontale in cui le varie resilienze si discostano.
+Al fine di valutare il comportamento dei tre grafi colpiti da un attacco casuale, abbiamo inserito nel grafico precedente due rette:
+\begin{itemize}
+	\item retta orizzontale corrispondete al limite di resilienza del 75\% (4576 nodi);
+	\item retta verticale indica il superamento del 20\% (1295 nodi) dei nodi rimossi. 
+\end{itemize}
+Come si può osservare, dopo la rimozione del 20\% dei nodi tutti e tre i gruppi di punti sono oltre il limite di resilienza fissato al 75\%, ottenendo valori di resilienza simili.\\
+Dato che il tipo di attacco è casuale la riesecuzione dell'attacco porterebbe ad ottenere risultati leggermente diversi, osservando però i gruppi di punti globalmente possiamo constatare una forte similarità in termini di linearità della diminuzione della resilienza.\\
+In conclusione possiamo dire che i gruppi di punti sono essenzialmente comparabili, l'unica differenza riscontrabile si può apprezzare nella parte finale dell'asse orrizzontale in cui le varie resilienze si discostano significativamente.
 
-\includegraphics[width=0.9\textwidth]{Figure_2}
+\includegraphics[width=1.0\textwidth]{../grafici/Figure_2}
 
-\section*{Domanda 3}
+\newpage
+\begin{landscape}
+    \section*{Domanda 3}
 Abbiamo effettuato l'attacco con strategia max-degree. Il seguente grafico presenta la correlazione tra nodi rimossi e dimensione della componente massima come richiesto dalla domanda.
-
-\includegraphics[width=0.9\textwidth]{Figure_3}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=1.25\textwidth]{../grafici/Figure_3}
+		\caption{Grafico resilienza attacco max-degree.}
+	\end{figure}
+\end{landscape}
 
 \section*{Domanda 4}
-In maniera analoga a quanto fatto ai grafici esposti in domanda 2, si e' insirita una retta per il limite di resilienza al 75\% e una per il superamento del 20\% dei nodi rimossi.
-In questo caso tutti i grafi sono sotto la soglia di resilienza, però stavolta presentano andamenti estremamente differenti.
-Il grafo reale e' quello che si comporta peggio: come si puo' notare ha una caduta repentina gia' dopo le prime rimozioni e dopo circa 200 rimozione ha relienza quasi nulla.
+In maniera analoga a quanto fatto precedentemente, si sono inserite due rette:
+\begin{itemize}
+	\item retta orizzontale corrispondete al limite di resilienza del 75\% (4576 nodi);
+	\item retta verticale indica il superamento del 20\% (1295 nodi) dei nodi rimossi. 
+\end{itemize}
+In questo caso tutti i grafi sono sotto la soglia di resilienza presentando però andamenti estremamente differenti.\\
+Il grafo reale è quello che presenta il comportamento peggiore, in quanto presenta una caduta repentina immediatamente dopo le prime rimozioni e dopo circa 200 rimozione ha relienza quasi nulla.
 Il grafo UPA invece ha una caduta meno violenta comporata al grafo reale, ma comunque veloce. La resilienza si annulla quasi completamente gia' dopo 700 rimozioni.
 Il grafo ER risulta invece quello piu' resistenza: nonostante non riesca a mantenersi sopra la soglia dopo il 20\$ delle rimozioni e' quello che si avvicina maggiormente. Fino a quasi 1000 rimozioni tiene un decrescita quasi lineare, mentra tra 1000 e 1200 rimozioni il tasso di decrescita aumenta fino a diventa circa esponenziale dopo il limite delle 1200 rimozioni.\\
 Queste differenze le imputiamo alle diverse topologie che i vari grafi prentano. Queste infatti essendo che la scelta non e' piu' casuale influenzano gli effetti dei vari attacchi.\\
@@ -63,7 +90,7 @@ Il grafo reale, invece, intuiamo essere caratterizzato da un basso numero di nod
 
 Al fine di avere una maggiore comprensione della topologia abbiamo deciso di realizzare tre rappresentazioni grafiche dei vari grafi. Si rappresentano i nodi con cerchi di raggio proporzionale al grado.
 
-\includegraphics[width=0.9\textwidth]{Figure_1}
+\includegraphics[width=0.9\textwidth]{../grafici/Figure_1}
 
 \section*{Domanda 5}
 In allegata alla consegna sono stati inseriti i codice sorgenti python dei vari file.
