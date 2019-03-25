@@ -57,10 +57,10 @@ for g in G:
     for i in tqdm(range(1,NumNodes+1),desc=g):
         
         #strategia random
-        #nodeOff.randomStrategy(G[g])
+        nodeOff.randomStrategy(G[g])
         
         #strategia max degree
-        nodeOff.randomStrategy(G[g])
+        #nodeOff.maxDegreeStrategy(G[g])
 
         arrayCC=CC.ConnectedComponets(G[g])
         dim_CC_maxs.append(CC.dim_CC_max(arrayCC))
