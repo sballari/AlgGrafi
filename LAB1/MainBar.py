@@ -36,8 +36,8 @@ G3 =UPA.UpaGraph(labels,m)
 
 G={
     'real': G1,
-    'ER p: '+str(p): G2,
-    'UPA m: '+str(m): G3
+    'ER p: 0.0006': G2,
+    'UPA m: 2': G3
 }
 
 dim_CC_maxs=[] #dimensione della componente connessa massima al variare del tempo
@@ -57,10 +57,10 @@ for g in G:
     for i in tqdm(range(1,NumNodes+1),desc=g):
         
         #strategia random
-        #nodeOff.randomStrategy(G[g])
+        nodeOff.randomStrategy(G[g])
         
         #strategia max degree
-        nodeOff.randomStrategy(G[g])
+        #nodeOff.maxDegreeStrategy(G[g])
 
         arrayCC=CC.ConnectedComponets(G[g])
         dim_CC_maxs.append(CC.dim_CC_max(arrayCC))

@@ -114,8 +114,9 @@ class NotOrientedGraph(Graph):
         for (node, val) in G.degree():
             d[node]=val
 
-        nx.draw(G, nodelist=d.keys(),node_size=d.values())
+        nx.draw_random(G, nodecolor="red", nodelist=d.keys(),node_size=d.values(),)
         plt.show()
+        #nx.write_gexf(G, "ER0.gexf")
 
     def get_Max_Degree_Node(self):  
         # desc : restituisce la label del nodo di grado maggiore
