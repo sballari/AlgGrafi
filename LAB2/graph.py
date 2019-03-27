@@ -13,7 +13,7 @@ class Node:
         # label : etichetta del nodo
         self.label=n
         # adj: insieme di etichette dei nodi adiacenti
-        self.adj = []
+        self.adj = dict()
     
     def addEdge(self,dest,oraP,oraA,codCorsa,codLin):
         # desc : inserisce un arco dal nodo attuale , ordine ora arrivo
@@ -21,10 +21,14 @@ class Node:
         # oraP : orario di partenza 
         # oraA : orario arrivo
         # tempo: O(log(n))
-        self.orderedInsert(self.adj,dest,oraP,oraA,codCorsa,codLin,len(self.adj)-1,False)
+        if dest in self.adj :
+            edgeList = self.adj[dest]
+            self.orderedInsert(edgeList,oraP,oraA,codCorsa,codLin,len(edgeList)-1,False)
+        else :
+            self.adj[dest] = [(oraA,oraP,codCorsa,codLin)]
         
     @staticmethod
-    def orderedInsert(list_,dest,oraP,oraA,codCorsa,codLin,lim,sxdx):
+    def orderedInsert(list_,oraP,oraA,codCorsa,codLin,lim,sxdx):
         # desc : inserisce un arco dal nodo attuale , ordine ora arrivo
         # list: lista delle adiacenze
         # dest: label staz di destinazione
@@ -41,15 +45,21 @@ class Node:
         
         if (dim!=0) :
             i = dim//2 #lower bound
+
+            #i e' un offset
+            if sxdx == False : i = i    #SIX
+            else : i = lim + i          #DESTRA
+
+            
             oraPi = (list_[i])[1]
 
             if oraP < oraPi: 
-                Node.orderedInsert(list_,dest,oraP,oraA,codCorsa,codLin,i-1,False)
+                Node.orderedInsert(list_,oraP,oraA,codCorsa,codLin,i-1,False)
             if oraP > oraPi: 
-                Node.orderedInsert(list_,dest,oraP,oraA,codCorsa,codLin,i+1,True)
-            if oraP == oraPi: list_.insert(i,[dest,oraA,oraP,codCorsa,codLin])
+                Node.orderedInsert(list_,oraP,oraA,codCorsa,codLin,i+1,True)
+            if oraP == oraPi: list_.insert(i,(oraA,oraP,codCorsa,codLin))
         else: 
-            list_.insert(lim,[dest,oraA,oraP,codCorsa,codLin])
+            list_.insert(lim,(oraA,oraP,codCorsa,codLin))
     
 class Graph(object):
     def __init__(self):
@@ -65,6 +75,11 @@ class Graph(object):
         # tempo: O(1)
         if label not in self.nodes:
             self.nodes[label]=Node(label)
+
+
+    ####################################
+    ### CODICE NON CONTROLLATO #########
+    ####################################
 
     def buildGraph(self,G):
         # desc : popola G con nodi e archi
@@ -85,13 +100,17 @@ class Graph(object):
             for out in self.nodes[l].adj_out:
                 f.write(str(l)+'\t'+str(out)+'\n')
 
+    ####################################
+    ### FINE CODICE NON CONTROLLATO ####
+    ####################################
+ 
 class OrientedGraph(Graph):
     # desc : crea un grafo orientato
     def __init__(self):
         Graph.__init__(self)
 
     def addEdge(self,stazA,stazB,oraP,oraA,codCorsa, codLin):
-        # desc : crea un arco orientato: n1L -> n2L 
+        # desc : crea un arco orientato: STAZA -> STAZB 
         #        se i nodi non esistono li crea,
         #        se l'arco e' illegale (cappio) ignora l'aggiunta
         #        se archi // allora legali   
@@ -105,6 +124,11 @@ class OrientedGraph(Graph):
             self.addNode(stazB)
             self.nodes[stazA].addEdge(stazB,oraP,oraA,codCorsa,codLin)
 
+        
+    ####################################
+    ### CODICE NON CONTROLLATO GIU' ####
+    ####################################
+
     def plotGraph(self):
         # desc : crea una struttura networkX e la usa per plottare il grafo
         G=self.buildGraph(nx.Graph())
@@ -114,25 +138,9 @@ class OrientedGraph(Graph):
 
         nx.draw(G, nodelist=d.keys(),node_size=d.values())
         plt.show()
-
-    def get_Max_Degree_Node(self):  
-        # desc : restituisce la label del nodo con in-degree maggiore
-        # tempo : O (len(nodes))
-        max_label=random.choice(self.nodes.keys())
-        for label in self.nodes:
-            if len(self.nodes[max_label].adj) < len(self.nodes[label].adj):
-                max_label=label
-        return max_label
-
-    def getEdgeNumber(self):
-        # desc : restituisce il numero di archi totali del grafo
-        # tempo : O(len(nodes))
-        edge=0
-        for label in self.nodes:
-            edge+=self.nodes[label].degree()
-        return edge
-
-    # [(staz_p, staz_a, ora_p, ora_a, cod_corsa, cod_lin)]
+    ####################################
+    ### FINE CODICE NON CONTROLLATO ####
+    ####################################
 
     @staticmethod
     def inputGraph(f):
@@ -140,13 +148,29 @@ class OrientedGraph(Graph):
         #       preso dal file indicato
         # f : nome del file da cui attingere
         
+        
         f=open(f,'r')
         s = f.read()
-        s=s.split('\n')
-        for i in range(len(s)):
-            s[i]=s[i].split('\t') #array in N^2
+        lines = s.split('\n')
+        
+        i=0
+        while i < len(lines) :
+            print
+            lines[i]=lines[i].split('\t') #[[stazP, stazA, oraP, oraA, codCorsa, codLin]]
+            i += 1
+
+        
         G = OrientedGraph()
-        for i in range(len(s)-1):
-            G.addEdge(s[i][0],s[i][1])
-    
+        i = 0
+        while i < len(lines)-1 : #l'ultima riga del file e' vuota
+            stazP = lines[i][0]
+            stazA = lines[i][1]
+            oraP = lines[i][2]
+            oraA =  lines[i][3]
+            codCorsa =  lines[i][4]
+            codLin =  lines[i][5]
+            print "rigo "+str(i)
+            G.addEdge(stazP, stazA, oraP, oraA, codCorsa, codLin)
+            i += 1
+        
         return G
