@@ -21,50 +21,40 @@ class Node:
         # oraP : orario di partenza 
         # oraA : orario arrivo
         # tempo: O(log(n))
-        """
+        
         if dest in self.adj:
-            #edgeList = self.adj[dest]
-            #self.orderedInsert(edgeList,oraP,oraA,codCorsa,codLin,len(edgeList)-1,False)
-
+            edgeList = self.adj[dest]
+            self.orderedInsert(edgeList,oraP,oraA,codCorsa,codLin,0,len(edgeList)-1)
         else :
             self.adj[dest] = [(oraA,oraP,codCorsa,codLin)]
         """
         if dest not in self.adj:
             self.adj[dest]=[]
         self.adj[dest].append([(oraA,oraP,codCorsa,codLin)])
+        """
     @staticmethod
-    def orderedInsert(list_,oraP,oraA,codCorsa,codLin,lim,sxdx):
+    def orderedInsert(list_,oraP,oraA,codCorsa,codLin,lbi,ubi):
         # desc : inserisce un arco dal nodo attuale , ordine ora arrivo
         # list: lista delle adiacenze
         # dest: label staz di destinazione
         # oraP : orario di partenza 
         # oraA : orario arrivo
-        # sxdx = false sinistra , true destra, 
-        # lim = indice LIMITE COMPRESO sx o dx in cui fare l'inserimento,prima volta len-1
-        #       Chunk = sx : [0,lim], dx: [lim,n-1]
+        # lbi : lower bound compreso sx del chunk
+        # ubi : upper bound compreso dx del chunk
         # tempo: O(log(n))
 
-        dim=0 #dimensione del chunk
-        if sxdx == False : dim = lim+1
-        else : dim = len(list_) - lim
+        dim=ubi-lbi+1 #dimensione del chunk
+        i = lbi + (dim//2) #indice pivot
         
-        if (dim!=0) :
-            i = dim//2 #lower bound
-
-            #i e' un offset
-            if sxdx == False : i = i    #SIX
-            else : i = lim + i          #DESTRA
-
-            
-            oraPi = (list_[i])[1]
-
+        if (dim>0) :
+            oraPi = (list_[i])[0] #oraP dell'elemento pivot
             if oraP < oraPi: 
-                Node.orderedInsert(list_,oraP,oraA,codCorsa,codLin,i-1,False)
+                Node.orderedInsert(list_,oraP,oraA,codCorsa,codLin,lbi,i-1)
             if oraP > oraPi: 
-                Node.orderedInsert(list_,oraP,oraA,codCorsa,codLin,i+1,True)
-            if oraP == oraPi: list_.insert(i,(oraA,oraP,codCorsa,codLin))
+                Node.orderedInsert(list_,oraP,oraA,codCorsa,codLin,i+1,ubi)
+            if oraP == oraPi: list_.insert(i,(oraP,oraA,codCorsa,codLin))
         else: 
-            list_.insert(lim,(oraA,oraP,codCorsa,codLin))
+            list_.insert(i,(oraP,oraA,codCorsa,codLin))
     
 class Graph(object):
     def __init__(self):
@@ -131,7 +121,7 @@ class OrientedGraph(Graph):
 
         
     ####################################
-    ### CODICE NON CONTROLLATO GIU' ####
+    ### CODICE NON CONTROLLATO #########
     ####################################
 
     def plotGraph(self):
@@ -157,23 +147,16 @@ class OrientedGraph(Graph):
         f=open(f,'r')
         s = f.read()
         lines = s.split('\n')
-        print len(lines)
-        """
+        
         i=0
         while i < len(lines) :
-            edge=edge.split('\t') #[[stazP, stazA, oraP, oraA, codCorsa, codLin]]
+            lines[i]=lines[i].split('\t') #[(stazP, stazA, oraP, oraA, codCorsa, codLin)]
             i += 1
-        print len(lines[0])
-        """
-        edges = []
-        for line in lines:
-            edges.append(line.split("\t"))
-        edges.pop(len(edges)-1)
-        #print edges
-
+        
         G = OrientedGraph()
+        del lines[-1] #elimino l'ultima riga che e' vuota
         i=0
-        for edge in edges:
+        for edge in lines:
             stazP = edge[0]
             stazA = edge[1]
             oraP = edge[2]
@@ -183,4 +166,5 @@ class OrientedGraph(Graph):
             print "rigo "+str(i)
             G.addEdge(stazP, stazA, oraP, oraA, codCorsa, codLin)
             i+=1
+            
         return G
