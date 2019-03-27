@@ -21,12 +21,17 @@ class Node:
         # oraP : orario di partenza 
         # oraA : orario arrivo
         # tempo: O(log(n))
-        if dest in self.adj :
-            edgeList = self.adj[dest]
-            self.orderedInsert(edgeList,oraP,oraA,codCorsa,codLin,len(edgeList)-1,False)
+        """
+        if dest in self.adj:
+            #edgeList = self.adj[dest]
+            #self.orderedInsert(edgeList,oraP,oraA,codCorsa,codLin,len(edgeList)-1,False)
+
         else :
             self.adj[dest] = [(oraA,oraP,codCorsa,codLin)]
-        
+        """
+        if dest not in self.adj:
+            self.adj[dest]=[]
+        self.adj[dest].append([(oraA,oraP,codCorsa,codLin)])
     @staticmethod
     def orderedInsert(list_,oraP,oraA,codCorsa,codLin,lim,sxdx):
         # desc : inserisce un arco dal nodo attuale , ordine ora arrivo
@@ -152,25 +157,30 @@ class OrientedGraph(Graph):
         f=open(f,'r')
         s = f.read()
         lines = s.split('\n')
-        
+        print len(lines)
+        """
         i=0
         while i < len(lines) :
-            print
-            lines[i]=lines[i].split('\t') #[[stazP, stazA, oraP, oraA, codCorsa, codLin]]
+            edge=edge.split('\t') #[[stazP, stazA, oraP, oraA, codCorsa, codLin]]
             i += 1
+        print len(lines[0])
+        """
+        edges = []
+        for line in lines:
+            edges.append(line.split("\t"))
+        edges.pop(len(edges)-1)
+        #print edges
 
-        
         G = OrientedGraph()
-        i = 0
-        while i < len(lines)-1 : #l'ultima riga del file e' vuota
-            stazP = lines[i][0]
-            stazA = lines[i][1]
-            oraP = lines[i][2]
-            oraA =  lines[i][3]
-            codCorsa =  lines[i][4]
-            codLin =  lines[i][5]
+        i=0
+        for edge in edges:
+            stazP = edge[0]
+            stazA = edge[1]
+            oraP = edge[2]
+            oraA =  edge[3]
+            codCorsa =  edge[4]
+            codLin =  edge[5]
             print "rigo "+str(i)
             G.addEdge(stazP, stazA, oraP, oraA, codCorsa, codLin)
-            i += 1
-        
+            i+=1
         return G
