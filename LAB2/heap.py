@@ -1,27 +1,31 @@
 class heap:
     def __init__(self):
         self.deque= []
-        self.dc=dict()
-        self.d=dict()
-        self.p=dict()
-    #def setup(self,G,A,hm):
-    #    for B in G.nodes[A].adj:
-    #        data = G.nodes[A].nextTransport(B,hm)
-    #        if len(data) > 0:
-    #            self.add(B,data)
-    def add(self,station,data):
-        self.dc[station]=len(self.deque)
-        self.deque.append([station,data])
+        self.position=dict()
+        self.data=dict()
+        self.parent=dict()
+
+    def setup(self,vlist,vstart,vhour,vday):
+        for i in vlist:
+            self.data[i]=None
+            self.parent[i]=None
+        self.data[vstart]=[vhour,vday]
+        self.add(vstart,[vhour,vday])
+
+    def add(self,station,info):
+        self.position[station]=len(self.deque)
+        self.deque.append(station)
         self.bubbleUp(station)
+        
     def bubbleUp(self,station):
-        if station in self.dc:
-            i = self.dc[station]
+        if station in self.position:
+            i = self.position[station]
             p = (i-1)/2
 
-            while i > 0 and self.deque[i][1][0].fminute+self.deque[i][1][1]*1440 <  self.deque[p][1][0].fminute+self.deque[p][1][1]*1440:
+            while i > 0 and self.TimeByIndex(i) <  self.TimeByIndex(p):
                 #scambio gli indici nel dizionario
-                self.dc[self.deque[p][0]]=i
-                self.dc[self.deque[i][0]]=p
+                self.position[self.deque[p]]=i
+                self.position[self.deque[i]]=p
                 #scambio gli indici nell'array
                 mv = self.deque[i]
                 self.deque[i]=self.deque[p]
@@ -30,46 +34,51 @@ class heap:
                 i=p
                 p=(i-1)/2
 
-    def decreaseKey(self,station,data):
-        if station in self.dc:
-            i = self.dc[station]
-            self.deque[i][1]=data
-            self.bubbleUp(station)
-        else:
-            self.add(station,data)
+    def decreaseKey(self,u,v,info):
+        if self.RELAX(u,v,info):
+            if v in self.position:
+                self.bubbleUp(v)
+            else:
+                self.add(v,info)
+
     def extractMin(self):
         next_station = self.deque[0]
-        del self.dc[next_station[0]]
-        
+        del self.position[next_station]
         last = self.deque.pop()
+
         if len(self.deque) > 0:
             self.deque[0] = last
-            self.dc[self.deque[0][0]]=0
-            self.trickledown(self.deque[0][0])
+            self.position[self.deque[0]]=0
+            self.trickledown(self.deque[0])
         return next_station
 
     def trickledown(self,station):
-        i = self.dc[station]
+        i = self.position[station]
         l = i * 2 + 1
         r = i * 2 + 2 
         smallest = i
-        if l < len(self.deque) and self.deque[l][1][0].fminute+self.deque[l][1][1]*1440 < self.deque[i][1][0].fminute+self.deque[i][1][1]*1440:
+        if l < len(self.deque) and self.TimeByIndex(l) <  self.TimeByIndex(i):
             smallest = l
 
-        if r < len(self.deque) and self.deque[r][1][0].fminute+self.deque[r][1][1]*1440 < self.deque[i][1][0].fminute+self.deque[i][1][1]*1440:
+        if r < len(self.deque) and self.TimeByIndex(r) <  self.TimeByIndex(i):
             smallest = r
         
         if smallest != i:
-            self.dc[self.deque[smallest][0]]=i
-            self.dc[self.deque[i][0]]=smallest
-            #scambio gli indici nell'array
+            self.position[self.deque[smallest]]=i
+            self.position[self.deque[i]]=smallest
+
             mv = self.deque[i]
             self.deque[i]=self.deque[smallest]
             self.deque[smallest]=mv
-            #print self.deque[smallest]
-            self.trickledown(self.deque[smallest][0])
+            self.trickledown(self.deque[smallest])
     
 
-    def RELAX(self,u,v,data):
-        self.d[v]=data
-        self.p[v]=u
+    def RELAX(self,u,v,info):
+        if self.data[v][0].fminute + self.data[v][1]*1440 > info[0].fminute + info[1]*1440:
+            self.data[v]=info
+            self.parent[v]=u
+            return True
+        return False
+
+    def TimeByIndex(self,index):
+        return self.data[self.deque[index]][0].fminute+self.data[self.deque[index]][1]*1440

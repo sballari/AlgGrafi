@@ -7,8 +7,8 @@ sys.setrecursionlimit(1000000)
 
 G = graph.OrientedGraph.inputGraph("/home/rossidaniel/ownCloud/viaggi.csv")
 
-d,p=dijkstra.algo(G)
+h=dijkstra.algo(G)
 i="300000044"
-#while p[i]!=None:
-#    print p[i],d[i]
-#    i=p[i]
+while h.parent[i]!=None:
+    print h.parent[i],[str(j) for j in h.data[i]]
+    i=h.parent[i]

@@ -10,32 +10,38 @@ def INITSSSP(h,G,station,hm):
 def algo(G):
     A="500000079"
     h = heap.heap()
-    tstart=graph.Hour("01300")
-    INITSSSP(h,G,A,[tstart,0])
-    h.add(A,[tstart,0])
+    h.setup([i for i in G.nodes],"500000079",graph.Hour("01300"),0)
     count =0
     while len(h.deque) > 0:
         u = h.extractMin()
-        #print str(u[0]),[str(i) for i in u[1]]
-        u=u[0]
+        print len(h.deque)
+        #print 
+        #print u
         for v in G.nodes[u].adj:
-            next_transport=G.nodes[u].nextTransport(v,h.d[u][0],h.d[u][1])
-            #print "data: ",str(h.d[u][0]),str(h.d[u][1]),[str(i) for i in next_transport]
-            if h.d[v] == None:
-                h.RELAX(u,v,next_transport)
-                h.add(v,next_transport)
-                print "add"
+            best_v=G.nodes[u].nextTransport(v,h.data[u][0],h.data[u][1])
+            #print "data: ",v,str(h.data[u][0]),str(h.data[u][1]),[str(i) for i in best_v]
+
+            if h.data[v] == None:
+                h.data[v]=best_v
+                h.parent[v]=u
+                h.add(v,best_v)
+
+                #print "add"
             else:
-                if next_transport[0].fminute + next_transport[1]*1440 < h.d[v][0].fminute+h.d[v][1]*1440:
-                    print str(h.deque[h.dc[v]][1][0])
-                    h.RELAX(u,v,next_transport)
-                    h.decreaseKey(v,next_transport)
-                    print str(h.deque[h.dc[v]][1][0])
-                    print "descrease"
+                h.decreaseKey(u,v,best_v)
+                #print "descrease"
         count+=1
-        if count == 20:
+        #print 
+        #print "coda"
+        """
+        for i in h.deque:
+            print str(i) ,[str(j) for j in h.data[i]]
+        
+        if count == 3:
+            print "---------------------------------------------------"
             for i in h.deque:
-                print [str(z) for z in h.d[i[0]]], str(i[0]),[str(j) for j in i[1]]
+                print str(i) ,[str(j) for j in h.data[i]]
             
             break;
+        """
     return h
