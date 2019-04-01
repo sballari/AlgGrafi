@@ -1,8 +1,19 @@
-#m = grado_medio(G)
-# /2 se e' orientato
 import matplotlib.pyplot as plt
 import networkx as nx
 import random
+
+class Hour:
+    def __init__(self,hm):
+        l=list(hm)
+        self.shm=hm
+        self.hour=int(l[1]+l[2])%24
+        self.minute=int(l[3]+l[4])
+        self.fminute=self.hour*60+self.minute
+
+    def __str__(self):
+        hour= str(self.hour) if len(str(self.hour)) == 2 else "0"+str(self.hour)
+        minute= str(self.minute) if len(str(self.minute)) == 2 else "0"+str(self.minute)
+        return hour+":"+minute
 
 class Node:
     def __init__(self,n):
@@ -26,12 +37,8 @@ class Node:
             edgeList = self.adj[dest]
             self.orderedInsert(edgeList,oraP,oraA,codCorsa,codLin,0,len(edgeList)-1)
         else :
-            self.adj[dest] = [(oraA,oraP,codCorsa,codLin)]
-        """
-        if dest not in self.adj:
-            self.adj[dest]=[]
-        self.adj[dest].append([(oraA,oraP,codCorsa,codLin)])
-        """
+            self.adj[dest] = [[oraP,oraA,codCorsa,codLin]]
+
     @staticmethod
     def orderedInsert(list_,oraP,oraA,codCorsa,codLin,lbi,ubi):
         # desc : inserisce un arco dal nodo attuale , ordine ora arrivo
@@ -52,10 +59,30 @@ class Node:
                 Node.orderedInsert(list_,oraP,oraA,codCorsa,codLin,lbi,i-1)
             if oraP > oraPi: 
                 Node.orderedInsert(list_,oraP,oraA,codCorsa,codLin,i+1,ubi)
-            if oraP == oraPi: list_.insert(i,(oraP,oraA,codCorsa,codLin))
+            if oraP == oraPi: list_.insert(i,[oraP,oraA,codCorsa,codLin])
         else: 
-            list_.insert(i,(oraP,oraA,codCorsa,codLin))
+            list_.insert(i,[oraP,oraA,codCorsa,codLin])
     
+    def nextTransport(self,station,hm,d):
+        if station in self.adj:
+            best = []
+            day = 0
+            while len(best) == 0:
+                i=0
+                while i < len(self.adj[station]) and self.adj[station][i][0].fminute+day*1440 < hm.fminute+d*1440:
+                    i+=1
+
+                if i < len(self.adj[station]):
+                    best = self.adj[station][i]
+                    while i<len(self.adj[station]) and self.adj[station][i][0].fminute < best[1].fminute:
+                        if self.adj[station][i][1].fminute < best[1].fminute:
+                            best = self.adj[station][i]
+                        i+=1
+                else: 
+                    day+=1
+            best=[best[0],day,best[2],best[3]]
+            #print str(hm),str(d),"-",[str(i) for i in best]
+            return best
 class Graph(object):
     def __init__(self):
         # desc : costruttore della classe grafo
@@ -156,6 +183,7 @@ class OrientedGraph(Graph):
         G = OrientedGraph()
         del lines[-1] #elimino l'ultima riga che e' vuota
         i=0
+
         for edge in lines:
             stazP = edge[0]
             stazA = edge[1]
@@ -163,8 +191,12 @@ class OrientedGraph(Graph):
             oraA =  edge[3]
             codCorsa =  edge[4]
             codLin =  edge[5]
-            print "rigo "+str(i)
             G.addEdge(stazP, stazA, oraP, oraA, codCorsa, codLin)
             i+=1
-            
+        
+        for A in G.nodes:
+            for B in G.nodes[A].adj:
+                for corsa in G.nodes[A].adj[B]:
+                    corsa[0]=Hour(corsa[0])
+                    corsa[1]=Hour(corsa[1])
         return G

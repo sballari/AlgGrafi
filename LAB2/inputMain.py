@@ -1,13 +1,14 @@
 import graph
 import sys
-
- 
+from tqdm import tqdm
+import heap
+import dijkstra
 sys.setrecursionlimit(1000000)
 
-print "inizio lettura viaggi"
-G1 = graph.OrientedGraph.inputGraph("viaggi.csv")
-print "fine"
+G = graph.OrientedGraph.inputGraph("/home/rossidaniel/ownCloud/viaggi.csv")
 
-roma = G1.nodes["200403018"]
-for key in roma.adj:
-    print 'dest:',key, 'corresponds to', roma.adj[key]
+d,p=dijkstra.algo(G)
+i="300000044"
+#while p[i]!=None:
+#    print p[i],d[i]
+#    i=p[i]
