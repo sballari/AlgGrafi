@@ -67,9 +67,14 @@ class Node:
         if station in self.adj:
             best = []
             day = 0
+            
             while len(best) == 0:
                 i=0
+                print "iniziamo",str(hm),day,[[str(k) for k in j] for j in self.adj[station]]
+
                 while i < len(self.adj[station]) and self.adj[station][i][0].fminute+day*1440 < hm.fminute+d*1440:
+                    print [str(j) for j in self.adj[station][i]]
+                    print "+++++++++++++++"
                     i+=1
 
                 if i < len(self.adj[station]):
@@ -78,10 +83,14 @@ class Node:
                         if self.adj[station][i][1].fminute < best[1].fminute:
                             best = self.adj[station][i]
                         i+=1
-                else: 
+                else:
                     day+=1
-            best=[best[0],day,best[2],best[3]]
-            #print str(hm),str(d),"-",[str(i) for i in best]
+
+            if best[0].fminute > best[1].fminute:
+                day+=1
+                print "devo aggiungere un giorno"
+            print "best transport", str(hm),str(d),"-",[str(i) for i in best]
+            best=[best[1],day,best[2],best[3]]
             return best
 class Graph(object):
     def __init__(self):
