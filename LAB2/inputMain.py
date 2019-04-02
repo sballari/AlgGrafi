@@ -1,34 +1,20 @@
-import graph
-import sys
-import heap
-import dijkstra
+from dijkstra import dijkstra
+from graph import OrientedGraph,Hour
 
-G = graph.OrientedGraph.inputGraph("/home/rossidaniel/ownCloud/viaggi.csv")
+#creo il grafo orientato
+G = OrientedGraph.inputGraph("viaggi.csv")
 
+#informazioni viaggio magari da buttare su un file
 From="200417051"
-Hour="02340"
+tm="02355"
 To="140701016"
-h=dijkstra.algo(G,From,Hour)
 
+#lancio dijkstra che mi restituisce d
+data,parent=dijkstra(G,From,Hour(tm))
+
+#stampo soluzione di viaggio
 i=To
-print i,[str(j) for j in h.data[i]]
-while h.parent[i]!=None:
-    print h.parent[i],[str(j) for j in h.data[i]]
-    i=h.parent[i]
-
-
-"""
-print "------------------"
-z="220402027"
-print "posso prendere un bus da "
-for i in G.nodes:
-    if z in G.nodes[i].adj:
-        print i
-print "per andare in ",z
-print "+++++++++++++++++++"
-print "da ",z,"posso andare in"
-for i in G.nodes[z].adj:
-    print i
-for i in h.data:
-    print i,[str(j) for j in h.data[i]]
-"""
+print i,[str(j) for j in data[i]]
+while parent[i]!=None:
+    print parent[i],[str(j) for j in data[i]]
+    i=parent[i]

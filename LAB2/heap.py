@@ -1,23 +1,42 @@
 class heap:
     def __init__(self):
+        #desc: costruisco le strutture dati richieste dallo heap
+        #deque: coda di priorita, contiene il codice di ciascuna 
+        #       stazione ordinato nello heap secondo l'ordine di arrivo
+        #position: dizionario che ha per chiave il codice della stazione 
+        #          e valore la posizione della stazione nella coda deque
+        #data: dizionario che tiene conto dei dati di arrivo migliore nella stazione
+        #parent: dizionario che ha per chiave il codice della stazione e per valore
+        #        la stazione da cui raggiungere la stazione chiave
         self.deque= []
         self.position=dict()
         self.data=dict()
         self.parent=dict()
 
-    def setup(self,vlist,vstart,vhour,vday):
+    def setup(self,vlist,vstart,vhour,vday=0):
+        #desc: inserisce valori vuoti per ciascuna stazione,
+        #      inserisce i dati della stazione root e la 
+        #      aggiunge alla coda deque
+        #vlist: lista delle stazioni
+        #vstart: stazione root
+        #vhour: orario di partenza
+        #vday: giorno di partenza di default a 0
         for i in vlist:
             self.data[i]=[]
             self.parent[i]=None
         self.data[vstart]=[vhour,vday]
-        self.add(vstart,[vhour,vday])
+        self.add(vstart)
 
-    def add(self,station,info):
+    def add(self,station):
+        #desc: inserisce una stazione nella coda e aggiorna la sua posizione
+        #station: codice stazione da inserire
         self.position[station]=len(self.deque)
         self.deque.append(station)
         self.bubbleUp(station)
         
     def bubbleUp(self,station):
+        #desc: aggiorna lo heap dopo l'inserimento o la modifica del nodo station
+        #station: codice stazione inserito o modificato
         if station in self.position:
             i = self.position[station]
             p = (i-1)/2
@@ -35,13 +54,18 @@ class heap:
                 p=(i-1)/2
 
     def decreaseKey(self,u,v,info):
+        #desc: modifica in meglio un nodo e se non presente nella coda lo riaggiunge
+        #u: nodo precedente/padre
+        #v: nodo corrente
+        #info: info sull'ora di arrivo alla stazione v 
         if self.RELAX(u,v,info):
             if v in self.position:
                 self.bubbleUp(v)
             else:
-                self.add(v,info)
+                self.add(v)
 
     def extractMin(self):
+        #desc: estrae il nodo con orario arrivo minimo e aggiorna la coda deque
         next_station = self.deque[0]
         del self.position[next_station]
         last = self.deque.pop()
@@ -53,6 +77,9 @@ class heap:
         return next_station
 
     def trickledown(self,station):
+        #desc: aggiorna la posizione del nodo station se i 
+        #      suoi figli hanno un orario di arrivo minore 
+        #station: codice stazione da spostare eventualmente
         i = self.position[station]
         l = i * 2 + 1
         r = i * 2 + 2 
@@ -74,6 +101,10 @@ class heap:
     
 
     def RELAX(self,u,v,info):
+        #desc: rilassa l'arco u-v
+        #u: nodo predecessore/padre
+        #v: nodo corrente
+        #info: info sull'ora di arrivo alla stazione v 
         if self.data[v][0].fminute + self.data[v][1]*1440 > info[0].fminute + info[1]*1440:
             self.data[v]=info
             self.parent[v]=u
@@ -81,4 +112,7 @@ class heap:
         return False
 
     def TimeByIndex(self,index):
+        #desc: restituisce il tempo in minuti della stazione in posizione index
+        #index: indice della coda deque corripondente ad una stazione di cui si vuole sapere
+        #       l'orario di arrivo in minuti.
         return self.data[self.deque[index]][0].fminute+self.data[self.deque[index]][1]*1440
