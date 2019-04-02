@@ -7,7 +7,7 @@ class heap:
 
     def setup(self,vlist,vstart,vhour,vday):
         for i in vlist:
-            self.data[i]=None
+            self.data[i]=[]
             self.parent[i]=None
         self.data[vstart]=[vhour,vday]
         self.add(vstart,[vhour,vday])

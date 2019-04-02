@@ -3,17 +3,18 @@ import networkx as nx
 import random
 
 class Hour:
-    def __init__(self,hm):
+    def __init__(self,hm,d=0):
         l=list(hm)
         self.shm=hm
         self.hour=int(l[1]+l[2])%24
         self.minute=int(l[3]+l[4])
-        self.fminute=self.hour*60+self.minute
+        self.day=int(d)*1440
+        self.fminute=int(self.hour*60+self.minute)
 
     def __str__(self):
         hour= str(self.hour) if len(str(self.hour)) == 2 else "0"+str(self.hour)
         minute= str(self.minute) if len(str(self.minute)) == 2 else "0"+str(self.minute)
-        return hour+":"+minute
+        return str(self.day/1440)+" "+hour+":"+minute
 
 class Node:
     def __init__(self,n):
@@ -67,30 +68,32 @@ class Node:
         if station in self.adj:
             best = []
             day = 0
-            
+
             while len(best) == 0:
                 i=0
-                print "iniziamo",str(hm),day,[[str(k) for k in j] for j in self.adj[station]]
+                #print "iniziamo",str(hm),day,[[str(k) for k in j] for j in self.adj[station]]
 
                 while i < len(self.adj[station]) and self.adj[station][i][0].fminute+day*1440 < hm.fminute+d*1440:
-                    print [str(j) for j in self.adj[station][i]]
-                    print "+++++++++++++++"
+                    #print [str(j) for j in self.adj[station][i]]
+                    #print "+++++++++++++++"
                     i+=1
 
                 if i < len(self.adj[station]):
                     best = self.adj[station][i]
-                    while i<len(self.adj[station]) and self.adj[station][i][0].fminute < best[1].fminute:
-                        if self.adj[station][i][1].fminute < best[1].fminute:
+
+                    while i<len(self.adj[station]) and self.adj[station][i][0].fminute < best[1].fminute+best[1].day:
+                        if self.adj[station][i][1].fminute+self.adj[station][i][1].day < best[1].fminute+best[1].day:
                             best = self.adj[station][i]
                         i+=1
+
                 else:
                     day+=1
 
             if best[0].fminute > best[1].fminute:
                 day+=1
-                print "devo aggiungere un giorno"
-            print "best transport", str(hm),str(d),"-",[str(i) for i in best]
-            best=[best[1],day,best[2],best[3]]
+                #print "devo aggiungere un giorno"
+            #print "best transport", str(hm),str(d),"-",[str(i) for i in best]
+            best=[best[1],day,best[0],best[2],best[3]]
             return best
 class Graph(object):
     def __init__(self):
@@ -196,16 +199,24 @@ class OrientedGraph(Graph):
         for edge in lines:
             stazP = edge[0]
             stazA = edge[1]
-            oraP = edge[2]
-            oraA =  edge[3]
+            oraP = list(edge[2])
+            oraA =  list(edge[3])
             codCorsa =  edge[4]
             codLin =  edge[5]
+
+            oraP=oraP[0]+str(0)+str(int(oraP[1]+oraP[2])%24)+oraP[3]+oraP[4] if int(oraP[1]+oraP[2]) > 23 else oraP[0]+oraP[1]+oraP[2]+oraP[3]+oraP[4]
+            oraA=oraA[0]+str(0)+str(int(oraA[1]+oraA[2])%24)+oraA[3]+oraA[4] if int(oraA[1]+oraA[2]) > 23 else oraA[0]+oraA[1]+oraA[2]+oraA[3]+oraA[4]
             G.addEdge(stazP, stazA, oraP, oraA, codCorsa, codLin)
             i+=1
         
         for A in G.nodes:
             for B in G.nodes[A].adj:
                 for corsa in G.nodes[A].adj[B]:
+                    if(int(corsa[0])> int(corsa[1])):
+
+                        corsa[1]=Hour(corsa[1],1)
+                    else:
+                        corsa[1]=Hour(corsa[1],0)
                     corsa[0]=Hour(corsa[0])
-                    corsa[1]=Hour(corsa[1])
+
         return G
