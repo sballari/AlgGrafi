@@ -1,14 +1,20 @@
-import graph
-import sys
+from dijkstra import dijkstra
+from graph import OrientedGraph,Hour
 
- 
-sys.setrecursionlimit(1000000)
+#creo il grafo orientato
+G = OrientedGraph.inputGraph("viaggi.csv")
 
-print "porcoddio"
-G1 = graph.OrientedGraph.inputGraph("viaggi.csv")
-print "fine"
+#informazioni viaggio magari da buttare su un file
+From="200417051"
+tm="02355"
+To="140701016"
 
-for i in G1.nodes:
-    for j in G1.nodes[i].adj:
-        for k in G1.nodes[i].adj[j]:
-            print k
+#lancio dijkstra che mi restituisce d
+data,parent=dijkstra(G,From,Hour(tm))
+
+#stampo soluzione di viaggio
+i=To
+print i,[str(j) for j in data[i]]
+while parent[i]!=None:
+    print parent[i],[str(j) for j in data[i]]
+    i=parent[i]
