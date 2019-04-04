@@ -31,3 +31,9 @@ def dijkstra(G,root,hm):
                 h.decreaseKey(u,v,best_v)
 
     return h.data,h.parent
+
+    '''
+    def Astar(G,root,dest,hm,koordMap,speed):
+        h = h.heap()
+        h.setupE([i for i in G.nodes],root,hm,koordMap,dest,speed)
+    '''
