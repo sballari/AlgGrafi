@@ -53,3 +53,27 @@ def distance(stazA, stazB, coordMap):
 
 
 
+def hourPlusMinuts(hour_string, min_int):
+    #return : tupla con ora di arrivo in stringa "01020", e giorni di viaggio in numero
+
+    if ( min_int >= 60*24) : print "allert: viaggio di piu' di un giorno"
+    next_day = 0
+
+    vhour_l = list(hour_string)
+    minut = int("".join(vhour_l[-2:])) #prendo i minuti
+    ore = int ("".join(vhour_l[1:3])) ##prendo le ore
+    new_min = minut + (min_int % 60)
+    new_h = ore + (min_int //60) 
+    if (new_h>=24): 
+        new_h = new_h % 24 
+        next_day = new_h//24
+
+    #se serve aggiungo zero
+    if len(str(new_h))!=2 : new_h = "0"+str(new_h)
+    else: new_h = str(new_h)
+
+    if len(str(new_min))!=2 : new_min = "0"+str(new_min)
+    else: new_min = str(new_min)
+
+    new_time = "0"+new_h+new_min
+    return (new_time, next_day)
