@@ -1,3 +1,5 @@
+import parserCoord
+
 class heap:
     def __init__(self):
         #desc: costruisco le strutture dati richieste dallo heap
@@ -22,10 +24,25 @@ class heap:
         #vhour: orario di partenza
         #vday: giorno di partenza di default a 0
         for i in vlist:
+            self.data[i]=[] #orario infinito
+            self.parent[i]=None
+        self.data[vstart]=[vhour,vday] 
+        self.add(vstart)
+    
+    def setupE(self,vlist,vstart,vhour,koordMap,dest,speed,vday=0):
+        for i in vlist:
             self.data[i]=[]
             self.parent[i]=None
-        self.data[vstart]=[vhour,vday]
+
+        ########################
+        #### calcolo h #########
+        ########################
+        min_fastest_journey = int( ( parserCoord.distance(vstart, dest, koordMap) / speed ) * 60 ) # minuti del viaggio min        
+        t_fast = parserCoord.hourPlusMinuts(vhour,min_fastest_journey)
+        #######################
+        self.data[vstart]=[t_fast[0],vday+t_fast[1]] 
         self.add(vstart)
+
 
     def add(self,station):
         #desc: inserisce una stazione nella coda e aggiorna la sua posizione
