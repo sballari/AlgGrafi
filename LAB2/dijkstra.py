@@ -45,7 +45,7 @@ def dijkstra(G,root,hm):
         #scorro la lista delle adiacenze del nodo minimo
         for v in G.nodes[u].adj:
             #ottengo le info sul trasporto migliore per viaggiare dalla stazione u alla stazione v
-            best_v=G.nodes[u].nextTransport(v,h.data[u][0],h.data[u][1])
+            best_v=G.nodes[u].nextTransport(v,h.data[u][0],h.data[u][1],h.data[u][2][3])
 
             #se e' la prima volta che si passa per la stazione v si inserisce nella coda con le sue info
             if h.data[v] == []:
@@ -55,6 +55,7 @@ def dijkstra(G,root,hm):
             #altrimenti si vede se il trasporto attuale e' migliore di quello localmente trovato precedentemente
             else:
                 h.decreaseKey(u,v,best_v)
+
     storage = dict()
 
     for station in h.data:

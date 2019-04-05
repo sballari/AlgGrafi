@@ -26,7 +26,7 @@ class heap:
         for i in vlist:
             self.data[i]=[] #orario infinito
             self.parent[i]=None
-        self.data[vstart]=[vhour,vday,[vhour,vday]] 
+        self.data[vstart]=[vhour,vday,[vhour,vday,vhour,None,None]] 
         self.add(vstart)
     
     def setupE(self,vlist,vstart,vhour,koordMap,dest,speed,vday=0):

@@ -68,7 +68,7 @@ class Node:
         else: 
             list_.insert(i,[oraP,oraA,codCorsa,codLin])
     
-    def nextTransport(self,station,hm,d):
+    def nextTransport(self,station,hm,d,corsa):
         #desc: fornisce la migliore soluzione di viaggio di viaggio tra questa stazione/nodo e 
         # la stazione station se presente nella sua lista delle adiacenze dall'orario hm
         #station: stazione verso cui si cerca il miglior trasporto
@@ -76,6 +76,7 @@ class Node:
         #d:giorno di partenza 
 
         #controllo se la il nodo/stazione station e' nella lista delle adiacenze di questo nodo
+        print corsa
         if station in self.adj:
             #inizializzo valori valori di ricerca
             best = []
