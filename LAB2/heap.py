@@ -26,7 +26,7 @@ class heap:
         for i in vlist:
             self.data[i]=[] #orario infinito
             self.parent[i]=None
-        self.data[vstart]=[vhour,vday] 
+        self.data[vstart]=[vhour,vday,[vhour,vday]] 
         self.add(vstart)
     
     def setupE(self,vlist,vstart,vhour,koordMap,dest,speed,vday=0):
@@ -56,7 +56,7 @@ class heap:
         #station: codice stazione inserito o modificato
         if station in self.position:
             i = self.position[station]
-            p = (i-1)/2
+            p = (i-1)//2
 
             while i > 0 and self.TimeByIndex(i) <  self.TimeByIndex(p):
                 #scambio gli indici nel dizionario
@@ -76,10 +76,8 @@ class heap:
         #v: nodo corrente
         #info: info sull'ora di arrivo alla stazione v 
         if self.RELAX(u,v,info):
-            if v in self.position:
-                self.bubbleUp(v)
-            else:
-                self.add(v)
+            self.bubbleUp(v)
+
 
     def extractMin(self):
         #desc: estrae il nodo con orario arrivo minimo e aggiorna la coda deque
@@ -104,7 +102,7 @@ class heap:
         if l < len(self.deque) and self.TimeByIndex(l) <  self.TimeByIndex(i):
             smallest = l
 
-        if r < len(self.deque) and self.TimeByIndex(r) <  self.TimeByIndex(i):
+        if r < len(self.deque) and self.TimeByIndex(r) <  self.TimeByIndex(smallest):
             smallest = r
         
         if smallest != i:
@@ -123,7 +121,7 @@ class heap:
         #v: nodo corrente
         #info: info sull'ora di arrivo alla stazione v 
         if self.data[v][0].fminute + self.data[v][1]*1440 > info[0].fminute + info[1]*1440:
-            self.data[v]=info
+            self.data[v]=[info[0],info[1],info]
             self.parent[v]=u
             return True
         return False
