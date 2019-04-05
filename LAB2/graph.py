@@ -18,7 +18,7 @@ class Hour:
         #desc: fornisce una stampa "pulita" di un oggetto orario
         hour= str(self.hour) if len(str(self.hour)) == 2 else "0"+str(self.hour)
         minute= str(self.minute) if len(str(self.minute)) == 2 else "0"+str(self.minute)
-        return str(self.day/1440)+" "+hour+":"+minute
+        return hour+":"+minute
 
 class Node:
     def __init__(self,n):
@@ -68,7 +68,7 @@ class Node:
         else: 
             list_.insert(i,[oraP,oraA,codCorsa,codLin])
     
-    def nextTransport(self,station,hm,d,corsa):
+    def nextTransport(self,station,hm,d,corsa,linea):
         #desc: fornisce la migliore soluzione di viaggio di viaggio tra questa stazione/nodo e 
         # la stazione station se presente nella sua lista delle adiacenze dall'orario hm
         #station: stazione verso cui si cerca il miglior trasporto
@@ -76,7 +76,6 @@ class Node:
         #d:giorno di partenza 
 
         #controllo se la il nodo/stazione station e' nella lista delle adiacenze di questo nodo
-        print corsa
         if station in self.adj:
             #inizializzo valori valori di ricerca
             best = []
@@ -107,8 +106,15 @@ class Node:
                             i=0
                             partial_day += 1
                         #controllo che l'orario di partenza non sia successivo all'orario di arrivo al nodo stazione
+                        #print self.adj[station][i][2] , corsa , self.adj[station][i][3] , linea
+                        if self.adj[station][i][2] == corsa and self.adj[station][i][3] == linea:
+                            if self.adj[station][i][0].fminute+partial_day*1440 == best[0].fminute+best[0].day:
+                                if self.adj[station][i][1].fminute+partial_day*1440 == best[1].fminute+best[1].day:
+                                    best = self.adj[station][i]
+                                    day +=partial_day
+                        
                         if self.adj[station][i][0].fminute+partial_day*1440 < best[1].fminute+best[1].day:
-                            
+
                             #controllo che l'orario di arrivo di questo trasporto non sia migliore di quello ottimo localmente trovato
                             if self.adj[station][i][1].fminute+partial_day*1440 < best[1].fminute+best[1].day:
                                 

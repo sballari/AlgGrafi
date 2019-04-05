@@ -7,21 +7,44 @@ import time
 G = OrientedGraph.inputGraph("viaggi.csv")
 
 #informazioni viaggio magari da buttare su un file
-From="200417051"
-tm="02355"
-To="140701016"
+From="210602003"
+tm="00630"
+To="300000030"
 
 #lancio dijkstra che mi restituisce d
 elapsedtime=time.time()
 data,parent=dijkstra(G,From,Hour(tm))
-print time.time()-elapsedtime
+print "Elapsed Time:",time.time()-elapsedtime
 
 #stampo soluzione di viaggio
 i=To
-print i,[str(j) for j in data[i]]
+
+
+
+stazioni = []
+
 while parent[i]!=None:
-    print parent[i],[str(j) for j in data[i]]
+    stazioni.append((i,data[i]))
     i=parent[i]
+
+print "Viaggio da",From,"a",To
+print "Orario di partenza:",data[From][2]
+print "Orario di arrivo:",data[To][0]
+i=len(stazioni)-1
+
+cod=''
+staz=From
+while i >= 0:
+    if cod != data[stazioni[i][0]][3]:
+        if i+1 == len(stazioni):
+            print stazioni[i][1][2],"corsa",data[stazioni[i][0]][3],data[stazioni[i][0]][4],"da",staz,"a",
+        else:
+            print staz
+            print stazioni[i][1][2],"corsa",data[stazioni[i][0]][3],data[stazioni[i][0]][4],"da",stazioni[i][0],"a",
+        cod = data[stazioni[i][0]][3]
+        staz=stazioni[i][0]
+    i-=1
+print To
 """
 
 #########################
