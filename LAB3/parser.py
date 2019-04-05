@@ -13,27 +13,26 @@ def parser_LTS(ds_name):
     f=open(mypath)
     s=f.read()
     lines=s.split('\n')
+    data=[]
     for line in lines:
-        line=line.split(" ")
-        line=filter(lambda r : r!="", line)
-    
-    weightType = lines[5][-1]
-    print weightType
+        rigo=line.split(" ")
+        data.append(filter(lambda r : r!="", rigo))
+    weightType = data[4][1]
 
     i=5
     find = False
     city = []
-    while lines[i] != "EOF":
+    while data[i][0] != 'EOF':
+
         if (find == False):
-            if lines[i][0] == "NODE_COORD_SECTION": 
+            if data[i][0] == 'NODE_COORD_SECTION': 
                 find = True
         else:
-            index = lines[i][0]
-            x_coord = lines[i][1]
-            y_coord = lines[i][2]
+            index = data[i][0]
+            x_coord = data[i][1]
+            y_coord = data[i][2]
             tupla = (index,x_coord,y_coord)
-            print tupla
             city.append(tupla)
         i+=1
      
-    return (weightType,city)
+    return weightType,city

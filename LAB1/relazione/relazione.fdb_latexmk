@@ -1,8 +1,8 @@
 # Fdb version 3
-["pdflatex"] 1553529276 "/home/rossidaniel/Documenti/AlgGrafi/LAB1/relazione/relazione.tex" "/home/rossidaniel/Documenti/AlgGrafi/LAB1/relazione/relazione.pdf" "relazione" 1553529353
+["pdflatex"] 1554194421 "/home/rossidaniel/Documenti/AlgGrafi/LAB1/relazione/relazione.tex" "/home/rossidaniel/Documenti/AlgGrafi/LAB1/relazione/relazione.pdf" "relazione" 1554194426
   "/etc/texmf/web2c/texmf.cnf" 1533129909 1101 af7716885e081ab43982cab7b4672c1a ""
-  "/home/rossidaniel/Documenti/AlgGrafi/LAB1/relazione/relazione.aux" 1553529280 535 5a79817e6ea880602e0211f99479d7cf ""
-  "/home/rossidaniel/Documenti/AlgGrafi/LAB1/relazione/relazione.tex" 1553529352 7282 994a6695c5102d69b9e9e032cff80b6a ""
+  "/home/rossidaniel/Documenti/AlgGrafi/LAB1/relazione/relazione.aux" 1554194426 524 eeed861249126f62d297dcb8caaf0695 ""
+  "/home/rossidaniel/Documenti/AlgGrafi/LAB1/relazione/relazione.tex" 1554194421 7787 3b377083d3a20672d4c2942201d4b07e ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -92,11 +92,11 @@
   "figures/figure_random.png" 1553526592 62218 c282a5455b838cfc4fb4274e2912f251 ""
   "figures/figure_random_line.png" 1553526592 62797 ca7751d8bea5733e9b12c94ce5ed89a2 ""
   "figures/real.png" 1553526592 1070372 a13f9695f28d3c6065a511e58c913382 ""
-  "relazione.aux" 1553529280 535 5a79817e6ea880602e0211f99479d7cf ""
-  "relazione.tex" 1553529352 7282 994a6695c5102d69b9e9e032cff80b6a ""
+  "relazione.aux" 1554194426 524 eeed861249126f62d297dcb8caaf0695 ""
+  "relazione.tex" 1554194421 7787 3b377083d3a20672d4c2942201d4b07e ""
   (generated)
-  "relazione.pdf"
   "relazione.aux"
-  "/home/rossidaniel/Documenti/AlgGrafi/LAB1/relazione/relazione.pdf"
   "relazione.log"
+  "relazione.pdf"
   "/home/rossidaniel/Documenti/AlgGrafi/LAB1/relazione/relazione.log"
+  "/home/rossidaniel/Documenti/AlgGrafi/LAB1/relazione/relazione.pdf"
