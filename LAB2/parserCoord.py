@@ -22,19 +22,9 @@ def readCord():
         data = filter(lambda r : r!="", data)
 
         codStaz=data[0]
-        longitud = data[1]
-        lat = data[2]
-        nameStaz = "".join(data[4:])
-        bfkoord[codStaz]=(longitud,lat,nameStaz)
-        
-    f.close()
-
-    f=open("coord.csv","w")
-    for i in bfkoord:
-        f.write(i)
-        f.write("\t")
-        f.write(str(bfkoord[i]))
-        f.write("\n")
+        longitud = float(data[1])
+        lat = float(data[2])
+        bfkoord[codStaz]=[longitud,lat]        
     f.close()
     
     return bfkoord

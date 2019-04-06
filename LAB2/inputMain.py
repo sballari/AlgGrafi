@@ -7,9 +7,9 @@ import time
 G = OrientedGraph.inputGraph("viaggi.csv")
 
 #informazioni viaggio magari da buttare su un file
-From="210602003"
-tm="00630"
-To="300000030"
+From="300000032"
+tm="00530"
+To="400000122"
 
 #lancio dijkstra che mi restituisce d
 elapsedtime=time.time()
@@ -19,11 +19,12 @@ print "Elapsed Time:",time.time()-elapsedtime
 #stampo soluzione di viaggio
 i=To
 
-
+points=[]
 
 stazioni = []
 
 while parent[i]!=None:
+    points.append([i,parent[i]])
     stazioni.append((i,data[i]))
     i=parent[i]
 
@@ -45,6 +46,8 @@ while i >= 0:
         staz=stazioni[i][0]
     i-=1
 print To
+
+G.plotGraph(points)
 """
 
 #########################

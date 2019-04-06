@@ -1,6 +1,9 @@
-import matplotlib.pyplot as plt
-import networkx as nx
+import numpy as np
+from matplotlib import pyplot as plt
 import random
+import parserCoord
+import matplotlib.lines as lines
+
 
 class Hour:
     def __init__(self,hm,d=0):
@@ -30,6 +33,7 @@ class Node:
         self.label=n
         # adj: insieme di etichette dei nodi adiacenti
         self.adj = dict()
+        self.geocoor=[0,0]
     
     def addEdge(self,dest,oraP,oraA,codCorsa,codLin):
         # desc : inserisce un arco dal nodo attuale , ordine ora arrivo
@@ -202,19 +206,19 @@ class OrientedGraph(Graph):
     ### CODICE NON CONTROLLATO #########
     ####################################
 
-    def plotGraph(self):
+    def plotGraph(self,s=0):
         # desc : crea una struttura networkX e la usa per plottare il grafo
-        G=self.buildGraph(nx.Graph())
-        d={}
-        for (node, val) in G.degree():
-            d[node]=val
+        fig, ax = plt.subplots()
 
-        nx.draw(G, nodelist=d.keys(),node_size=d.values())
+        data = np.array([self.nodes[i].geocoord for i in self.nodes])
+        for i in s:
+            line = [(self.nodes[i[0]].geocoord[0],self.nodes[i[0]].geocoord[1]),(self.nodes[i[1]].geocoord[0],self.nodes[i[1]].geocoord[1])]
+            (line1_xs, line1_ys) = zip(*line)
+            ax.add_line(lines.Line2D(line1_xs, line1_ys, linewidth=1, color='blue'))
+        x, y = data.T
+        plt.scatter(x,y,s=1,c='grey')
+        plt.gca().set_aspect('equal', adjustable='box')
         plt.show()
-    ####################################
-    ### FINE CODICE NON CONTROLLATO ####
-    ####################################
-
     @staticmethod
     def inputGraph(f):
         # desc: crea un grafo orientato 
@@ -260,5 +264,9 @@ class OrientedGraph(Graph):
                     else:
                         corsa[1]=Hour(corsa[1],0)
                     corsa[0]=Hour(corsa[0])
+        coord=parserCoord.readCord()
+        for station in coord:
+            if station in G.nodes:
+                G.nodes[station].geocoord=coord[station]
 
         return G
