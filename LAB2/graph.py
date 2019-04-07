@@ -3,10 +3,10 @@ from matplotlib import pyplot as plt
 import random
 import parserCoord
 import matplotlib.lines as lines
-
+from math import radians, sin, cos, acos
 
 class Hour:
-    def __init__(self,hm,d=0):
+    def __init__(self,hm="00000",d=0):
         #desc: classe orario ci supporta nella gestione degli orari
         #hm: orario nel seguente formato '0HHMM'
         #day: usato per tenere traccia delle coppie di orario a cavallo della mezzanotte
@@ -22,6 +22,21 @@ class Hour:
         hour= str(self.hour) if len(str(self.hour)) == 2 else "0"+str(self.hour)
         minute= str(self.minute) if len(str(self.minute)) == 2 else "0"+str(self.minute)
         return hour+":"+minute
+    def addMinute(self,addminute):
+        addhour=addminute/60
+        addminute=addminute%60
+
+        self.minute+=addminute
+        self.hour+=addhour
+
+        if self.minute >= 60:
+            self.minute = self.minute%60
+            self.hour+=1
+        if self.hour >= 24:
+            self.hour = self.hour%24
+
+        self.fminute=int(self.hour*60+self.minute)
+
 
 class Node:
     def __init__(self,n):
@@ -33,7 +48,7 @@ class Node:
         self.label=n
         # adj: insieme di etichette dei nodi adiacenti
         self.adj = dict()
-        self.geocoor=[0,0]
+        self.geocoord=[0,0]
     
     def addEdge(self,dest,oraP,oraA,codCorsa,codLin):
         # desc : inserisce un arco dal nodo attuale , ordine ora arrivo
@@ -270,3 +285,50 @@ class OrientedGraph(Graph):
                 G.nodes[station].geocoord=coord[station]
 
         return G
+    def getSolution(self,From,To,parent,data):
+        i=To
+
+        points=[]
+
+        stazioni = []
+
+        while parent[i]!=None:
+            points.append([i,parent[i]])
+            stazioni.append((i,data[i]))
+            i=parent[i]
+
+        print "Viaggio da",From,"a",To
+        print "Orario di partenza:",data[From][2]
+        print "Orario di arrivo:",data[To][0]
+        i=len(stazioni)-1
+
+        cod=''
+        staz=From
+        while i >= 0:
+            if cod != data[stazioni[i][0]][3]:
+                if i+1 != len(stazioni):
+                    print staz
+                print stazioni[i][1][2],"corsa",data[stazioni[i][0]][3],data[stazioni[i][0]][4],"da",staz,"a",
+                cod = data[stazioni[i][0]][3]
+                staz=stazioni[i][0]
+            i-=1
+        print To
+        return points
+
+    def distance(self,u,v):
+        coordA = self.nodes[u].geocoord
+        coordB = self.nodes[v].geocoord
+        slat = radians(float(coordA[1]))
+        slon = radians(float(coordA[0]))
+        elat = radians(float(coordB[1]))
+        elon = radians(float(coordB[0]))
+        dist = dist = float(6371.01) * acos(sin(slat)*sin(elat) + cos(slat)*cos(elat)*cos(slon - elon))
+        return int(dist)
+
+    @staticmethod
+    def addMinutes(hour,day,addMinutes):
+        if hour.fminute+day*1440 +addMinutes>= day+1*1440:
+            day+=1
+        newhour=Hour(hour.shm)
+        newhour.addMinute(addMinutes)
+        return newhour,day

@@ -15,7 +15,7 @@ class heap:
         self.data=dict()
         self.parent=dict()
 
-    def setup(self,vlist,vstart,vhour,vday=0):
+    def setup(self,vlist,vstart,vhour,vprior=0,vday=0):
         #desc: inserisce valori vuoti per ciascuna stazione,
         #      inserisce i dati della stazione root e la 
         #      aggiunge alla coda deque
@@ -23,26 +23,15 @@ class heap:
         #vstart: stazione root
         #vhour: orario di partenza
         #vday: giorno di partenza di default a 0
+
         for i in vlist:
             self.data[i]=[] #orario infinito
             self.parent[i]=None
-        self.data[vstart]=[vhour,vday,[vhour,vday,vhour,None,None]] 
-        self.add(vstart)
-    
-    def setupE(self,vlist,vstart,vhour,koordMap,dest,speed,vday=0):
-        for i in vlist:
-            self.data[i]=[]
-            self.parent[i]=None
+        if vprior == 0:
+            vprior=vhour
+        self.data[vstart]=[vprior,vday,[vhour,vday,vhour,None,None]] 
 
-        ########################
-        #### calcolo h #########
-        ########################
-        min_fastest_journey = int( ( parserCoord.distance(vstart, dest, koordMap) / speed ) * 60 ) # minuti del viaggio min        
-        t_fast = parserCoord.hourPlusMinuts(vhour,min_fastest_journey)
-        #######################
-        self.data[vstart]=[t_fast[0],vday+t_fast[1]] 
         self.add(vstart)
-
 
     def add(self,station):
         #desc: inserisce una stazione nella coda e aggiorna la sua posizione
@@ -76,8 +65,10 @@ class heap:
         #v: nodo corrente
         #info: info sull'ora di arrivo alla stazione v 
         if self.RELAX(u,v,info):
-            self.bubbleUp(v)
-
+            if v in self.deque:
+                self.bubbleUp(v)
+            else:
+                self.add(v)
 
     def extractMin(self):
         #desc: estrae il nodo con orario arrivo minimo e aggiorna la coda deque
@@ -121,7 +112,7 @@ class heap:
         #v: nodo corrente
         #info: info sull'ora di arrivo alla stazione v 
         if self.data[v][0].fminute + self.data[v][1]*1440 > info[0].fminute + info[1]*1440:
-            self.data[v]=[info[0],info[1],info]
+            self.data[v]=info
             self.parent[v]=u
             return True
         return False

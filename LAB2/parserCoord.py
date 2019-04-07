@@ -67,3 +67,4 @@ def hourPlusMinuts(hour_string, min_int):
 
     new_time = "0"+new_h+new_min
     return (new_time, next_day)
+

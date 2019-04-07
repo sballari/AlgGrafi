@@ -1,5 +1,5 @@
 from heap import heap
-
+from graph import OrientedGraph
 def checkheap(i,coda,data):
     if i > len(coda):
         return True
@@ -24,37 +24,28 @@ def checkheap(i,coda,data):
     else:
         return False
     return ok
-
-def dijkstra(G,root,hm):
-    #desc: algoritmo per la ricerca di cammini minimi da un nodo root
-    #root: codice stazione di partenza, corrispondente al nodo root
-    #hm: orario di partenza dalla stazione root
-
-    #creo la struttura dati heap
+def astar(G,root,dest,hm,speed=2):
     h = heap()
 
-    #eseguo il setup dell'heap
-    h.setup([i for i in G.nodes],root,hm)
+    hour,day=OrientedGraph.addMinutes(hm,0,G.distance(root,dest)/speed)
+
+    h.setup([i for i in G.nodes],root,hm,hour,day)
+    u = h.extractMin()
     c=0
-    #continuo l'esecuzione finche' la coda non rimane vuota
-    while len(h.deque) > 0:
-        #estraggo il nodo con tempo di arrivo minimo nella coda e aggiorno
-        #print checkheap(0,h.deque,h.data)
-        u = h.extractMin()
-
-        #scorro la lista delle adiacenze del nodo minimo
+    while u != dest:
         for v in G.nodes[u].adj:
-            #ottengo le info sul trasporto migliore per viaggiare dalla stazione u alla stazione v
-            best_v=G.nodes[u].nextTransport(v,h.data[u][0],h.data[u][1],h.data[u][2][3],h.data[u][2][4])
 
-            #se e' la prima volta che si passa per la stazione v si inserisce nella coda con le sue info
+            best_v=G.nodes[u].nextTransport(v,h.data[u][2][0],h.data[u][1],h.data[u][2][3],h.data[u][2][4])
+            hour,day=OrientedGraph.addMinutes(best_v[0],best_v[1],G.distance(v,dest)/speed)
+
             if h.data[v] == []:
-                h.data[v]=[best_v[0],best_v[1],best_v]
+                h.data[v]=[hour,day,best_v]
                 h.parent[v]=u
                 h.add(v)
-            #altrimenti si vede se il trasporto attuale e' migliore di quello localmente trovato precedentemente
             else:
-                h.decreaseKey(u,v,[best_v[0],best_v[1],best_v])
+                h.decreaseKey(u,v,[hour,day,best_v])
+
+        u = h.extractMin()
         c+=1
 
     print "nodi visitati:",c
