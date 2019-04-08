@@ -95,6 +95,7 @@ class Node:
         #d:giorno di partenza 
 
         #controllo se la il nodo/stazione station e' nella lista delle adiacenze di questo nodo
+
         if station in self.adj:
             #inizializzo valori valori di ricerca
             best = []
@@ -327,7 +328,7 @@ class OrientedGraph(Graph):
 
     @staticmethod
     def addMinutes(hour,day,addMinutes):
-        if hour.fminute+day*1440 +addMinutes>= day+1*1440:
+        if hour.fminute+day*1440 +addMinutes>= (day+1)*1440:
             day+=1
         newhour=Hour(hour.shm)
         newhour.addMinute(addMinutes)

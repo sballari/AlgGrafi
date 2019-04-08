@@ -29,7 +29,7 @@ class heap:
             self.parent[i]=None
         if vprior == 0:
             vprior=vhour
-        self.data[vstart]=[vprior,vday,[vhour,vday,vhour,None,None]] 
+        self.data[vstart]=[vprior,vday,[vhour,0,vhour,None,None]] 
 
         self.add(vstart)
 

@@ -8,9 +8,9 @@ import time
 G = OrientedGraph.inputGraph("viaggi.csv")
 
 #informazioni viaggio magari da buttare su un file
-From="200417051"
-tm="02355"
-To="140701016"
+From="300000032"
+tm="00530"
+To="400000122"
 
 print "A*"
 #lancio dijkstra che mi restituisce d
@@ -23,6 +23,7 @@ for i in data_astar:
         data_astar[i] = data_astar[i][2]
 points_astar=G.getSolution(From,To,parent_astar,data_astar)
 
+
 print 
 print "DIJKSTRA"
 elapsedtime=time.time()
@@ -34,5 +35,4 @@ for i in data_dijkstra:
         data_dijkstra[i] = data_dijkstra[i][2]
 points_dijkstra=G.getSolution(From,To,parent_dijkstra,data_dijkstra)
 
-G.plotGraph(points_dijkstra)
-
+#G.plotGraph(points_dijkstra)
