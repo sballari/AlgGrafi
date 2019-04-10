@@ -9,7 +9,15 @@ class MatrixCompleteGraph():
         # matrice bidimensinale (lista di liste) preinit a 0
 
     def addweight(self, x, y, weight):
-        self.weight_matrix[x][y] = weight
+        #grafo non orientato
+        if (x==y): self.weight_matrix[y][x]=0
+        else :
+            self.weight_matrix[x][y] = weight
+            self.weight_matrix[y][x] = weight
+        
+    
+    def getweight(self,start_index,dest_index): 
+        return self.weight_matrix[start_index][dest_index]
 
     @staticmethod
     def createGraphFromTSP(fileName):
