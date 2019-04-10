@@ -17,7 +17,7 @@ def parser_LTS(ds_name):
     for line in lines:
         rigo=line.split(" ")
         data.append(filter(lambda r : r!="", rigo))
-    weightType = data[4][1]
+    weightType = data[4][-1]
 
     i=5
     find = False
