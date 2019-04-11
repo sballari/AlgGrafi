@@ -16,8 +16,7 @@ def HKVisit(v, S, G, D, P):
     # S : vertici che devo visitare partendo da 0 n-1 -> e' un Set
 
     if len(S) == 1:
-        v_index = S.copy().pop()
-        return G.getweight(v_index, 0)
+        return G.getweight(v, 0) # v in S per ipotesi
     else:
         if D[v].get(str(S)) != None:
             return D[v][str(S)]
