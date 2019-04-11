@@ -6,7 +6,6 @@ def HKTSP(G):
     P = [dict() for i in range(len(G.weight_matrix))] 
     S = set(range(0, len(G.weight_matrix)))
     ret = HKVisit(0, S, G, D, P)
-    print D
     return ret
 
 
