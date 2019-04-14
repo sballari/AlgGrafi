@@ -24,24 +24,17 @@ class MatrixCompleteGraph():
         w_type, coord = parser_LTS(fileName)
         G=MatrixCompleteGraph(len(coord))
 
-        if w_type == "GEO":
-            pairs = [(elemX,elemY) for elemX in coord for elemY in coord]
-            for e in pairs:
-                dst = MatrixCompleteGraph.distanceGEO(e[0],e[1])
-                index1 = int(e[0][0])-1 #gli indici sono sfasati di uno
-                index2 = int(e[1][0])-1
-                G.addweight(index1,index2,dst)
-            return G
-                   
-        if w_type == "EUC_2D":
-            pairs = [(elemX,elemY) for elemX in coord for elemY in coord]
-            for e in pairs:
-                dst = MatrixCompleteGraph.distanceEUC(e[0],e[1])
-                index1 = int(e[0][0])-1
-                index2 = int(e[1][0])-1
-                G.addweight(index1,index2,dst)
-            return G
-        return w_type
+        distFun = None
+        if w_type == "GEO" : distFun = MatrixCompleteGraph.distanceGEO
+        if w_type == "EUC_2D" : distFun = MatrixCompleteGraph.distanceEUC
+
+        pairs = [(x,y) for x in range(len(coord)) for y in range(x+1,len(coord))]
+        for (x,y) in pairs:
+            dst = distFun(coord[x],coord[y])
+            G.addweight(x,y,dst)
+            
+        return G
+
                 
     @staticmethod
     def radiantConv(tupla):
