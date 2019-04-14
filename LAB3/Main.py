@@ -1,8 +1,10 @@
 from graph import MatrixCompleteGraph
 import HK
 
-G = MatrixCompleteGraph.createGraphFromTSP("burma14.tsp")
+b14 = "burma14"
+u22 = "ulysses22"
+ds_name = b14
 
-# G = MatrixCompleteGraph(4)
-# G.weight_matrix = [[0,4,1,3],[4,0,2,1],[1,2,0,5],[3,1,5,0]]
+G = MatrixCompleteGraph.createGraphFromTSP(ds_name+".tsp")
+
 print HK.HKTSP(G)
