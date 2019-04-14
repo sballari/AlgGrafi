@@ -5,7 +5,7 @@ from math import cos, acos, sqrt
 class MatrixCompleteGraph():
 
     def __init__(self,n):
-        self.weight_matrix = [[0] * n] * n
+        self.weight_matrix = [ [0 for i in range(n)] for j in range(n)]
         # matrice bidimensinale (lista di liste) preinit a 0
 
     def addweight(self, x, y, weight):
@@ -28,7 +28,7 @@ class MatrixCompleteGraph():
             pairs = [(elemX,elemY) for elemX in coord for elemY in coord]
             for e in pairs:
                 dst = MatrixCompleteGraph.distanceGEO(e[0],e[1])
-                index1 = int(e[0][0])-1
+                index1 = int(e[0][0])-1 #gli indici sono sfasati di uno
                 index2 = int(e[1][0])-1
                 G.addweight(index1,index2,dst)
             return G
@@ -53,10 +53,10 @@ class MatrixCompleteGraph():
         lon_deg = float(tupla[2])
 
         lat_min = lat_deg - int(lat_deg)
-        lat_rad = pi * (lat_deg + 5.0 * lat_min/ 3.0) / 180.0
+        lat_rad = pi * (int(lat_deg) + 5.0 * lat_min/ 3.0) / 180.0
 
         lon_min = lon_deg - int(lon_deg)
-        lon_rad = pi * (lon_deg + 5.0 * lon_min/ 3.0) / 180.0
+        lon_rad = pi * (int(lon_deg) + 5.0 * lon_min/ 3.0) / 180.0
 
         return lat_rad,lon_rad
 
@@ -65,8 +65,8 @@ class MatrixCompleteGraph():
         #node(nodeId,x,y)
         #calcola la distanza geografica fra 2 nodi
         
-        longitude_i,latitude_i = MatrixCompleteGraph.radiantConv(node1)
-        longitude_j,latitude_j = MatrixCompleteGraph.radiantConv(node2)
+        latitude_i, longitude_i = MatrixCompleteGraph.radiantConv(node1)
+        latitude_j, longitude_j = MatrixCompleteGraph.radiantConv(node2)
         
         RRR = 6378.388
 
