@@ -19,6 +19,9 @@ class MatrixCompleteGraph():
     def getweight(self,start_index,dest_index): 
         return self.weight_matrix[start_index][dest_index]
 
+    def getNumNodes(self):
+        return len(self.weight_matrix)
+
     @staticmethod
     def createGraphFromTSP(fileName):
         w_type, coord = parser_LTS(fileName)
