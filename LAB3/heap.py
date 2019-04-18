@@ -1,4 +1,3 @@
-import parserCoord
 
 class heap:
     def __init__(self):
@@ -12,7 +11,7 @@ class heap:
     def add(self,index,value):
         #desc: inserisce una stazione nella coda e aggiorna la sua posizione
         #station: codice stazione da inserire
-        indexValueMap[index] = value
+        self.indexValueMap[index] = value
         n = len(self.A) 
         self.A[n] = index #metto l'indice in ultima posizione
         self.indexPositionMap[index] = n
@@ -29,14 +28,14 @@ class heap:
     def value(self,index):
         return self.indexValueMap[index]
     def changeValue(self,index,newValue):
-        return self.indexValueMap[index]=newValue
+        self.indexValueMap[index]=newValue
 
 
     def isPresent(self,index):
         i=0
         trovato=False
 
-        while i<len(self.A) && !trovato :
+        while i<len(self.A) and trovato==False :
             if A[i] == index : 
                 trovato = True
             i = i+1
