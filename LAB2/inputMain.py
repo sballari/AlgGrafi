@@ -1,10 +1,11 @@
-import parserCoord
+from parser import parser
 from dijkstra import dijkstra
 from astar import astar
 from graph import Hour, OrientedGraph
 import time
 
-#creo il grafo orientato
+parser("data_transport/")
+
 G = OrientedGraph.inputGraph("viaggi.csv")
 
 #informazioni viaggio magari da buttare su un file
@@ -15,7 +16,7 @@ To="400000122"
 print "A*"
 #lancio dijkstra che mi restituisce d
 elapsedtime=time.time()
-data_astar,parent_astar=astar(G,From,To,Hour(tm))
+data_astar,parent_astar=astar(G,From,To,Hour(tm),5)
 print "Elapsed Time:",time.time()-elapsedtime
 
 for i in data_astar:
@@ -35,4 +36,4 @@ for i in data_dijkstra:
         data_dijkstra[i] = data_dijkstra[i][2]
 points_dijkstra=G.getSolution(From,To,parent_dijkstra,data_dijkstra)
 
-#G.plotGraph(points_dijkstra)
+G.plotGraph(points_dijkstra)

@@ -35,11 +35,10 @@ def dijkstra(G,root,hm):
 
     #eseguo il setup dell'heap
     h.setup([i for i in G.nodes],root,hm)
-    c=0
+
     #continuo l'esecuzione finche' la coda non rimane vuota
     while len(h.deque) > 0:
         #estraggo il nodo con tempo di arrivo minimo nella coda e aggiorno
-        #print checkheap(0,h.deque,h.data)
         u = h.extractMin()
 
         #scorro la lista delle adiacenze del nodo minimo
@@ -55,8 +54,5 @@ def dijkstra(G,root,hm):
             #altrimenti si vede se il trasporto attuale e' migliore di quello localmente trovato precedentemente
             else:
                 h.decreaseKey(u,v,[best_v[0],best_v[1],best_v])
-        c+=1
-
-    print "nodi visitati:",c
 
     return h.data,h.parent

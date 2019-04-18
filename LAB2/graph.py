@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import random
-import parserCoord
+from parser import readCord
 import matplotlib.lines as lines
 from math import radians, sin, cos, acos
 
@@ -9,7 +9,9 @@ class Hour:
     def __init__(self,hm="00000",d=0):
         #desc: classe orario ci supporta nella gestione degli orari
         #hm: orario nel seguente formato '0HHMM'
-        #day: usato per tenere traccia delle coppie di orario a cavallo della mezzanotte
+        #d: usato per tenere traccia delle coppie di orario a cavallo della mezzanotte
+        # tempo: O(1)
+
         l=list(hm)
         self.shm=hm
         self.hour=int(l[1]+l[2])%24
@@ -19,10 +21,17 @@ class Hour:
 
     def __str__(self):
         #desc: fornisce una stampa "pulita" di un oggetto orario
+        # tempo: O(1)
+
         hour= str(self.hour) if len(str(self.hour)) == 2 else "0"+str(self.hour)
         minute= str(self.minute) if len(str(self.minute)) == 2 else "0"+str(self.minute)
         return hour+":"+minute
+
     def addMinute(self,addminute):
+        #desc: aggiunge all'istanziazione dell'oggetto orario una certo numero di minuti
+        #addminute: numeri da aggiungere
+        # tempo: O(1)
+        
         addhour=addminute/60
         addminute=addminute%60
 
@@ -93,7 +102,7 @@ class Node:
         #station: stazione verso cui si cerca il miglior trasporto
         #hm: orario di partenza
         #d:giorno di partenza 
-
+        # tempo: O(viaggi disponibili da questa stazione alla stazione station)
         #controllo se la il nodo/stazione station e' nella lista delle adiacenze di questo nodo
 
         if station in self.adj:
@@ -166,18 +175,14 @@ class Graph(object):
         # desc : aggiunge un oggetto nodo al grafo
         # label : label del nodo che si vuole aggiungere
         # tempo: O(1)
+
         if label not in self.nodes:
             self.nodes[label]=Node(label)
-
-
-    ####################################
-    ### CODICE NON CONTROLLATO #########
-    ####################################
 
     def buildGraph(self,G):
         # desc : popola G con nodi e archi
         # G : oggetto grafo networkx vuoto, 
-        #     se il grafo e' diretto va usata networkX.DiGraph altrimenti networkX.Graph
+
         for node in self.nodes:
             G.add_node(self.nodes[node].label,size=self.nodes[node].degree()/100)
         for node in self.nodes:
@@ -185,18 +190,6 @@ class Graph(object):
                 G.add_edge(self.nodes[node].label,tail,width=0.0001)
         return G
 
-    def writeOnFile(self,nm):
-        # desc : crea un file con le tabelle delle adiacenze del grafo
-        # nm : nome del file su cui scrivere
-        f=open(nm+'.txt','a')
-        for l in self.nodes:
-            for out in self.nodes[l].adj_out:
-                f.write(str(l)+'\t'+str(out)+'\n')
-
-    ####################################
-    ### FINE CODICE NON CONTROLLATO ####
-    ####################################
- 
 class OrientedGraph(Graph):
     # desc : crea un grafo orientato
     def __init__(self):
@@ -212,18 +205,15 @@ class OrientedGraph(Graph):
         # codCorsa : 
         # codLin : 
         # tempo : O(log n)
+
         if stazA != stazB: #evita i cappi
             self.addNode(stazA)
             self.addNode(stazB)
             self.nodes[stazA].addEdge(stazB,oraP,oraA,codCorsa,codLin)
 
-        
-    ####################################
-    ### CODICE NON CONTROLLATO #########
-    ####################################
-
     def plotGraph(self,s=0):
         # desc : crea una struttura networkX e la usa per plottare il grafo
+        # s: archi da un nodo ad un'altro, coppie di nodi
         fig, ax = plt.subplots()
 
         data = np.array([self.nodes[i].geocoord for i in self.nodes])
@@ -235,12 +225,12 @@ class OrientedGraph(Graph):
         plt.scatter(x,y,s=1,c='grey')
         plt.gca().set_aspect('equal', adjustable='box')
         plt.show()
+
     @staticmethod
     def inputGraph(f):
         # desc: crea un grafo orientato 
         #       preso dal file indicato
         # f : nome del file da cui attingere
-        
         
         f=open(f,'r')
         s = f.read()
@@ -280,13 +270,19 @@ class OrientedGraph(Graph):
                     else:
                         corsa[1]=Hour(corsa[1],0)
                     corsa[0]=Hour(corsa[0])
-        coord=parserCoord.readCord()
+        coord=readCord()
         for station in coord:
             if station in G.nodes:
                 G.nodes[station].geocoord=coord[station]
 
         return G
     def getSolution(self,From,To,parent,data):
+        #desc: stampa della soluzione testuale
+        #From: stazione di partenza
+        #To: stazione di arrivo
+        #parent: dizionario predecessori, chiave stazione e valore stazione precedente
+        #data: dizionario orario arrivo, chiave stazione e valore orario di arrivo in quella stazione
+         
         i=To
 
         points=[]
@@ -317,6 +313,9 @@ class OrientedGraph(Graph):
         return points
 
     def distance(self,u,v):
+        #desc: calcolo della distanza geodetica
+        #u: codice stazione partenza
+        #v: codice stazione di arrivo
         coordA = self.nodes[u].geocoord
         coordB = self.nodes[v].geocoord
         slat = radians(float(coordA[1]))

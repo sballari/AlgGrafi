@@ -1,0 +1,12 @@
+{
+    "sshfs.configs": [
+        {
+            "host": "serverdarossi.servehttp.com",
+            "name": "UbuntuServer",
+            "password": "3=avEcesEm",
+            "port": 27,
+            "root": "~",
+            "username": "rossidaniel"
+        }
+    ]
+}

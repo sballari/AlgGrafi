@@ -10,6 +10,7 @@ class heap:
         #data: dizionario che tiene conto dei dati di arrivo migliore nella stazione
         #parent: dizionario che ha per chiave il codice della stazione e per valore
         #        la stazione da cui raggiungere la stazione chiave
+
         self.deque= []
         self.position=dict()
         self.data=dict()
@@ -23,7 +24,7 @@ class heap:
         #vstart: stazione root
         #vhour: orario di partenza
         #vday: giorno di partenza di default a 0
-
+        #tempo O(len(vlist))
         for i in vlist:
             self.data[i]=[] #orario infinito
             self.parent[i]=None
@@ -36,6 +37,8 @@ class heap:
     def add(self,station):
         #desc: inserisce una stazione nella coda e aggiorna la sua posizione
         #station: codice stazione da inserire
+        #tempo O(log(len(deque))
+
         self.position[station]=len(self.deque)
         self.deque.append(station)
         self.bubbleUp(station)
@@ -43,6 +46,8 @@ class heap:
     def bubbleUp(self,station):
         #desc: aggiorna lo heap dopo l'inserimento o la modifica del nodo station
         #station: codice stazione inserito o modificato
+        #tempo O(log(len(deque))
+
         if station in self.position:
             i = self.position[station]
             p = (i-1)//2
@@ -64,14 +69,16 @@ class heap:
         #u: nodo precedente/padre
         #v: nodo corrente
         #info: info sull'ora di arrivo alla stazione v 
+        #tempo O(log(len(deque))
+
         if self.RELAX(u,v,info):
             if v in self.deque:
                 self.bubbleUp(v)
-            else:
-                self.add(v)
 
     def extractMin(self):
         #desc: estrae il nodo con orario arrivo minimo e aggiorna la coda deque
+        #tempo O(log(len(deque))
+
         next_station = self.deque[0]
         del self.position[next_station]
         last = self.deque.pop()
@@ -86,6 +93,8 @@ class heap:
         #desc: aggiorna la posizione del nodo station se i 
         #      suoi figli hanno un orario di arrivo minore 
         #station: codice stazione da spostare eventualmente
+        #tempo O(log(len(deque))
+
         i = self.position[station]
         l = i * 2 + 1
         r = i * 2 + 2 
@@ -111,6 +120,8 @@ class heap:
         #u: nodo predecessore/padre
         #v: nodo corrente
         #info: info sull'ora di arrivo alla stazione v 
+        #tempo O(1)
+
         if self.data[v][0].fminute + self.data[v][1]*1440 > info[0].fminute + info[1]*1440:
             self.data[v]=info
             self.parent[v]=u
@@ -121,4 +132,6 @@ class heap:
         #desc: restituisce il tempo in minuti della stazione in posizione index
         #index: indice della coda deque corripondente ad una stazione di cui si vuole sapere
         #       l'orario di arrivo in minuti.
+        #tempo O(1)
+
         return self.data[self.deque[index]][0].fminute+self.data[self.deque[index]][1]*1440

@@ -1,4 +1,4 @@
-	\documentclass{article}
+\documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{amsmath}
@@ -18,27 +18,33 @@
 \maketitle
 
 \section*{Domanda 1}
-La rete di traporti è stata modellata come segue:
+La rete di traporti è stata modellata come un arco orientato con archi pesati, abbiamo considerato il grafo così organizzato:
 \begin{itemize}
-	\item \textbf{Vertici}: stazioni
-	\item \textbf{Archi}: trasporti tra una stazione ed un'altra.
+	\item \textbf{Vertici}: stazioni della rete;
+	\item \textbf{Archi}: trasporti disponibili tra una stazione ed un'altra.
 \end{itemize}
-Ogni arco da una stazione A ad una stazione B tiene come peso l'orario di partenza da A e di arrivo a B.
-Più nel dettaglio abbiamo deciso di utilizzare come lista delle adianceze per ciascun nodo un dizionario, avente per chiave la stazione di arrivo e per valore una lista ordinata per orario di partenza delle corse con partenza dalla stazione corrente a quella chiave.
+
+Scendendo maggiormente nel dettaglio ogni nodo (stazione) aveva per lista delle adiacenze un dizionario, questo avente per chiave il codice della stazione di arrivo e per valore una lista ordinata per orario di partenza delle corse con partenza dalla stazione corrente a quella chiave.
+Si è quindi deciso di utilizzare come peso per ciascun arco l'orario di arrivo di un trasporto alla stazione destinazione.
 
 \section*{Domanda 2}
-Abbiamo implementato sia l'algoritmo Dijkstra sia l'algoritmo A*, utilizzando per entrambi un min-heap come coda di priorità, rispetto l'algoritmo visto a lezione si è deciso di inglobare la funzione di inizializzazione e la funzione di rilassamento all'interno della struttura dati min-heap.
+Abbiamo implementato sia l'algoritmo Dijkstra che l'algoritmo A* utilizzando per entrambi una coda di priorità.
+Rispetto l'algoritmo generico visto a lezione si è deciso di inglobare la funzione di inizializzazione e quella di rilassamento all'interno della struttura dati.\\
+La struttura dati considera considera come priorità l'orario associato ai nodi presenti nella coda, l'ora considerata è quella minima rispettivamente:
+\begin{itemize}
+	\item Dijkstra: ora localmente minore di arrivo alla stazione stessa;
+	\item A*: ora stimata di arrivo alla stazione di destinazione dalla stazione stessa.
+\end{itemize}
 
+\newpage
 \section*{Domanda 3}
-
 \begin{figure}[H]
 	\begin{minipage}{0.55\linewidth}
 		\centering
-		\hspace*{-6cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
+		\hspace*{-3cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
 	\end{minipage}
-	\hspace*{-4cm}\begin{minipage}{0.7\linewidth}
-		\textbf{Viaggio 1}:\\
-		Viaggio da 200415016 a 200405005\\
+	\hspace*{-2cm}\begin{minipage}{0.7\linewidth}
+		\textbf{Viaggio da 200415016 a 200405005}:\\
 		Orario di partenza: 09:30\\
 		Orario di arrivo: 09:52\\
 		09:30 corsa 00360 RGTR125/1 da 200415016 a 200415009\\
@@ -48,11 +54,10 @@ Abbiamo implementato sia l'algoritmo Dijkstra sia l'algoritmo A*, utilizzando pe
 \begin{figure}[H]
 	\begin{minipage}{0.55\linewidth}
 		\centering
-		\hspace*{-6cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
+		\hspace*{-3cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
 	\end{minipage}
-	\hspace*{-4cm}\begin{minipage}{0.7\linewidth}
-		\textbf{Viaggio 2}:\\
-		Viaggio da 300000032 a 400000122\\
+	\hspace*{-2cm}\begin{minipage}{0.7\linewidth}
+		\textbf{Viaggio da 300000032 a 400000122}:\\
 		Orario di partenza: 05:30\\
 		Orario di arrivo: 13:50\\
 		06:26 corsa 07608 C881 da 300000032 a 110606001\\
@@ -65,11 +70,10 @@ Abbiamo implementato sia l'algoritmo Dijkstra sia l'algoritmo A*, utilizzando pe
 \begin{figure}[H]
 	\begin{minipage}{0.55\linewidth}
 		\centering
-		\hspace*{-6cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
+		\hspace*{-3cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
 	\end{minipage}
-	\hspace*{-4cm}\begin{minipage}{0.7\linewidth}
-		\textbf{Viaggio 3}:\\
-		Viaggio da 210602003 a 300000030\\
+	\hspace*{-2cm}\begin{minipage}{0.7\linewidth}
+		\textbf{Viaggio da 210602003 a 300000030}:\\
 		Orario di partenza: 06:30\\
 		Orario di arrivo: 10:53\\
 		06:41 corsa 00030 CFLBUS185 da 210602003 a 210602005\\
@@ -84,11 +88,10 @@ Abbiamo implementato sia l'algoritmo Dijkstra sia l'algoritmo A*, utilizzando pe
 \begin{figure}[H]
 	\begin{minipage}{0.55\linewidth}
 		\centering
-		\hspace*{-6cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
+		\hspace*{-3cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
 	\end{minipage}
-	\hspace*{-4cm}\begin{minipage}{0.7\linewidth}
-		\textbf{Viaggio 4}:\\
-		Viaggio da 200417051 a 140701016\\
+	\hspace*{-2cm}\begin{minipage}{0.7\linewidth}
+		\textbf{Viaggio da 200417051 a 140701016}:\\
 		Orario di partenza: 12:00\\
 		Orario di arrivo: 12:43\\
 		12:20 corsa 03712 C821 da 200417051 a 140701016
@@ -98,11 +101,10 @@ Abbiamo implementato sia l'algoritmo Dijkstra sia l'algoritmo A*, utilizzando pe
 \begin{figure}[H]
 	\begin{minipage}{0.55\linewidth}
 		\centering
-		\hspace*{-6cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
+		\hspace*{-3cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
 	\end{minipage}
-	\hspace*{-4cm}\begin{minipage}{0.7\linewidth}
-		\textbf{Viaggio 5}:\\
-		Viaggio da 200417051 a 140701016\\
+	\hspace*{-2cm}\begin{minipage}{0.7\linewidth}
+		\textbf{Viaggio da 200417051 a 140701016}:\\
 		Orario di partenza: 23:55\\
 		Orario di arrivo: 00:44\\
 		00:09 corsa 03623 C821 da 200417051 a 140701016
@@ -112,11 +114,10 @@ Abbiamo implementato sia l'algoritmo Dijkstra sia l'algoritmo A*, utilizzando pe
 \begin{figure}[H]
 	\begin{minipage}{0.55\linewidth}
 		\centering
-		\hspace*{-6cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
+		\hspace*{-3cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
 	\end{minipage}
-	\hspace*{-4cm}\begin{minipage}{0.7\linewidth}
-		\textbf{Viaggio 6}:\\
-		Viaggio da 200406015 a 110405001\\
+	\hspace*{-2cm}\begin{minipage}{0.7\linewidth}
+		\textbf{Viaggio da 200406015 a 110405001}:\\
 		Orario di partenza: 21:30\\
 		Orario di arrivo: 07:16\\
 		21:45 corsa 02708 AVL20 da 200406015 a 200406013\\
@@ -128,16 +129,15 @@ Abbiamo implementato sia l'algoritmo Dijkstra sia l'algoritmo A*, utilizzando pe
 		04:30 corsa 03468 RGTR840 da 200417051 a 110101004\\
 		07:14 corsa 02156 RGTR665 da 110101004 a 110405001
 		
-			\end{minipage}
+\end{minipage}
 \end{figure}
 \begin{figure}[H]
 	\begin{minipage}{0.55\linewidth}
 		\centering
-		\hspace*{-6cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
+		\hspace*{-3cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
 	\end{minipage}
-	\hspace*{-4cm}\begin{minipage}{0.7\linewidth}
-		\textbf{Viaggio 7}:\\
-		Viaggio da 140701040 a 210101001\\
+	\hspace*{-2cm}\begin{minipage}{0.7\linewidth}
+		\textbf{Viaggio da 140701040 a 210101001}:\\
 		Orario di partenza: 05:30\\
 		Orario di arrivo: 07:10\\
 		05:34 corsa 06082 RGTR512 da 140701040 a 140701013\\
@@ -154,11 +154,10 @@ Abbiamo implementato sia l'algoritmo Dijkstra sia l'algoritmo A*, utilizzando pe
 \begin{figure}[H]
 	\begin{minipage}{0.55\linewidth}
 		\centering
-		\hspace*{-6cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
+		\hspace*{-3cm}\includegraphics[width=1.0\linewidth, valign=t]{figures/Figure_1}
 	\end{minipage}
-	\hspace*{-4cm}\begin{minipage}{0.7\linewidth}
-		\textbf{Viaggio 8}:\\
-		Viaggio da 170801001 a 220402082\\
+	\hspace*{-2cm}\begin{minipage}{0.7\linewidth}
+		\textbf{Viaggio da 170801001 a 220402082}:\\
 		Orario di partenza: 12:30\\
 		Orario di arrivo: 14:44\\
 		12:45 corsa 03018 RGTR414 da 170801001 a 160501003\\
@@ -173,4 +172,13 @@ Abbiamo implementato sia l'algoritmo Dijkstra sia l'algoritmo A*, utilizzando pe
 		
 			\end{minipage}
 \end{figure}
+
+\section*{Domanda 4}
+Le soluzioni fornite dagli algoritmi sono ottime, sotto l'assunzione che il tempo di spostamento all'interno delle stazioni, da un binario ad un altro per esempio, sia nullo e che quindi non venga considerato.\\
+Un possibile miglioramento per rendere più ragionevoli alcune soluzioni potrebbe essere quello di minimizzare il numero di cambi, questo perché dato un percorso ottimo potrebbe esisterne uno che arriva alla stessa destinazione poco tempo dopo ma facendo un numero minore di cambi.\\
+Questa modifica potrebbe essere fatta assegnando una penalità oraria (ritardo) se si effettua il cambio, si dovrebbe quindi incrementare di una certa quantità $k$ l'orario di partenza da quella stazione se non si prosegue con la stessa corsa con cui si è arrivati.
+
+\section*{Domanda 5}
+In allegato alla consegna sono stati inseriti i codice sorgente Python.
+
 \end{document}
