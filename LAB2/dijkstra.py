@@ -1,30 +1,5 @@
 from heap import heap
 
-def checkheap(i,coda,data):
-    if i > len(coda):
-        return True
-    ok=False
-    if 2*i+1 < len(coda):
-        if data[coda[i]][0].fminute+data[coda[i]][1]*1440 <= data[coda[2*i+1]][0].fminute+data[coda[2*i+1]][1]*1440:
-            ok=checkheap(2*i+1,coda,data)
-        else:
-            print data[coda[i]][0].fminute+data[coda[i]][1]*1440 , data[coda[2*i+1]][0].fminute+data[coda[2*i+1]][1]*1440
-            return False
-    else:
-        return True
-    if ok == True:
-        if 2*i+2 < len(coda):
-            if data[coda[i]][0].fminute+data[coda[i]][1]*1440 <= data[coda[2*i+2]][0].fminute+data[coda[2*i+2]][1]*1440:
-                ok=checkheap(2*i+2,coda,data)
-            else:
-                print data[coda[i]][0].fminute+data[coda[i]][1]*1440 , data[coda[2*i+2]][0].fminute+data[coda[2*i+2]][1]*1440
-                return False
-        else:
-            return True
-    else:
-        return False
-    return ok
-
 def dijkstra(G,root,hm):
     #desc: algoritmo per la ricerca di cammini minimi da un nodo root
     #root: codice stazione di partenza, corrispondente al nodo root

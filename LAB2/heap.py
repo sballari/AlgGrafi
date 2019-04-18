@@ -1,5 +1,3 @@
-import parserCoord
-
 class heap:
     def __init__(self):
         #desc: costruisco le strutture dati richieste dallo heap

@@ -4,14 +4,14 @@ from astar import astar
 from graph import Hour, OrientedGraph
 import time
 
-parser("data_transport/")
+parser("data/data_transport/")
 
-G = OrientedGraph.inputGraph("viaggi.csv")
+G = OrientedGraph.inputGraph("data/viaggi.csv")
 
 #informazioni viaggio magari da buttare su un file
-From="300000032"
-tm="00530"
-To="400000122"
+From="170801001"
+tm="01230"
+To="220402082"
 
 print "A*"
 #lancio dijkstra che mi restituisce d
@@ -36,4 +36,4 @@ for i in data_dijkstra:
         data_dijkstra[i] = data_dijkstra[i][2]
 points_dijkstra=G.getSolution(From,To,parent_dijkstra,data_dijkstra)
 
-G.plotGraph(points_dijkstra)
+G.plotGraph(From+"_"+To,points_dijkstra)

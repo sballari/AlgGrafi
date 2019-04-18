@@ -44,16 +44,15 @@ def parser(mypath):
                             [stazione1[0], stazione2[0], stazione1[2], stazione2[1], corsa, linea])
         f.close()
 
-    f = open("viaggi.csv", "w")
+    f = open("data/viaggi.csv", "w")
     for i in coppia:
         for j in i:
             f.write(j+"\t")
         f.write("\n")
 
 
-def readCord():
+def readCord(mypath):
     # return: una mappa key:codStaz -> value:(long,lat)
-    mypath = "bfkoord"
 
     f = file(mypath)
     s = f.read()

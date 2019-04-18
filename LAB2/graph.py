@@ -211,7 +211,7 @@ class OrientedGraph(Graph):
             self.addNode(stazB)
             self.nodes[stazA].addEdge(stazB,oraP,oraA,codCorsa,codLin)
 
-    def plotGraph(self,s=0):
+    def plotGraph(self,fname,s=0):
         # desc : crea una struttura networkX e la usa per plottare il grafo
         # s: archi da un nodo ad un'altro, coppie di nodi
         fig, ax = plt.subplots()
@@ -224,7 +224,9 @@ class OrientedGraph(Graph):
         x, y = data.T
         plt.scatter(x,y,s=1,c='grey')
         plt.gca().set_aspect('equal', adjustable='box')
-        plt.show()
+        plt.xticks([])
+        plt.yticks([])
+        plt.savefig(fname)
 
     @staticmethod
     def inputGraph(f):
@@ -270,7 +272,7 @@ class OrientedGraph(Graph):
                     else:
                         corsa[1]=Hour(corsa[1],0)
                     corsa[0]=Hour(corsa[0])
-        coord=readCord()
+        coord=readCord("data/bfkoord")
         for station in coord:
             if station in G.nodes:
                 G.nodes[station].geocoord=coord[station]
