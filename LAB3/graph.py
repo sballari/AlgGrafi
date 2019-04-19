@@ -80,4 +80,4 @@ class MatrixCompleteGraph():
         y1 = float(node1[2])
         y2 = float(node2[2])
         distance = sqrt((x1-x2)**2 + (y1-y2)**2)
-        return distance
+        return int(distance)
