@@ -48,3 +48,19 @@ def buildHeap(n,keys,root):
     for i in indexs: 
         Q.add(i,keys[i])
     return Q
+
+def pi2Tree(piMap):
+    #desc: converte la mappa dei predecessori in un albero classico
+    #piMap : mappa dei padri di ogni nodo
+    #return : mappa dei successori
+    if len(piMap) == 0 : return None
+    else: 
+        if len(piMap) == 1  :
+            el,padre = piMap.popitem()
+            return {padre: [el]}
+        else:    
+            el,padre = piMap.popitem()
+            tree = pi2Tree(piMap)
+            if padre in tree : tree[padre].append(el)
+            else: tree[padre]=[el] 
+            return tree
