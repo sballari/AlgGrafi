@@ -18,18 +18,18 @@
 \maketitle
 
 \section*{Domanda 1}
-La rete di traporti è stata modellata come un arco orientato con archi pesati, abbiamo considerato il grafo così organizzato:
+La rete di traporti è stata modellata come un grafo orientato con archi pesati, abbiamo considerato il grafo così organizzato:
 \begin{itemize}
 	\item \textbf{Vertici}: stazioni della rete;
 	\item \textbf{Archi}: trasporti disponibili tra una stazione ed un'altra.
 \end{itemize}
 
-Scendendo maggiormente nel dettaglio ogni nodo (stazione) aveva per lista delle adiacenze un dizionario, questo avente per chiave il codice della stazione di arrivo e per valore una lista ordinata per orario di partenza delle corse con partenza dalla stazione corrente a quella chiave.
+Scendendo maggiormente nel dettaglio ogni nodo (stazione) ha per lista delle adiacenze un dizionario, questo ha per chiave il codice della stazione di arrivo e per valore una lista ordinata, per orario di partenza, delle corse con partenza dalla stazione corrente a quella chiave.
 Si è quindi deciso di utilizzare come peso per ciascun arco l'orario di arrivo di un trasporto alla stazione destinazione.
 
 \section*{Domanda 2}
 Abbiamo implementato sia l'algoritmo Dijkstra che l'algoritmo A* utilizzando per entrambi una coda di priorità.
-Rispetto l'algoritmo generico visto a lezione si è deciso di inglobare la funzione di inizializzazione e quella di rilassamento all'interno della struttura dati.\\
+Rispetto l'algoritmo generico visto a lezione si è deciso di inglobare la funzione di inizializzazione e quella di rilassamento all'interno della struttura dati di appoggio.\\
 La struttura dati considera considera come priorità l'orario associato ai nodi presenti nella coda, l'ora considerata è quella minima rispettivamente:
 \begin{itemize}
 	\item Dijkstra: ora localmente minore di arrivo alla stazione stessa;
@@ -47,7 +47,7 @@ La struttura dati considera considera come priorità l'orario associato ai nodi 
 		\textbf{Viaggio da 200415016 a 200405005}:\\
 		Orario di partenza: 09:30\\
 		Orario di arrivo: 09:52\\
-		09:30 corsa 00360 RGTR125/1 da 200415016 a 200415009\\
+		\mbox{09:30 corsa 00360 RGTR125/1 da 200415016 a 200415009}\\
 		09:50 corsa 06602 RGTR10 da 200415009 a 200405005
 			\end{minipage}
 \end{figure}
@@ -76,9 +76,9 @@ La struttura dati considera considera come priorità l'orario associato ai nodi 
 		\textbf{Viaggio da 210602003 a 300000030}:\\
 		Orario di partenza: 06:30\\
 		Orario di arrivo: 10:53\\
-		06:41 corsa 00030 CFLBUS185 da 210602003 a 210602005\\
-		06:55 corsa 00037 CFLBUS175 da 210602005 a 220502003\\
-		07:07 corsa 01306 CFLBUS176 da 220502003 a 201103001\\
+		\mbox{06:41 corsa 00030 CFLBUS185 da 210602003 a 210602005}\\
+		\mbox{06:55 corsa 00037 CFLBUS175 da 210602005 a 220502003}\\
+		\mbox{07:07 corsa 01306 CFLBUS176 da 220502003 a 201103001}\\
 		07:20 corsa 00024 RGTR176 da 201103001 a 200405036\\
 		07:24 corsa 01173 RGTR172 da 200405036 a 200405026\\
 		07:27 corsa 04301 AVL31 da 200405026 a 200405035\\
@@ -94,7 +94,7 @@ La struttura dati considera considera come priorità l'orario associato ai nodi 
 		\textbf{Viaggio da 200415009 a 300000030}:\\
 		Orario di partenza: 18:00\\
 		Orario di arrivo: 22:28\\
-		18:08 corsa 00350 RGTR125/1 da 200415009 a 200415017\\
+		\mbox{18:08 corsa 00350 RGTR125/1 da 200415009 a 200415017}\\
 		18:13 corsa 08140 RGTR27 da 200415017 a 200405035\\
 		18:22 corsa 05838 C821 da 200405035 a 200101007\\
 		19:31 corsa 02142 C821 da 200101007 a 300000030
@@ -126,7 +126,7 @@ La struttura dati considera considera come priorità l'orario associato ai nodi 
 		Orario di arrivo: 07:16\\
 		21:45 corsa 02708 AVL20 da 200406015 a 200406013\\
 		21:47 corsa 03714 AVLCN da 200406013 a 200406011\\
-		21:57 corsa 00487 RGTR125/1 da 200406011 a 200405020\\
+		\mbox{21:57 corsa 00487 RGTR125/1 da 200406011 a 200405020}\\
 		22:03 corsa 03714 AVLCN da 200405020 a 200405023\\
 		22:12 corsa 03725 AVLCN da 200405023 a 200405035\\
 		22:16 corsa 03722 C821 da 200405035 a 200417051\\
@@ -146,7 +146,7 @@ La struttura dati considera considera come priorità l'orario associato ai nodi 
 		Orario di arrivo: 07:10\\
 		05:34 corsa 06082 RGTR512 da 140701040 a 140701013\\
 		05:45 corsa 03830 C821 da 140701013 a 160904001\\
-		06:12 corsa 03626 CFLBUSL10 da 160904001 a 200419026\\
+		\mbox{06:12 corsa 03626 CFLBUSL10 da 160904001 a 200419026}\\
 		06:20 corsa 03177 AVL4 da 200419026 a 200405014\\
 		06:22 corsa 00040 AVL18 da 200405014 a 200417047\\
 		06:34 corsa 05313 RGTR213 da 200417047 a 200417044\\
@@ -180,7 +180,8 @@ La struttura dati considera considera come priorità l'orario associato ai nodi 
 \section*{Domanda 4}
 Le soluzioni fornite dagli algoritmi sono ottime, sotto l'assunzione che il tempo di spostamento all'interno delle stazioni, da un binario ad un altro per esempio, sia nullo e che quindi non venga considerato.\\
 Un possibile miglioramento per rendere più ragionevoli alcune soluzioni potrebbe essere quello di minimizzare il numero di cambi, questo perché dato un percorso ottimo potrebbe esisterne uno che arriva alla stessa destinazione poco tempo dopo ma facendo un numero minore di cambi.\\
-Questa modifica potrebbe essere fatta assegnando una penalità oraria (ritardo) se si effettua il cambio, si dovrebbe quindi incrementare di una certa quantità $k$ l'orario di partenza da quella stazione se non si prosegue con la stessa corsa con cui si è arrivati.
+Questa modifica potrebbe essere fatta assegnando una penalità oraria (ritardo) se si effettua il cambio, si dovrebbe quindi incrementare di una certa quantità $k$ l'orario di partenza da quella stazione se non si prosegue con la stessa corsa con cui si è arrivati.\\
+Un altro problema riscontrabile nell'utilizzo di soluzioni ottime fornite dagli algoritmi, su stesse istanze del problema, è la restituzione della stessa soluzione di viaggio ottima per ogni ricerca, questo potrebbe portare ad un sovraffollamento di alcune corse generando ritardi e disservizi della rete, quindi una possibile soluzione potrebbe essere quella di considerare tutte le soluzioni ottime fornite per uno stesso problema e bilanciare il carico sulle diverse soluzioni.
 
 \section*{Domanda 5}
 In allegato alla consegna sono stati inseriti i codice sorgente Python.

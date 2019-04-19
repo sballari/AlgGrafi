@@ -1,39 +1,51 @@
 from graph import MatrixCompleteGraph
+import time
 
-
-def HKTSP(G):
+def HKTSP(G,time_limit=300):
     D = [dict() for i in range(len(G.weight_matrix))] 
     P = [dict() for i in range(len(G.weight_matrix))] 
     S = set(range(0, len(G.weight_matrix)))
-    ret = HKVisit(0, S, G, D, P)
+    l=[time_limit]
+    ret = HKVisit(0, S, G, D, P,l)
+    print "Elapsed Time: ",time_limit-l[0]
     return ret
 
 
-def HKVisit(v, S, G, D, P):
+def HKVisit(v, S, G, D, P,time_limit):
     # v : vertice di arrivo
     # G : grafo pesato delle distanze
     # S : vertici che devo visitare partendo da 0 n-1 -> e' un Set
-
+    #print time_limit
+    tm=time.time()
     if len(S) == 1:
+        time_limit[0]-=time.time()-tm
         return G.getweight(v, 0) # v in S per ipotesi
-    else:
-        if D[v].get(str(S)) != None:
-            return D[v][str(S)]
+    
+    if D[v].get(str(S)) != None:
+        time_limit[0]-=time.time()-tm
+        return D[v][str(S)]
 
+    mindist = None
+    minprec = None
+    S_ = S.difference({v})  # S=S\{v}
+    time_limit[0]-=time.time()-tm
+    
+    for u in S_:
+        
+        dist = HKVisit(u, S_, G, D, P,time_limit)+G.getweight(u, v)
+        tm=time.time()
+        if mindist == None:
+            mindist = dist
+            minprec = u
         else:
-            mindist = None
-            minprec = None
-            S_ = S.difference({v})  # S=S\{v}
+            if dist < mindist:
+                mindist = dist
+                minprec = u
 
-            for u in S_:
-                dist = HKVisit(u, S_, G, D, P)+G.getweight(u, v)
-                if mindist == None:
-                    mindist = dist
-                    minprec = u
-                else:
-                    if dist < mindist:
-                        mindist = dist
-                        minprec = u
-            D[v][str(S)] = mindist
-            P[v][str(S)] = minprec
-            return mindist
+        time_limit[0]-=time.time()-tm
+
+        if time_limit[0] < 1:
+            break
+    D[v][str(S)] = mindist
+    P[v][str(S)] = minprec
+    return mindist
