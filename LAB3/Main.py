@@ -13,8 +13,8 @@ G = MatrixCompleteGraph.createGraphFromTSP(ds_name+".tsp")
 # print circ 
 # print randomInsertion.weightCirc(circ,G)
 
-# print HK.HKTSP(G)
+print HK.HKTSP(G)
 
-mst = primMST.PrimMST(G,0)
-print mst
+#mst = primMST.PrimMST(G,0)
+#print mst
 
