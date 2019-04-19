@@ -13,7 +13,7 @@ class heap:
         #station: codice stazione da inserire
         self.indexValueMap[index] = value
         n = len(self.A) 
-        self.A[n] = index #metto l'indice in ultima posizione
+        self.A.append(index)  #metto l'indice in ultima posizione
         self.indexPositionMap[index] = n
         self.bubbleUp(n)
 
@@ -36,7 +36,7 @@ class heap:
         trovato=False
 
         while i<len(self.A) and trovato==False :
-            if A[i] == index : 
+            if self.A[i] == index : 
                 trovato = True
             i = i+1
 
@@ -48,13 +48,13 @@ class heap:
         #station: codice stazione inserito o modificato
         p = self.parentPosition(i)
 
-        while i > 0 and self.value(A[i]) <  self.value(A[p]):
+        while i > 0 and self.value(self.A[i]) <  self.value(self.A[p]):
             #scambio A[i] <-> A[p]
-            self.indexPositionMap[A[p]] = i
-            self.indexPositionMap[A[i]] = p
+            self.indexPositionMap[self.A[p]] = i
+            self.indexPositionMap[self.A[i]] = p
             
-            tmp = A[p]
-            self.A[p] = A[i]
+            tmp = self.A[p]
+            self.A[p] = self.A[i]
             self.A[i] = tmp
             
 
@@ -67,7 +67,7 @@ class heap:
         else: 
             self.changeValue(node_index,newValue)
             i = self.indexPositionMap[node_index]
-            self.bubbleUp(self,i)
+            self.bubbleUp(i)
             return True
 
 
@@ -75,7 +75,7 @@ class heap:
         #desc: estrae il nodo con orario arrivo minimo e aggiorna la coda deque
         n = len(self.A)
 
-        minEl = self.value(self.A[0])
+        minEl = self.A[0]
         del self.indexPositionMap[self.A[0]]
         del self.indexValueMap[self.A[0]]
         
@@ -96,7 +96,7 @@ class heap:
         if l < len(self.A) and self.value(self.A[l]) <  self.value(self.A[i]):
             smallest = l
 
-        if r < len(self.A) and self.value(self.A[r]) <  self.value(A[smallest]):
+        if r < len(self.A) and self.value(self.A[r]) <  self.value(self.A[smallest]):
             smallest = r
         
         if smallest != i:

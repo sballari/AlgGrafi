@@ -17,7 +17,9 @@ def PrimMST(G,root):
     while Q.isEmpty() == False :
         u = Q.extractMin()
         #trovo l'arco minimo tra u e tutti gli altri nodi 
-        for v in range(n).remove(u): #il grafo e' completo
+        range_ = range(n)
+        range_.remove(u)
+        for v in range_: #il grafo e' completo
             if Q.isPresent(v) and G.getweight(u,v) < key[v]:
                 key[v] = G.getweight(u,v)
                 pi[v] = u
