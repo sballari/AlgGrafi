@@ -18,7 +18,7 @@
 \maketitle
 
 \section*{Domanda 1}
-La rete di traporti è stata modellata come un grafo orientato con archi pesati, abbiamo considerato il grafo così organizzato:
+La rete di traporti è stata modellata come un multi grafo orientato con archi pesati, abbiamo considerato il grafo così organizzato:
 \begin{itemize}
 	\item \textbf{Vertici}: stazioni della rete;
 	\item \textbf{Archi}: trasporti disponibili tra una stazione ed un'altra.
@@ -35,7 +35,7 @@ La struttura dati considera considera come priorità l'orario associato ai nodi 
 	\item Dijkstra: ora localmente minore di arrivo alla stazione stessa;
 	\item A*: ora stimata di arrivo alla stazione di destinazione dalla stazione stessa.
 \end{itemize}
-
+I due algoritmi forniscono le stesse soluzioni alle stesse istanze di problemi. L'euristica è calcolata come il tempo necessario a percorrere alla velocità di 300 km/h la distanza in linea d'aria tra due nodi. La funzione di valutazione di conseguenza consiste nella somma all'ora di arrivo a una determinata stazione di questa euristica, fornendo così un'ora stimata di arrivo. Con punti poco lontani A* presenta un notevole vantaggio in termini di tempo di esecuzione, mentre scegliendo stazioni molto lontane  A* presenta tempi peggiori. Abbiamo quindi deciso di calcolare il tempo impiegato da A* non considerando il tempo di calcolo dell'euristica. Il tempo così ottenuto è estremamente vicino al tempo di Dijkstra (leggermente inferiore), questo ci ha quindi portato a concludere che con punti lontani l'euristica risulti ingannevole e quindi porta a intraprendere molti percorsi errati arrivando alla stessa complessità di Dijkstra con però l'aggiunta di un notevole overhead dovuto al calcolo dell'euristica.
 \newpage
 \section*{Domanda 3}
 \begin{figure}[H]
