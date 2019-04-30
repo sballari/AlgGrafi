@@ -81,3 +81,11 @@ class MatrixCompleteGraph():
         y2 = float(node2[2])
         distance = sqrt((x1-x2)**2 + (y1-y2)**2)
         return int(distance)
+
+    def weightCirc(self,circ):
+        somma = 0
+        for j in range(1, len(circ)):
+            i = j-1
+            dij = self.getweight(circ[i],circ[j])
+            somma += dij
+        return somma
