@@ -64,3 +64,11 @@ def pi2Tree(piMap):
             if padre in tree : tree[padre].append(el)
             else: tree[padre]=[el] 
             return tree
+
+
+def costPi(piMap,G):
+    somma = 0
+    for p in piMap:
+        el = piMap[p]
+        somma += G.getweight(p,el)
+    return somma
