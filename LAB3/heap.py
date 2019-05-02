@@ -80,6 +80,7 @@ class heap:
         del self.indexValueMap[self.A[0]]
         
         self.A[0] = self.A[n-1]
+        self.indexPositionMap[self.A[n-1]] = 0
         self.A.pop() #decremento n
 
         self.trickledown(0)
