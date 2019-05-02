@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 *.pyc
+# latex extension
+*.aux
+*.fdb_latexmk
+*.synctex.gz
 
 # Distribution / packaging
 .Python
