@@ -45,25 +45,34 @@ for ds_name in onlyfiles:
     #HELD-KARP ALGORITHM
     print "esecuzione hk: "+ds_name
     sol,tm= HKTSP(G,10)
+    print "costo soluzione: "+str(sol)
+    print "tempo esecuzione: "+str(tm)
     errore=str(round((sol-optSol[ds_name])/optSol[ds_name]*100,2))+"%"
+    print "errore: "+str(errore)
     sol_HK.append(sol)
     tempo_HK.append(tm)
     errore_HK.append(errore)
-    
+
     #RANDOM INSERTION
     print "esecuzione random insertione: "+ds_name
     sol,tm= RandomInsertion(G)
     sol= G.weightCirc(sol)
+    print "costo soluzione: "+str(sol)
+    print "tempo esecuzione: "+str(tm)
     errore=str(round((sol-optSol[ds_name])/optSol[ds_name]*100,2))+"%"
+    print "errore: "+str(errore)
     sol_r.append(sol)
     tempo_r.append(tm)
     errore_r.append(errore)
-
+    
     #MST APPROX ALGORITHM
     print "esecuzione MSTApprox: "+ds_name
     sol,tm= MSTApprox.MSTApprox(G)
     sol = G.weightCirc(sol)
+    print "costo soluzione: "+str(sol)
+    print "tempo esecuzione: "+str(tm)
     errore=str(round((sol-optSol[ds_name])/optSol[ds_name]*100,2))+"%"
+    print "errore: "+str(errore)
     sol_MSTA.append(sol)
     tempo_MSTA.append(tm)
     errore_MSTA.append(errore)
