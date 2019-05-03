@@ -7,7 +7,7 @@ import pandas as pd
 from os import listdir
 from os.path import isfile, join
 from sys import setrecursionlimit
-from collections import OrderedDict
+from pandas.compat import OrderedDict
 
 
 setrecursionlimit(10000)
@@ -23,38 +23,40 @@ optSol = {
 
 mypath="dataset"
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+data = OrderedDict()
 
-index = []
+data["index"] = []
 
-sol_HK = []
-tempo_HK = []
-errore_HK = []
+data["sol_HK"] = []
+data["tempo_HK"] = []
+data["errore_HK"] = []
 
-sol_r = []
-tempo_r = []
-errore_r = [] 
+data["sol_r"] = []
+data["tempo_r"] = []
+data["errore_r"] = [] 
 
-sol_MSTA = []
-tempo_MSTA = []
-errore_MSTA = []
+data["sol_MSTA"] = []
+data["tempo_MSTA"] = []
+data["errore_MSTA"] = []
+
 
 for ds_name in onlyfiles:
     print "------------------INIZIO "+ds_name+" ------------"
     G = MatrixCompleteGraph.createGraphFromTSP(ds_name)
-    index.append(ds_name)
-    """
+    data["index"].append(ds_name)
+    
     #HELD-KARP ALGORITHM
     print "esecuzione hk: "+ds_name
-    sol,tm= HKTSP(G,60)
+    sol,tm= HKTSP(G,120)
     tm=round(tm,3)
     print "costo soluzione: "+str(sol)
     print "tempo esecuzione: "+str(tm)
     errore=str(round(float(sol-optSol[ds_name])/optSol[ds_name]*100,2))+"%"
     print "errore: "+str(errore)
-    sol_HK.append(sol)
-    tempo_HK.append(tm)
-    errore_HK.append(errore)
-    """
+    data["sol_HK"].append(sol)
+    data["tempo_HK"].append(tm)
+    data["errore_HK"].append(errore)
+    
     #RANDOM INSERTION
     print "esecuzione random insertione: "+ds_name
     sol,tm= RandomInsertion(G)
@@ -64,9 +66,9 @@ for ds_name in onlyfiles:
     print "tempo esecuzione: "+str(tm)
     errore=str(round(float(sol-optSol[ds_name])/optSol[ds_name]*100,2))+"%"
     print "errore: "+str(errore)
-    sol_r.append(sol)
-    tempo_r.append(tm)
-    errore_r.append(errore)
+    data["sol_r"].append(sol)
+    data["tempo_r"].append(tm)
+    data["errore_r"].append(errore)
     
     #MST APPROX ALGORITHM
     print "esecuzione MSTApprox: "+ds_name
@@ -77,12 +79,14 @@ for ds_name in onlyfiles:
     print "tempo esecuzione: "+str(tm)
     errore=str(round(float(sol-optSol[ds_name])/optSol[ds_name]*100,2))+"%"
     print "errore: "+str(errore)
-    sol_MSTA.append(sol)
-    tempo_MSTA.append(tm)
-    errore_MSTA.append(errore)
+    data["sol_MSTA"].append(sol)
+    data["tempo_MSTA"].append(tm)
+    data["errore_MSTA"].append(errore)
     
-"""
-df=pd.DataFrame(data=OrderedDict({"Istanze":index,"Soluzione_HK":sol_HK,"Tempo_HK":tempo_HK,"Errore_HK":errore_HK,"Soluzione_RINS":sol_r,"Tempo_RINS":tempo_r,"Errore_RINS":errore_r,"Soluzione_MSTA":sol_MSTA,"Tempo_MSTA":tempo_MSTA,"Errore_MSTA":errore_MSTA,}))
-df.set_index("Istanze",inplace=True)
+
+df=pd.DataFrame(data)
+df.set_index("index",inplace=True)
 print df.to_latex(index=True)
-"""
+
+
+
