@@ -67,7 +67,7 @@ for ds_name in onlyfiles:
     sol_r.append(sol)
     tempo_r.append(tm)
     errore_r.append(errore)
-    """
+    
     #MST APPROX ALGORITHM
     print "esecuzione MSTApprox: "+ds_name
     sol,tm= MSTApprox.MSTApprox(G)
@@ -80,7 +80,7 @@ for ds_name in onlyfiles:
     sol_MSTA.append(sol)
     tempo_MSTA.append(tm)
     errore_MSTA.append(errore)
-    """
+    
 """
 df=pd.DataFrame(data=OrderedDict({"Istanze":index,"Soluzione_HK":sol_HK,"Tempo_HK":tempo_HK,"Errore_HK":errore_HK,"Soluzione_RINS":sol_r,"Tempo_RINS":tempo_r,"Errore_RINS":errore_r,"Soluzione_MSTA":sol_MSTA,"Tempo_MSTA":tempo_MSTA,"Errore_MSTA":errore_MSTA,}))
 df.set_index("Istanze",inplace=True)
