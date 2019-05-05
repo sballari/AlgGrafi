@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{titling}
+\usepackage{pdflscape}
+\usepackage[export]{adjustbox}
+\usepackage{float}
+\usepackage{booktabs} % To thicken table lines
+
+\setlength{\droptitle}{-10em}
+\pagestyle{empty}
+
+\title{Lab. 2 - La rete dei trasporti pubblici}
+\author{Ballarin Simone, Gobbo Alessio, Rossi Daniel}
+\date{April 2019}
+
+\begin{document}
+\maketitle
+
+\section*{Domanda 1}
+\hspace{-2cm}
+\begin{tabular}{lrrlrrlrrl}
+	\toprule
+	index         & s\_HK     & t\_HK  & e\_HK     & s\_r     & t\_r & e\_r    & s\_MSTA  & t\_MSTA & e\_MSTA \\
+	\midrule
+	gr229.tsp     & 181220    & 599.00 & 34.63\%   & 147693   & 0.02 & 9.73\%  & 170205   & 0.019   & 26.45\% \\
+	ulysses22.tsp & 7105      & 599.00 & 1.31\%    & 7343     & 0.00 & 4.71\%  & 8132     & 0.001   & 15.96\% \\
+	dsj1000.tsp   & 551461828 & 599.00 & 2855.36\% & 20630542 & 0.62 & 10.56\% & 25728577 & 0.422   & 37.88\% \\
+	eil51.tsp     & 972       & 599.00 & 128.17\%  & 449      & 0.00 & 5.4\%   & 599      & 0.001   & 40.61\% \\
+	kroD100.tsp   & 146984    & 599.00 & 590.26\%  & 23550    & 0.00 & 10.59\% & 27296    & 0.005   & 28.19\% \\
+	d493.tsp      & 111748    & 599.00 & 219.26\%  & 38613    & 0.11 & 10.32\% & 45330    & 0.095   & 29.51\% \\
+	burma14.tsp   & 3323      & 0.87   & 0.0\%     & 3490     & 0.00 & 5.03\%  & 4062     & 0.000   & 22.24\% \\
+	\bottomrule
+\end{tabular}
+\end{document}

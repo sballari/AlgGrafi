@@ -86,7 +86,11 @@ for ds_name in onlyfiles:
 
 df=pd.DataFrame(data)
 df.set_index("index",inplace=True)
-print df.to_latex(index=True)
+with open('relazione/mytable.tex', 'w') as tf:
+     tf.write(df.to_latex(index=True))
+
+
+
 
 
 
