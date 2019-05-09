@@ -9,20 +9,13 @@ from os.path import isfile, join
 from sys import setrecursionlimit
 from pandas.compat import OrderedDict
 
-
 setrecursionlimit(10000)
-optSol = {
-    "burma14.tsp" : 3323,
-    "ulysses22.tsp": 7013,
-    "eil51.tsp": 426,
-    "kroD100.tsp":21294,
-    "gr229.tsp": 134602,
-    "d493.tsp": 35002,
-    "dsj1000.tsp": 	18659688
-}
 
-mypath="dataset"
-onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+f=open("dataset/data_opt.csv","r")
+s=f.read()
+s=s.split("\n")
+optSol=[i.split() for i in s]
+
 data = OrderedDict()
 
 data["index"] = []
@@ -39,32 +32,31 @@ data["sol_MSTA"] = []
 data["tempo_MSTA"] = []
 data["errore_MSTA"] = []
 
-
-for ds_name in onlyfiles:
+for ds_name, opt_sol in optSol:
     print "------------------INIZIO "+ds_name+" ------------"
     G = MatrixCompleteGraph.createGraphFromTSP(ds_name)
     data["index"].append(ds_name)
     
     #HELD-KARP ALGORITHM
     print "esecuzione hk: "+ds_name
-    sol,tm= HKTSP(G,120)
+    sol,tm= HKTSP(G,10)
     tm=round(tm,3)
     print "costo soluzione: "+str(sol)
     print "tempo esecuzione: "+str(tm)
-    errore=str(round(float(sol-optSol[ds_name])/optSol[ds_name]*100,2))+"%"
+    errore=str(round(float(sol-int(opt_sol))/int(opt_sol)*100,2))+"%"
     print "errore: "+str(errore)
     data["sol_HK"].append(sol)
     data["tempo_HK"].append(tm)
     data["errore_HK"].append(errore)
     
     #RANDOM INSERTION
-    print "esecuzione random insertione: "+ds_name
+    print "esecuzione random insertion: "+ds_name
     sol,tm= RandomInsertion(G)
     sol= G.weightCirc(sol)
     tm=round(tm,3)
     print "costo soluzione: "+str(sol)
     print "tempo esecuzione: "+str(tm)
-    errore=str(round(float(sol-optSol[ds_name])/optSol[ds_name]*100,2))+"%"
+    errore=str(round(float(sol-int(opt_sol))/int(opt_sol)*100,2))+"%"
     print "errore: "+str(errore)
     data["sol_r"].append(sol)
     data["tempo_r"].append(tm)
@@ -77,7 +69,7 @@ for ds_name in onlyfiles:
     tm=round(tm,3)
     print "costo soluzione: "+str(sol)
     print "tempo esecuzione: "+str(tm)
-    errore=str(round(float(sol-optSol[ds_name])/optSol[ds_name]*100,2))+"%"
+    errore=str(round(float(sol-int(opt_sol))/int(opt_sol)*100,2))+"%"
     print "errore: "+str(errore)
     data["sol_MSTA"].append(sol)
     data["tempo_MSTA"].append(tm)

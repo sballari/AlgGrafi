@@ -9,44 +9,31 @@ class heap:
 
 
     def add(self,index,value):
-        #desc: inserisce una stazione nella coda e aggiorna la sua posizione
-        #station: codice stazione da inserire
+        # desc: inserisce un nodo con label index nella coda ed il suo peso
+        # index: label del nodo da inserire da inserire
+        # value : costo di arrivo al nodo index
+        # tempo : O(log(len(A)))
+
         self.indexValueMap[index] = value
         n = len(self.A) 
         self.A.append(index)  #metto l'indice in ultima posizione
         self.indexPositionMap[index] = n
         self.bubbleUp(n)
 
-    @staticmethod  
-    def parentPosition(i):
-        return (i-1)//2
-
-
     def isEmpty(self):
         return len(self.A) == 0
     
     def value(self,index):
         return self.indexValueMap[index]
+
     def changeValue(self,index,newValue):
+        
         self.indexValueMap[index]=newValue
 
-
-    def isPresent(self,index):
-        i=0
-        trovato=False
-
-        while i<len(self.A) and trovato==False :
-            if self.A[i] == index : 
-                trovato = True
-            i = i+1
-
-        return trovato
-
-
     def bubbleUp(self,i):
-        #desc: aggiorna lo heap dopo l'inserimento o la modifica del nodo station
-        #station: codice stazione inserito o modificato
-        p = self.parentPosition(i)
+        # desc: aggiorna lo heap dopo l'inserimento o la modifica del nodo in posizione i
+        # i : posizione del nodo da controllare
+        p = (i-1)//2
 
         while i > 0 and self.value(self.A[i]) <  self.value(self.A[p]):
             #scambio A[i] <-> A[p]
@@ -72,7 +59,7 @@ class heap:
 
 
     def extractMin(self):
-        #desc: estrae il nodo con orario arrivo minimo e aggiorna la coda deque
+        #desc: estrae il nodo con costo minimo e aggiorna la coda
         n = len(self.A)
 
         minEl = self.A[0]
@@ -87,9 +74,9 @@ class heap:
         return minEl
 
     def trickledown(self,i):
-        #desc: aggiorna la posizione del nodo station se i 
-        #      suoi figli hanno un orario di arrivo minore 
-        #station: codice stazione da spostare eventualmente
+        #desc: aggiorna la posizione del nodo in posizione i 
+        #      suoi figli hanno un costo minore 
+        #i: posizione del nodo da controllare
         
         l = i * 2 + 1
         r = i * 2 + 2 
