@@ -20,6 +20,7 @@ def enumeration(tree,v):
     # desc : mette le label in una lista ordinata secondo una visita in profondita'
     # tree : mappa dei successori
     # v : vertice radice
+    
     if (v in tree) == False :
         return [v]
     else : 

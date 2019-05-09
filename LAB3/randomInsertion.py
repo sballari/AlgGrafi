@@ -6,6 +6,7 @@ def RandomInsertion(G):
     # descr : algoritmo che risolve il problema TSP sul grafo G usando l'euristica Random Insertion. La soluzione ottenuta e' 2-approssimata
     # G : grafo pesato
     # ret : tupla contenente il circuito hamiltoniano approssima con Random insertion e il tempo di esecuzione dell'algoritmo
+    
     tm=time.time()
     circParz = [0]
     nodi_non_usati = range(1,G.getNumNodes())
@@ -41,12 +42,4 @@ def RandomInsertion(G):
     
     tm = round(time.time()-tm,2)
     return circParz,tm
-
-
-
-
-        
-
-
-
 

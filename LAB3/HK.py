@@ -5,13 +5,14 @@ def HKTSP(G,time_limit=300):
     # G : grafo pesata 
     # time_limit : tempo in secondi massimo di esecuzione prima della terminazione forzata
     # return: tupla distanza soluzione migliore trovata nel tempo limite e tempo di esecuzione
+
     D = [dict() for i in range(len(G.weight_matrix))] 
     P = [dict() for i in range(len(G.weight_matrix))] 
     S = set(range(0, len(G.weight_matrix)))
     l=[time_limit]
     ret = HKVisit(0, S, G, D, P,l)
     tm=round(time_limit-l[0],2)
-    #print "Elapsed Time: ",time_limit-l[0]
+
     return ret,tm
 
 
@@ -19,7 +20,7 @@ def HKVisit(v, S, G, D, P,time_limit):
     # v : vertice di arrivo
     # G : grafo pesato delle distanze
     # S : vertici che devo visitare partendo da 0 n-1 -> e' un Set
-    #print time_limit
+    
     tm=time.time()
     if len(S) == 1:
         time_limit[0]-=time.time()-tm

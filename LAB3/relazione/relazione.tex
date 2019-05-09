@@ -7,30 +7,35 @@
 \usepackage[export]{adjustbox}
 \usepackage{float}
 \usepackage{booktabs} % To thicken table lines
+\usepackage{adjustbox}
 
 \setlength{\droptitle}{-10em}
 \pagestyle{empty}
 
-\title{Lab. 2 - La rete dei trasporti pubblici}
+\title{Lab. 3 - Il Commesso Viaggiatore}
 \author{Ballarin Simone, Gobbo Alessio, Rossi Daniel}
-\date{April 2019}
+\date{May 2019}
 
 \begin{document}
 \maketitle
 
 \section*{Domanda 1}
-\hspace{-2cm}
+\begin{table}
+\begin{adjustbox}{width=\columnwidth}
 \begin{tabular}{lrrlrrlrrl}
 	\toprule
-	index         & s\_HK     & t\_HK  & e\_HK     & s\_r     & t\_r & e\_r    & s\_MSTA  & t\_MSTA & e\_MSTA \\
+	{} & \multicolumn{3}{c}{Held-Karp} & \multicolumn{3}{c}{Euristica costruttiva} & \multicolumn{3}{c}{2\-approssimato} \\
+	index         & soluzione & tempo (s) & errore    & soluzione & tempo (s) & errore  & soluzione & tempo (s) & errore  \\
 	\midrule
-	gr229.tsp     & 181220    & 599.00 & 34.63\%   & 147693   & 0.02 & 9.73\%  & 170205   & 0.019   & 26.45\% \\
-	ulysses22.tsp & 7105      & 599.00 & 1.31\%    & 7343     & 0.00 & 4.71\%  & 8132     & 0.001   & 15.96\% \\
-	dsj1000.tsp   & 551461828 & 599.00 & 2855.36\% & 20630542 & 0.62 & 10.56\% & 25728577 & 0.422   & 37.88\% \\
-	eil51.tsp     & 972       & 599.00 & 128.17\%  & 449      & 0.00 & 5.4\%   & 599      & 0.001   & 40.61\% \\
-	kroD100.tsp   & 146984    & 599.00 & 590.26\%  & 23550    & 0.00 & 10.59\% & 27296    & 0.005   & 28.19\% \\
-	d493.tsp      & 111748    & 599.00 & 219.26\%  & 38613    & 0.11 & 10.32\% & 45330    & 0.095   & 29.51\% \\
-	burma14.tsp   & 3323      & 0.87   & 0.0\%     & 3490     & 0.00 & 5.03\%  & 4062     & 0.000   & 22.24\% \\
+	burma14.tsp   & 3323      & 0.81      & 0.0\%     & 3390      & 0.00      & 2.02\%  & 4062      & 0.000     & 22.24\% \\
+	ulysses22.tsp & 8649      & 9.00      & 23.33\%   & 7116      & 0.00      & 1.47\%  & 8132      & 0.000     & 15.96\% \\
+	eil51.tsp     & 1072      & 9.00      & 151.64\%  & 436       & 0.00      & 2.35\%  & 599       & 0.001     & 40.61\% \\
+	kroD100.tsp   & 153166    & 9.00      & 619.29\%  & 23335     & 0.00      & 9.58\%  & 27296     & 0.005     & 28.19\% \\
+	gr229.tsp     & 187849    & 9.00      & 39.56\%   & 150177    & 0.02      & 11.57\% & 170205    & 0.019     & 26.45\% \\
+	d493.tsp      & 112558    & 9.00      & 221.58\%  & 38446     & 0.09      & 9.84\%  & 45330     & 0.081     & 29.51\% \\
+	dsj1000.tsp   & 553258759 & 9.00      & 2864.99\% & 20988353  & 0.39      & 12.48\% & 25728577  & 0.268     & 37.88\% \\
 	\bottomrule
 \end{tabular}
+\end{adjustbox}
+\end{table}	
 \end{document}
