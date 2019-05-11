@@ -39,7 +39,7 @@ for ds_name, opt_sol in optSol:
     
     #HELD-KARP ALGORITHM
     print "esecuzione hk: "+ds_name
-    sol,tm= HKTSP(G,10)
+    sol,tm= HKTSP(G,120)
     tm='%.2E' % tm
     print "costo soluzione: "+str(sol)
     print "tempo esecuzione: "+str(tm)

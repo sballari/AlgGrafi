@@ -29,7 +29,6 @@ for ds_name, opt_sol in optSol:
     G = MatrixCompleteGraph.createGraphFromTSP(ds_name)
     l_error=[]
     for k in range(10000):
-        #print "esecuzione random insertion: "+ds_name
         csol,tm= RandomInsertion(G)
 
         sol= G.weightCirc(csol)
@@ -41,5 +40,5 @@ for ds_name, opt_sol in optSol:
 
 df=pd.DataFrame(data)
 df.set_index("index",inplace=True)
-with open('relazione/mytable.tex', 'w') as tf:
+with open('relazione/random.tex', 'w') as tf:
      tf.write(df.to_latex(index=True))

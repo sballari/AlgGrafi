@@ -26,24 +26,24 @@
 			\toprule
 			{} & \multicolumn{3}{c}{Held-Karp} & \multicolumn{3}{c}{Euristica costruttiva} & \multicolumn{3}{c}{2-approssimato} \\
 			\midrule
-												
-			Istanza       & soluzione & tempo (s) & $\epsilon$ (\%)    & soluzione & tempo (s) & $\epsilon$ (\%)  & soluzione & tempo (s) & $\epsilon$ (\%)  \\
+															
+			Istanza       & soluzione   & tempo (s) & $\epsilon$ (\%) & soluzione  & tempo (s) & $\epsilon$ (\%) & soluzione  & tempo (s) & $\epsilon$ (\%) \\
 			\midrule
-			burma14.tsp   & 3323      & 7.40E-01  & 0.0\%     & 3346      & 1.80E-04  & 0.69\%  & 4062      & 2.10E-04  & 22.24\% \\
-			ulysses22.tsp & 8649      & 1.00E+01  & 23.33\%   & 7448      & 3.26E-04  & 6.2\%   & 8132      & 3.73E-04  & 15.96\% \\
-			eil51.tsp     & 1065      & 1.00E+01  & 150.0\%   & 453       & 1.11E-03  & 6.34\%  & 599       & 1.11E-03  & 40.61\% \\
-			kroD100.tsp   & 152544    & 1.00E+01  & 616.37\%  & 23519     & 3.85E-03  & 10.45\% & 27296     & 3.60E-03  & 28.19\% \\
-			gr229.tsp     & 184720    & 1.00E+01  & 37.23\%   & 146473    & 2.05E-02  & 8.82\%  & 170205    & 1.44E-02  & 26.45\% \\
-			d493.tsp      & 112558    & 1.00E+01  & 221.58\%  & 38422     & 9.06E-02  & 9.77\%  & 45330     & 6.42E-02  & 29.51\% \\
-			dsj1000.tsp   & 553100651 & 1.00E+01  & 2864.15\% & 20746015  & 3.97E-01  & 11.18\% & 25728577  & 2.31E-01  & 37.88\% \\
-												
+			burma14.tsp   & 3323.0      & 8.33E-01  & 0.00            & 3346.0     & 1.55E-04  & 0.69            & 4062.0     & 1.87E-04  & 22.24           \\
+			ulysses22.tsp & 7418.0      & 1.20E+02  & 5.77            & 7183.0     & 3.07E-04  & 2.42            & 8132.0     & 3.45E-04  & 15.96           \\
+			eil51.tsp     & 1041.0      & 1.20E+02  & 144.37          & 468.0      & 1.61E-03  & 9.86            & 607.0      & 1.57E-03  & 42.49           \\
+			kroD100.tsp   & 148184.0    & 1.20E+02  & 595.90          & 22931.0    & 5.72E-03  & 7.69            & 27340.0    & 5.52E-03  & 28.39           \\
+			gr229.tsp     & 182455.0    & 1.20E+02  & 35.55           & 150495.0   & 2.76E-02  & 11.81           & 170205.0   & 2.28E-02  & 26.45           \\
+			d493.tsp      & 112276.0    & 1.20E+02  & 220.77          & 38592.0    & 1.14E-01  & 10.26           & 45827.0    & 8.24E-02  & 30.93           \\
+			dsj1000.tsp   & 552579267.0 & 1.20E+02  & 2861.35         & 20820213.0 & 6.31E-01  & 11.58           & 25729081.0 & 3.69E-01  & 37.89           \\
+															
 			\bottomrule
 		\end{tabular}}
 \end{center}
 \section*{Domanda 2}
 Descriviamo il comportamento di ciascun algoritmo al variare delle istanze di seguito.
 \subsection*{Held-Karp}
-L'algoritmo esatto data la sua elevata complessità, trova la soluzione esatta entro il tempo limite di x secondi solamente nell'istanza più piccola (burma14). Sempre con il limite di x secondi vediamo come il risultato di ulysses22 possa essere considerato accettabile, mentre per le altre istanze del problema, in generale, l'errore è più significativo. Nonostante quanto appena detto, in alcuni casi, l'errore di istanze più grandi risulta inferiore a quello calcolato per istanze più piccole (gr229,d493). Questa peculiarità trova spiegazione, secondo noi, nella particolare configurazione dei pesi di queste istanze: l'ordine con cui iteriamo i circuiti possibili è deterministico. In questi due particolari problemi, casualmente una soluzione buona si trova nei primi circuiti analizzati, portando ad avere soluzioni difficilmente migliorabili aumentando di poco il tempo.
+L'algoritmo esatto data la sua elevata complessità, trova la soluzione esatta entro il tempo limite di 120 secondi solamente nell'istanza più piccola (burma14). Sempre con il limite di 120 secondi vediamo come il risultato di ulysses22 possa essere considerato accettabile, mentre per le altre istanze del problema, in generale, l'errore è più significativo. Nonostante quanto appena detto, in alcuni casi, l'errore di istanze più grandi risulta inferiore a quello calcolato per istanze più piccole (gr229,d493). Questa peculiarità trova spiegazione, secondo noi, nella particolare configurazione dei pesi di queste istanze: l'ordine con cui iteriamo i circuiti possibili è deterministico. In questi due particolari problemi, casualmente una soluzione buona si trova nei primi circuiti analizzati, portando ad avere soluzioni difficilmente migliorabili aumentando di poco il tempo.
 
 \subsection*{Euristica costruttiva}
 L'euristica costruttiva scelta è stata la \textit{Random Insertion}, questa euristica prevede la costruzione di un circuito attraverso l'aggiunta iterativa di un nodo. 
@@ -56,13 +56,13 @@ Al fine di ottenere una maggiore comprensione dei risultati elaborati in relazio
 		\toprule
 		Istanza       & $\epsilon_{min}(\%)$ & $\epsilon_{max}(\%)$ \\
 		\midrule
-		burma14.tsp   & 0.69                 & 12.97                \\
-		ulysses22.tsp & 1.11                 & 10.11                \\
-		eil51.tsp     & 1.17                 & 8.22                 \\
-		kroD100.tsp   & 6.03                 & 9.92                 \\
-		gr229.tsp     & 7.29                 & 13.38                \\
-		d493.tsp      & 8.33                 & 11.22                \\
-		dsj1000.tsp   & 10.73                & 13.84                \\
+		burma14.tsp   & 0.00                 & 16.58                \\
+		ulysses22.tsp & 0.00                 & 15.67                \\
+		eil51.tsp     & 0.00                 & 18.78                \\
+		kroD100.tsp   & 1.16                 & 21.55                \\
+		gr229.tsp     & 3.93                 & 23.25                \\
+		d493.tsp      & 6.23                 & 15.88                \\
+		dsj1000.tsp   & 8.48                 & 17.56                \\
 		\bottomrule
 	\end{tabular}
 \end{table}
