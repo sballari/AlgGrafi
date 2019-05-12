@@ -39,11 +39,11 @@ for ds_name, opt_sol in optSol:
     
     #HELD-KARP ALGORITHM
     print "esecuzione hk: "+ds_name
-    sol,tm= HKTSP(G,10)
-    tm=round(tm,3)
+    sol,tm= HKTSP(G,120)
+    tm='%.2E' % tm
     print "costo soluzione: "+str(sol)
     print "tempo esecuzione: "+str(tm)
-    errore=str(round(float(sol-int(opt_sol))/int(opt_sol)*100,2))+"%"
+    errore=round(float(sol-int(opt_sol))/int(opt_sol)*100,2)
     print "errore: "+str(errore)
     data["sol_HK"].append(sol)
     data["tempo_HK"].append(tm)
@@ -53,10 +53,10 @@ for ds_name, opt_sol in optSol:
     print "esecuzione random insertion: "+ds_name
     sol,tm= RandomInsertion(G)
     sol= G.weightCirc(sol)
-    tm=round(tm,3)
+    tm='%.2E' % tm
     print "costo soluzione: "+str(sol)
     print "tempo esecuzione: "+str(tm)
-    errore=str(round(float(sol-int(opt_sol))/int(opt_sol)*100,2))+"%"
+    errore=round(float(sol-int(opt_sol))/int(opt_sol)*100,2)
     print "errore: "+str(errore)
     data["sol_r"].append(sol)
     data["tempo_r"].append(tm)
@@ -66,10 +66,10 @@ for ds_name, opt_sol in optSol:
     print "esecuzione MSTApprox: "+ds_name
     sol,tm= MSTApprox.MSTApprox(G)
     sol = G.weightCirc(sol)
-    tm=round(tm,3)
+    tm='%.2E' % tm
     print "costo soluzione: "+str(sol)
     print "tempo esecuzione: "+str(tm)
-    errore=str(round(float(sol-int(opt_sol))/int(opt_sol)*100,2))+"%"
+    errore=round(float(sol-int(opt_sol))/int(opt_sol)*100,2)
     print "errore: "+str(errore)
     data["sol_MSTA"].append(sol)
     data["tempo_MSTA"].append(tm)

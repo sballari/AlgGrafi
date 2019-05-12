@@ -40,6 +40,6 @@ def RandomInsertion(G):
                 delta_min = delta
         circParz.insert(minimaC[1],k)
     
-    tm = round(time.time()-tm,2)
+    tm = time.time()-tm
     return circParz,tm
 

@@ -32,6 +32,9 @@ class MatrixCompleteGraph():
         # tempo : O(1)
         return self.weight_matrix[start_index][dest_index]
 
+    def getNumNodes(self):
+        return len(self.weight_matrix)
+
     @staticmethod
     def createGraphFromTSP(fileName):
         # desc : carica i dati dal file fileName e crea un grafo che poi restituisce
@@ -98,8 +101,8 @@ class MatrixCompleteGraph():
         x2 = float(node2[1])
         y1 = float(node1[2])
         y2 = float(node2[2])
-        distance = sqrt((x1-x2)**2 + (y1-y2)**2)
-        return int(distance)
+        distance = round(sqrt((x1-x2)**2 + (y1-y2)**2),0)
+        return distance
 
     def weightCirc(self,circ):
         # desc : restituisce il costo totale se si attraversa il grafo secondo la sequenza data in circ

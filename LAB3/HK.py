@@ -6,12 +6,12 @@ def HKTSP(G,time_limit=300):
     # time_limit : tempo in secondi massimo di esecuzione prima della terminazione forzata
     # return: tupla distanza soluzione migliore trovata nel tempo limite e tempo di esecuzione
 
-    D = [dict() for i in range(len(G.weight_matrix))] 
-    P = [dict() for i in range(len(G.weight_matrix))] 
+    D = [dict() for i in range(len(G.weight_matrix))]
+    P = [dict() for i in range(len(G.weight_matrix))]
     S = set(range(0, len(G.weight_matrix)))
     l=[time_limit]
     ret = HKVisit(0, S, G, D, P,l)
-    tm=round(time_limit-l[0],2)
+    tm=time_limit-l[0]
 
     return ret,tm
 
@@ -26,11 +26,11 @@ def HKVisit(v, S, G, D, P,time_limit):
         time_limit[0]-=time.time()-tm
         return G.getweight(v, 0) # v in S per ipotesi
     
-    if D[v].get(str(S)) != None:
+    if str(S) in D[v]:
         time_limit[0]-=time.time()-tm
         return D[v][str(S)]
 
-    mindist = None
+    mindist = float("inf")
     minprec = None
     S_ = S.difference({v})  # S=S\{v}
     time_limit[0]-=time.time()-tm
@@ -39,18 +39,16 @@ def HKVisit(v, S, G, D, P,time_limit):
         
         dist = HKVisit(u, S_, G, D, P,time_limit)+G.getweight(u, v)
         tm=time.time()
-        if mindist == None:
+
+        if dist < mindist:
             mindist = dist
             minprec = u
-        else:
-            if dist < mindist:
-                mindist = dist
-                minprec = u
 
         time_limit[0]-=time.time()-tm
 
-        if time_limit[0] < 1:
+        if time_limit[0] <= 0:
             break
+    
     D[v][str(S)] = mindist
     P[v][str(S)] = minprec
     return mindist
