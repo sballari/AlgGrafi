@@ -32,7 +32,7 @@ def SlowClosestPair(P,Pslice):
 def euclide(p1,p2):
     return ((p1[1]-p2[1])**2+(p1[2]-p2[2])**2)**0.5
     
-
+# suddivide Y in YL e YR
 def Split(S,P,PL,PR):
     SL = []
     SR = []
@@ -67,9 +67,7 @@ def binarySearch(s,P,Pslice):
                 if s[0] == P[i][0]:
                     found = True
                 i=i+1
-        return found
-
-    
+        return found   
 
 def minTuple(t1,t2):
     if t1[0]< t2[0]:
@@ -78,4 +76,13 @@ def minTuple(t1,t2):
         return t2
 
 def ClosestPairStrip(S,mid,d):
-    pass
+    S_ = []
+    for s in S:
+        if abs(s[1]-mid) < d:
+            S_.append(s)
+    minDist = (float("inf"),-1,-1)
+    for u in range(len(S_)-1):
+        for v in range(u+1,min(u+6,len(S_))):
+            uv = (euclide(S_[u],S_[v]),S_[u],S_[v])
+            minDist = minTuple(minDist,uv)
+    return minDist

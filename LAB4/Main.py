@@ -1,5 +1,5 @@
 from ParserCancerData import ParserCancerData
-from FastClosestPair import Split
+from FastClosestPair import Split,FastClosestPair
 import random
 
 #Data = ParserCancerData("unifiedCancerData_212.csv")
@@ -11,10 +11,11 @@ P = sorted(Data,key=lambda x : x[1])
 S = sorted(Data,key=lambda x : x[2])
 print "S:",S
 print "P:",P
-l = 0
-r = len(P)
-m = (l+r)/2
+# l = 0
+# r = len(P)
+# m = (l+r)/2
 
-SL,SR = Split(S,P,(0,m),(m,r))
-print "SL:",SL
-print "SR:",SR
+# SL,SR = Split(S,P,(0,m),(m,r))
+# print "SL:",SL
+# print "SR:",SR
+print FastClosestPair(P,S,(0,len(P)))
