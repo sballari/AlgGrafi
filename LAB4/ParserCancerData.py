@@ -2,6 +2,7 @@ from os import listdir
 from os.path import isfile, join
 import unicodedata
 import string
+from Coord import *
 
 # Ogni riga dei file corrisponde ad una contea ed e' composta da cinque campi:
 # codice della contea, coordinata x, coordinata y, popolazione e rischio di cancro.
@@ -17,5 +18,12 @@ def ParserCancerData(file_name):
     data=[]
     for line in lines:
         rigo=line.split(',')
-        data.append(rigo)
+        contea = rigo[0]
+        x = float(rigo[1])
+        y = float(rigo[2])
+        pop = float(rigo[3])
+        risk = float(rigo[4])
+        point = Point(contea,x,y,pop,risk)
+        data.append(point)
+
     return data
