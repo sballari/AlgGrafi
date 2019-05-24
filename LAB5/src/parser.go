@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/csv"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -17,10 +18,21 @@ type City struct {
 	Longitude float64
 }
 
-func Parser() []City {
+type Centroid struct {
+	Latitude  float64
+	Longitude float64
+}
+
+func Parser(k int) ([]City, []Centroid) {
+	/*
+		k := numero dei centroidi da prendere
+	*/
 	csvFile, _ := os.Open("../data/cities-and-towns-of-usa.csv")
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 	var cities []City
+	var kMaxCity []City
+
+	reader.Read() //leggo a vuoto il primo valore (i titoli)
 
 	for {
 		line, error := reader.Read()
@@ -45,6 +57,45 @@ func Parser() []City {
 			Longitude: longitude,
 		}
 		cities = append(cities, city)
+
+		if len(kMaxCity) < k {
+			kMaxCity = append(kMaxCity, city)
+		} else {
+			//TODO si potrebbe fare con lista ordinata
+			biggest, pos := findMax(kMaxCity)
+			if city.Pop > biggest.Pop {
+				kMaxCity[pos] = city
+			}
+		}
 	}
-	return cities
+
+	fmt.Println(kMaxCity)
+
+	var centroids []Centroid
+	for c := range kMaxCity {
+		centroid := Centroid{
+			Latitude:  kMaxCity[c].Latitude,
+			Longitude: kMaxCity[c].Longitude,
+		}
+		centroids = append(centroids, centroid)
+	}
+	return cities, centroids
+}
+
+func findMax(kMaxs []City) (*City, int) {
+	if len(kMaxs) == 0 {
+		return nil, 0
+	}
+
+	maxPop := kMaxs[0].Pop
+	maxPosition := 0
+
+	for i := 1; i < len(kMaxs); i++ {
+		if kMaxs[i].Pop > maxPop {
+			maxPop = kMaxs[i].Pop
+			maxPosition = i
+		}
+	}
+	return &(kMaxs[maxPosition]), maxPosition
+
 }
