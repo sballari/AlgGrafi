@@ -48,7 +48,7 @@ L'algoritmo esatto data la sua elevata complessità, trova la soluzione esatta e
 \subsection*{Euristica costruttiva}
 L'euristica costruttiva scelta è stata la \textit{Random Insertion}, questa euristica prevede la costruzione di un circuito attraverso l'aggiunta iterativa di un nodo. 
 Questo viene scelto casualmente ed inserito nella posizione che minimizzi la deviazione necessaria.\\
-I risultati ottenuti sono sorprendentemente buoni. Tranne per il caso burma14 è l'algoritmo che trova sempre la soluzione migliore nel tempo più breve. Addirittura nell'istanza più grande l'errore risulta pari a 11\% calcolato in un tempo di 3.97E-01 secondi.\\
+I risultati ottenuti sono sorprendentemente buoni. Tranne per il caso burma14 è l'algoritmo che trova sempre la soluzione migliore nel tempo più breve. Addirittura nell'istanza più grande l'errore risulta pari a 11.58\% calcolato in un tempo di 6.31E-01 secondi.\\
 Al fine di ottenere una maggiore comprensione dei risultati elaborati in relazione alla natura casuale dell'algoritmo, abbiamo deciso di eseguire per ciascuna istanza del problema \textbf{10000} volte l'algoritmo. Abbiamo quindi estrapolato l'errore minimo e massimo per ciascuna istanza, riportando il tutto nella tabella a seguire:\\ 
 
 \begin{table}[H]
@@ -75,5 +75,8 @@ L'algoritmo basato sull'albero di cammino minimo sembra non presentare nessuna p
 \subsection*{Considerazioni generali}
 In generale si nota che l'istanza kroD100.tsp in relazione alla sua grandezza limitata è sempre il problema che negli algoritmi approssimati da i risultati peggiori.\\
 L'algoritmo in genere migliore è sempre l'euristica costruttiva in termini di errore percentuale. Per quanto riguarda l'efficienza notiamo come l'euristica costruttiva per istanze piccole sia migliore mentre per istanze più grandi risulti più efficiente l'algoritmo 2-approssimato.
+
+\section*{Domanda 3}
+In allegato alla consegna sono stati inseriti i codice sorgente Python.
 
 \end{document}
