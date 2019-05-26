@@ -8,6 +8,9 @@ class Point:
     def getY(self):
         return self.tupla[2]
 
+    def __str__(self):
+        return str(self.tupla)
+
 class Center:
     def __init__(self,x,y):
         self.tupla = (x,y)
@@ -17,3 +20,6 @@ class Center:
 
     def getY(self):
         return self.tupla[1]
+        
+    def __str__(self):
+        return str(self.tupla)

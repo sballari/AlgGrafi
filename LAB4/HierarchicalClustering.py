@@ -1,4 +1,4 @@
-from FastClosestPair import FastClosestPair 
+from FastClosestPair import * 
 from Coord import *
 
 # cluster : set di punti
@@ -16,24 +16,35 @@ def newCenter(cluster):
 # k : numero di cluster richiesti
 
 # point : oggetto di tipo Point -> getX,getY
-# Cluster : e' un set di Point
-# Centers : lista di centroidi -> Centers[i] e' il centroide di Clusters[i]
+# cluster : e' un set di Point
+# Centers : lista di centroidi -> Centers[i] e' il centroide di clusters[i]
 # cen : oggetto di tipo Center -> getX,getY
 
-def HierarchicalClustering(P,k):
-    Clusters = [] 
-    for point in P:
-        clu = {point}
-        Clusters.append(clu) # len(P) clusters, ognuno con 1 singolo punto
-    Centers = [Center(0,0) for j in range(len(Clusters))]
-    while len(Clusters) > k:
-        for index in range(len(Clusters)):
-            Centers[index] = newCenter(Clusters[index])
-            #print Centers
-        closestPoints = FastClosestPair(Centers,Centers,(0,len(Centers)-1))
+def Hierarchicalclustering(P,k):
+    clusters = [{point} for point in P]
+    centerx = [newCenter([point]) for point in P]
+
+    while len(clusters) > k:
+        for c in range(len(clusters)):
+            centerx[c] = newCenter(clusters[c])
+        centery = sorted(centerx,key=lambda y : y.getY())
+
+        closestPoints = FastClosestPair(centerx,centery,(0,len(clusters)))
+        print closestPoints,
+
+        
+        minDist = (float("inf"),-1,-1)
+        for i in range(len(centerx)):
+            for j in range(len(centerx)):
+                if i < j:
+                    ij = (euclide(centerx[i],centerx[j]),i,j)
+                    minDist=minTuple(minDist,ij)
+        print minDist
+        
+
         index1 = closestPoints[1]
         index2 = closestPoints[2]
-        Clusters[index1] = Clusters[index1].union(Clusters[index2])
-        Clusters.remove(Clusters[index2])
-        Centers.remove(Centers[index2])
-    return Clusters
+        clusters[index1] = clusters[index1].union(clusters[index2])
+        clusters.remove(clusters[index2])
+        centerx.remove(centerx[index2])
+    return centerx,clusters
