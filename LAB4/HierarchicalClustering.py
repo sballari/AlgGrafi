@@ -1,6 +1,30 @@
 from FastClosestPair import * 
 from Coord import *
 
+def insertP(list, n): 
+    index =0
+    # Searching for the position 
+    for i in range(len(list)): 
+        if list[i].getX() > n.getX(): 
+            index = i 
+            break
+
+      
+    # Inserting n in the list 
+    new_list = list[:index] + [n] + list[index:]
+    return new_list,index+1
+
+def insertS(list, n): 
+    index = 0
+    for i in range(len(list)): 
+        if list[i].getY() > n.getY(): 
+            index = i 
+            break
+      
+    # Inserting n in the list 
+    new_list = list[:index] + [n] + list[index:]
+    return new_list,index+1
+
 # cluster : set di punti
 def newCenter(cluster):
     x = 0
@@ -23,16 +47,15 @@ def newCenter(cluster):
 def Hierarchicalclustering(P,k):
     clusters = [{point} for point in P]
     centerx = [newCenter([point]) for point in P]
+    centery = sorted(centerx,key=lambda y : y.getY())
 
     while len(clusters) > k:
-        for c in range(len(clusters)):
-            centerx[c] = newCenter(clusters[c])
-        centery = sorted(centerx,key=lambda y : y.getY())
 
         closestPoints = FastClosestPair(centerx,centery,(0,len(clusters)))
+        print "----------------------------------"
+
         print closestPoints,
 
-        
         minDist = (float("inf"),-1,-1)
         for i in range(len(centerx)):
             for j in range(len(centerx)):
@@ -40,11 +63,40 @@ def Hierarchicalclustering(P,k):
                     ij = (euclide(centerx[i],centerx[j]),i,j)
                     minDist=minTuple(minDist,ij)
         print minDist
-        
 
         index1 = closestPoints[1]
         index2 = closestPoints[2]
-        clusters[index1] = clusters[index1].union(clusters[index2])
-        clusters.remove(clusters[index2])
-        centerx.remove(centerx[index2])
+        print closestPoints[0],index1,index2
+        print len(centerx),len(centery),len(clusters)
+
+        centerx1 = centerx[index1]
+        centery1 = centerx[index1]
+        cluster1 = clusters[index1]
+
+        centerx2 = centerx[index2]
+        centery2 = centerx[index2]
+        cluster2 = clusters[index2]
+
+        print cluster1,cluster2
+
+        clusters.remove(cluster1)
+        clusters.remove(cluster2)
+
+        centerx.remove(centerx1)
+        centerx.remove(centerx2)
+
+        centery.remove(centery1)
+        centery.remove(centery2)
+
+        print len(centerx),len(centery),len(clusters)
+
+        new_clusters = cluster1.union(cluster2)
+
+        new_center = newCenter(new_clusters)
+
+        centery,index=insertS(centery, new_center)
+        centerx,index = insertP(centerx, new_center)
+        clusters.insert(index, new_clusters)
+        print len(centerx),len(centery),len(clusters)
+
     return centerx,clusters
