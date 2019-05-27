@@ -31,7 +31,7 @@ def insertS(ls, n):
         return new_list,index
 
 # cluster : set di punti
-def newCenter(cluster):
+def newCenter(cluster,idcenter=0):
     x = 0
     y = 0
     for point in cluster:
@@ -39,7 +39,7 @@ def newCenter(cluster):
         y = y + point.getY()
     x = x / len(cluster)
     y = y / len(cluster)
-    return Center(x,y)
+    return Center(x,y,idcenter)
 
 # P : [Point]
 # k : numero di cluster richiesti
@@ -51,14 +51,15 @@ def newCenter(cluster):
 
 def Hierarchicalclustering(P,k):
     clusters = [{point} for point in P]
-    centerx = [newCenter([point]) for point in P]
+    centerx = [newCenter([P[p]],p) for p in range(len(P))]
+    counter=0
     centery = sorted(centerx,key=lambda y : y.getY())
 
     while len(clusters) > k:
-        print "**********************************************************"
-        print len(centerx),len(centery),len(clusters)
-        for c_index in range(len(clusters)):
-            print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
+        #print "**********************************************************"
+        #print len(centerx),len(centery),len(clusters)
+        #for c_index in range(len(clusters)):
+        #    print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
 
         closestPoints = FastClosestPair(centerx,centery,(0,len(clusters)))
 
@@ -111,8 +112,8 @@ def Hierarchicalclustering(P,k):
         """
         new_clusters = cluster1.union(cluster2)
 
-        new_center = newCenter(new_clusters)
-
+        new_center = newCenter(new_clusters,len(P)+counter)
+        counter+=1
         centery,index=insertS(centery, new_center)
         centerx,index = insertP(centerx, new_center)
         clusters.insert(index, new_clusters)

@@ -12,8 +12,9 @@ class Point:
         return str(self.tupla)
 
 class Center:
-    def __init__(self,x,y):
+    def __init__(self,x,y,IDcenter=0):
         self.tupla = (x,y)
+        self.idcenter=IDcenter
 
     def getX(self):
         return self.tupla[0]

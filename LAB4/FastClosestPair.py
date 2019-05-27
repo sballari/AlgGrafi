@@ -1,11 +1,9 @@
 def FastClosestPair(P,S,Pslice):
-    print "----("
-    print Pslice
     l=Pslice[0]
     r=Pslice[1]
     n = r-l
     if n <= 3:
-        print "----)"
+        #print "----)"
         return SlowClosestPair(P,Pslice)
     else:
         m = (l + r)/2
@@ -13,10 +11,11 @@ def FastClosestPair(P,S,Pslice):
         PR = (m,r) #bound dx non incluso
         SL,SR = Split(S,P,PL,PR)
         t = minTuple(FastClosestPair(P,SL,PL),FastClosestPair(P,SR,PR))
-        mid = 0.5 * (P[m].getX()+P[m+1].getX())
+        #mid = 0.5 * (P[m].getX()+P[m+1].getX())
+        mid = P[m].getX()
         minDist=minTuple(t,ClosestPairStrip(P,S,mid,t[0],Pslice))
-        print "----)"
-        #print str(minDist)
+        #print "----)"
+        ##print str(minDist)
         return minDist
 
 
@@ -28,7 +27,7 @@ def SlowClosestPair(P,Pslice):
     for i in range(l,r-1): #(1,2)
         for j in range (i+1 ,r): #(2,3)
             ij = (euclide(P[i],P[j]),i,j)
-            print i,j
+            #print i,j
             if ij[0] < minDist[0]:
                 minDist = ij
     return minDist
@@ -69,14 +68,14 @@ def binarySearch(s,P,Pslice):
         i=m-1
         found = -1
         while found==-1 and P[i].getX() == s.getX() and i >= l:
-            if s.getY() == P[i].getY():
+            if s.idcenter == P[i].idcenter:
                 found = i
             i=i-1
         if found == -1:
             i = m
             while found == -1 and P[i].getX() == s.getX() and i < r:
 
-                if s.getY() == P[i].getY():
+                if s.idcenter == P[i].idcenter:
                     found = i
                 i=i+1
 
@@ -91,23 +90,24 @@ def minTuple(t1,t2):
 def ClosestPairStrip(P,S,mid,d,Pslice):
     S_ = []
     for s in S:
+        #print "si o no?",abs(s.getX()-mid) , d
         if abs(s.getX()-mid) < d:
             S_.append(s)
-        else:
-            print "credo che elimero' ",binarySearch(s  ,P,Pslice)
+        #else:
+            #print "credo che elimenero' ",binarySearch(s,P,Pslice)
     minDist = (float("inf"),-1,-1)
 
     for u in range(len(S_)-1):
         for v in range(u+1,min(u+6,len(S_))):
             u_index =binarySearch(S_[u],P,Pslice)
             v_index = binarySearch(S_[v],P,Pslice)
-            print v_index,u_index,euclide(S_[u],S_[v])
+            #print v,u,v_index,u_index,euclide(S_[u],S_[v])
             uv = (euclide(S_[u],S_[v]),u,v)
             minDist = minTuple(minDist,uv)
-
-    u= binarySearch(S[minDist[1]],P,Pslice) if minDist[1] != -1 else -1
-    v= binarySearch(S[minDist[2]],P,Pslice) if minDist[2] != -1 else -1
+    #print minDist
+    u= binarySearch(S_[minDist[1]],P,Pslice) if minDist[1] != -1 else -1
+    v= binarySearch(S_[minDist[2]],P,Pslice) if minDist[2] != -1 else -1
 
     minDist = (minDist[0],u,v)
-    print "minDist:",minDist
+    #print "minDist:",minDist
     return minDist
