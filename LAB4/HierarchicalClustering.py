@@ -1,29 +1,34 @@
 from FastClosestPair import * 
 from Coord import *
 
-def insertP(list, n): 
-    index =0
+def insertP(ls, n): 
+    index = -1
     # Searching for the position 
-    for i in range(len(list)): 
-        if list[i].getX() > n.getX(): 
+    for i in range(len(ls)): 
+        if ls[i].getX() > n.getX(): 
             index = i 
             break
 
-      
-    # Inserting n in the list 
-    new_list = list[:index] + [n] + list[index:]
-    return new_list,index+1
+    if index == -1:
+        ls.append(n)
+        return ls,len(ls)-1
+    else:
+        new_list = ls[:index] + [n] + ls[index:]
+        return new_list,index
 
-def insertS(list, n): 
-    index = 0
-    for i in range(len(list)): 
-        if list[i].getY() > n.getY(): 
+def insertS(ls, n): 
+    index = -1
+    for i in range(len(ls)): 
+        if ls[i].getY() > n.getY(): 
             index = i 
             break
-      
-    # Inserting n in the list 
-    new_list = list[:index] + [n] + list[index:]
-    return new_list,index+1
+
+    if index == -1:
+        ls.append(n)
+        return ls,len(ls)-1
+    else:
+        new_list = ls[:index] + [n] + ls[index:]
+        return new_list,index
 
 # cluster : set di punti
 def newCenter(cluster):
@@ -50,9 +55,12 @@ def Hierarchicalclustering(P,k):
     centery = sorted(centerx,key=lambda y : y.getY())
 
     while len(clusters) > k:
+        print "**********************************************************"
+        print len(centerx),len(centery),len(clusters)
+        for c_index in range(len(clusters)):
+            print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
 
         closestPoints = FastClosestPair(centerx,centery,(0,len(clusters)))
-        print "----------------------------------"
 
         print closestPoints,
 
@@ -64,11 +72,16 @@ def Hierarchicalclustering(P,k):
                     minDist=minTuple(minDist,ij)
         print minDist
 
+        if closestPoints[0] != minDist[0]:
+            print "qualcosa non vaaaa"
+            break
+
         index1 = closestPoints[1]
         index2 = closestPoints[2]
+        """
         print closestPoints[0],index1,index2
         print len(centerx),len(centery),len(clusters)
-
+        """
         centerx1 = centerx[index1]
         centery1 = centerx[index1]
         cluster1 = clusters[index1]
@@ -76,9 +89,11 @@ def Hierarchicalclustering(P,k):
         centerx2 = centerx[index2]
         centery2 = centerx[index2]
         cluster2 = clusters[index2]
-
-        print cluster1,cluster2
-
+        """
+        print euclide(centerx1,centerx2 )
+        for c_index in range(len(clusters)):
+            print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
+        """
         clusters.remove(cluster1)
         clusters.remove(cluster2)
 
@@ -87,9 +102,13 @@ def Hierarchicalclustering(P,k):
 
         centery.remove(centery1)
         centery.remove(centery2)
-
+        """
+        print ""
+        for c_index in range(len(clusters)):
+            print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
+        print ""
         print len(centerx),len(centery),len(clusters)
-
+        """
         new_clusters = cluster1.union(cluster2)
 
         new_center = newCenter(new_clusters)
@@ -97,6 +116,16 @@ def Hierarchicalclustering(P,k):
         centery,index=insertS(centery, new_center)
         centerx,index = insertP(centerx, new_center)
         clusters.insert(index, new_clusters)
+        """
         print len(centerx),len(centery),len(clusters)
 
+        for c_index in range(len(clusters)):
+            print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
+        for c in centerx:
+            print c,
+        print ""
+        for c in centery:
+            print c,
+        print ""
+        """
     return centerx,clusters
