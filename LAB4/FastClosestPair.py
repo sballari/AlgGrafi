@@ -12,7 +12,7 @@ def FastClosestPair(P,S,Pslice):
         SL,SR = Split(S,P,PL,PR)
         t = minTuple(FastClosestPair(P,SL,PL),FastClosestPair(P,SR,PR))
         #mid = 0.5 * (P[m].getX()+P[m+1].getX())
-        mid = P[m].getX()
+        mid = float(P[m].getX()+P[m-1].getX())/2
         minDist=minTuple(t,ClosestPairStrip(P,S,mid,t[0],Pslice))
         #print "----)"
         ##print str(minDist)
@@ -99,8 +99,8 @@ def ClosestPairStrip(P,S,mid,d,Pslice):
 
     for u in range(len(S_)-1):
         for v in range(u+1,min(u+6,len(S_))):
-            u_index =binarySearch(S_[u],P,Pslice)
-            v_index = binarySearch(S_[v],P,Pslice)
+            #u_index =binarySearch(S_[u],P,Pslice)
+            #v_index = binarySearch(S_[v],P,Pslice)
             #print v,u,v_index,u_index,euclide(S_[u],S_[v])
             uv = (euclide(S_[u],S_[v]),u,v)
             minDist = minTuple(minDist,uv)

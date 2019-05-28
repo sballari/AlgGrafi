@@ -1,6 +1,8 @@
 from FastClosestPair import * 
 from Coord import *
+from tqdm import tqdm
 
+# inserisce un centroide in P mantenendo l'odinamento per x
 def insertP(ls, n): 
     index = -1
     # Searching for the position 
@@ -52,30 +54,30 @@ def newCenter(cluster,idcenter=0):
 def Hierarchicalclustering(P,k):
     clusters = [{point} for point in P]
     centerx = [newCenter([P[p]],p) for p in range(len(P))]
-    counter=0
+    counter = 0
     centery = sorted(centerx,key=lambda y : y.getY())
 
-    while len(clusters) > k:
+    for z in tqdm(range(k,len(P))):
         #print "**********************************************************"
         #print len(centerx),len(centery),len(clusters)
         #for c_index in range(len(clusters)):
         #    print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
 
-        closestPoints = FastClosestPair(centerx,centery,(0,len(clusters)))
+        closestPoints = FastClosestPair(centerx,centery,(0,len(clusters))) # (d,i,j) con i,j indici di centerx
 
-        print closestPoints,
+        #print closestPoints
 
-        minDist = (float("inf"),-1,-1)
-        for i in range(len(centerx)):
-            for j in range(len(centerx)):
-                if i < j:
-                    ij = (euclide(centerx[i],centerx[j]),i,j)
-                    minDist=minTuple(minDist,ij)
-        print minDist
+        # minDist = (float("inf"),-1,-1)
+        # for i in range(len(centerx)):
+        #     for j in range(len(centerx)):
+        #         if i < j:
+        #             ij = (euclide(centerx[i],centerx[j]),i,j)
+        #             minDist=minTuple(minDist,ij)
+        # print minDist
 
-        if closestPoints[0] != minDist[0]:
-            print "qualcosa non vaaaa"
-            break
+        #if closestPoints[0] != minDist[0]:
+        #    print "qualcosa non vaaaa"
+        #    break
 
         index1 = closestPoints[1]
         index2 = closestPoints[2]
@@ -114,7 +116,7 @@ def Hierarchicalclustering(P,k):
 
         new_center = newCenter(new_clusters,len(P)+counter)
         counter+=1
-        centery,index=insertS(centery, new_center)
+        centery,_=insertS(centery, new_center)
         centerx,index = insertP(centerx, new_center)
         clusters.insert(index, new_clusters)
         """
