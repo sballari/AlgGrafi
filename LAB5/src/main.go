@@ -1,13 +1,11 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
-	fmt.Println("Main lanciato")
-	cities := Parser()
-	d, c1, c2 := SlowClosestPair(cities)
-	fmt.Printf("distanza: %f\tcitta1: %s\tcitta2: %s\n", d, c1.Name, c2.Name)
+	// fmt.Println("Main lanciato")
+	// _, centroids := Parser(50)
+	// fmt.Println(len(centroids))
 
+	fmt.Print(3.0 / 2)
 }
