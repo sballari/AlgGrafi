@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"sync"
 )
 
 func KMeansClustering(P []City, MU []Centroid, k int, q int) ([]int, []Centroid) {
@@ -12,22 +13,36 @@ func KMeansClustering(P []City, MU []Centroid, k int, q int) ([]int, []Centroid)
 		q : numero di iterazioni di raffinamento
 	*/
 	var n = len(P)
-	var cluster []int //cluster[i] = cluster a cui il punto i viene assegnato
+	var cluster = make([]int, n) //cluster[i] = cluster a cui il punto i viene assegnato
 
 	for i := 1; i <= q; i++ { //iterazioni di raffinamento (no punto fisso)
 
 		//ASSEGNAMENTO per ogni nodo in P
+		var wg sync.WaitGroup
+		wg.Add(n)
 		for j := 0; j < n; j++ { //it should be a parallel for
-			l := nearestCentroidIndex(&P[j], MU)
-			cluster[j] = l //assegno a P[j] il cluster l
+			go func(j int) {
+				defer wg.Done()
+				l := nearestCentroidIndex(&P[j], MU)
+				cluster[j] = l //assegno a P[j] il cluster l
+			}(j)
 		}
+		wg.Wait()
+
 		//AGGIORNAMENTO per ogni centroide f in MU
+		wg.Add(k)
 		for f := 0; f < k; f++ { //parallel for
-			fakeChannel := make(chan pReduceResult) //NON USATO solo per compilare e non avere errori RT
-			pRedResult := pReduceCluster(P, cluster, 0, n-1, f, fakeChannel)
-			MU[f].Latitude = pRedResult.sumX / (float64)(pRedResult.size)
-			MU[f].Longitude = pRedResult.sumY / (float64)(pRedResult.size)
+			go func(f int) {
+				defer wg.Done()
+				resultChannel := make(chan pReduceResult)
+				go pReduceCluster(P, cluster, 0, n-1, f, resultChannel)
+				pRedResult := <-resultChannel
+
+				MU[f].Latitude = pRedResult.sumX / (float64)(pRedResult.size)
+				MU[f].Longitude = pRedResult.sumY / (float64)(pRedResult.size)
+			}(f)
 		}
+		wg.Wait()
 	}
 	return cluster, MU
 }
@@ -56,7 +71,7 @@ type pReduceResult struct {
 	size int
 }
 
-func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan chan pReduceResult) pReduceResult {
+func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan chan pReduceResult) {
 	myChannel := make(chan pReduceResult)
 
 	if i == j {
@@ -67,18 +82,17 @@ func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan cha
 				size: 1,
 			}
 			fatherChan <- result
-			return result
 		} else {
 			result := pReduceResult{sumX: 0, sumY: 0, size: 0}
 			fatherChan <- result
-			return result
 		}
 	} else {
 		mid := (i + j) / 2
 
 		go pReduceCluster(P, cluster, i, mid, h, myChannel)
-		result2 := pReduceCluster(P, cluster, mid+1, j, h, myChannel)
+		go pReduceCluster(P, cluster, mid+1, j, h, myChannel)
 		result1 := <-myChannel
+		result2 := <-myChannel
 
 		result := pReduceResult{
 			sumX: result1.sumX + result2.sumX,
@@ -86,7 +100,6 @@ func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan cha
 			size: result1.size + result2.size,
 		}
 		fatherChan <- result
-		return result
 	}
 
 }
