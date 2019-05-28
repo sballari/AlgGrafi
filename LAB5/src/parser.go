@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"encoding/csv"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -68,8 +67,6 @@ func Parser(k int) ([]City, []Centroid) {
 			}
 		}
 	}
-
-	fmt.Println(kMaxCity)
 
 	var centroids []Centroid
 	for c := range kMaxCity {
