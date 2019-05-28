@@ -3,31 +3,34 @@ def FastClosestPair(P,S,Pslice):
     r=Pslice[1]
     n = r-l
     if n <= 3:
+        #print "----)"
         return SlowClosestPair(P,Pslice)
     else:
         m = (l + r)/2
         PL = (l,m) #bound dx non incluso
         PR = (m,r) #bound dx non incluso
         SL,SR = Split(S,P,PL,PR)
-        t = min(FastClosestPair(P,SL,PL),FastClosestPair(P,SR,PR))
-        mid = 0.5 * (P[m].getX()+P[m+1].getX())
-        return minTuple(t,ClosestPairStrip(S,mid,t[0]))
+        t = minTuple(FastClosestPair(P,SL,PL),FastClosestPair(P,SR,PR))
+        #mid = 0.5 * (P[m].getX()+P[m+1].getX())
+        mid = float(P[m].getX()+P[m-1].getX())/2
+        minDist=minTuple(t,ClosestPairStrip(P,S,mid,t[0],Pslice))
+        #print "----)"
+        ##print str(minDist)
+        return minDist
 
 
 def SlowClosestPair(P,Pslice):
     l = Pslice[0] #1
     r = Pslice[1] #3
-    minI = -1 
-    minJ = -1
-    minD = float("inf")
+    minDist = (float("inf"),-1,-1)
+    #print "intervallo",l,r
     for i in range(l,r-1): #(1,2)
-        for j in range (i+1,r): #(2,3)
-            d = euclide(P[i],P[j])
-            if d < minD:
-                minD = d
-                minI = i
-                minJ = j
-    return (minD,minI,minJ)
+        for j in range (i+1 ,r): #(2,3)
+            ij = (euclide(P[i],P[j]),i,j)
+            #print i,j
+            if ij[0] < minDist[0]:
+                minDist = ij
+    return minDist
 
 def euclide(p1,p2):
     x1 = p1.getX()
@@ -38,10 +41,12 @@ def euclide(p1,p2):
     
 # suddivide Y in YL e YR
 def Split(S,P,PL,PR):
+    Pslice = (PL[0],PR[1])
     SL = []
     SR = []
     for s in S:
-        if binarySearch(s,P,PL) == True:
+        i= binarySearch(s,P,Pslice)
+        if PL[0] <= i < PL[1]:
             SL.append(s)
         else:
             SR.append(s)
@@ -52,7 +57,7 @@ def binarySearch(s,P,Pslice):
     l=Pslice[0]
     r=Pslice[1]
     if l + 1 == r: 
-        return s.getX() == P[l].getX() and s.getY() == P[l].getY()
+        return l
 
     else:
         m = (l + r)/2
@@ -61,17 +66,19 @@ def binarySearch(s,P,Pslice):
         if s.getX() > P[m].getX():
             return binarySearch(s,P,(m,r))
         i=m-1
-        found = False
-        while P[i].getX() == s.getX() and i >= l and found!=True:
-            if s.getY() == P[i].getY():
-                found = True
+        found = -1
+        while found==-1 and P[i].getX() == s.getX() and i >= l:
+            if s.idcenter == P[i].idcenter:
+                found = i
             i=i-1
-        if found != True:
+        if found == -1:
             i = m
-            while P[i].getX() == s.getX() and i < r and found!=True:
-                if s.getY() == P[i].getY():
-                    found = True
+            while found == -1 and P[i].getX() == s.getX() and i < r:
+
+                if s.idcenter == P[i].idcenter:
+                    found = i
                 i=i+1
+
         return found
 
 def minTuple(t1,t2):
@@ -80,15 +87,27 @@ def minTuple(t1,t2):
     else:
         return t2
 
-def ClosestPairStrip(S,mid,d):
+def ClosestPairStrip(P,S,mid,d,Pslice):
     S_ = []
-    for i in range(len(S)):
-        if abs(S[i].getX()-mid) < d:
-            s_ = (i,S[i])
-            S_.append(s_)
+    for s in S:
+        #print "si o no?",abs(s.getX()-mid) , d
+        if abs(s.getX()-mid) < d:
+            S_.append(s)
+        #else:
+            #print "credo che elimenero' ",binarySearch(s,P,Pslice)
     minDist = (float("inf"),-1,-1)
+
     for u in range(len(S_)-1):
         for v in range(u+1,min(u+6,len(S_))):
-            uv = (euclide(S_[u][1],S_[v][1]),S_[u][0],S_[v][0])
+            #u_index =binarySearch(S_[u],P,Pslice)
+            #v_index = binarySearch(S_[v],P,Pslice)
+            #print v,u,v_index,u_index,euclide(S_[u],S_[v])
+            uv = (euclide(S_[u],S_[v]),u,v)
             minDist = minTuple(minDist,uv)
+    #print minDist
+    u= binarySearch(S_[minDist[1]],P,Pslice) if minDist[1] != -1 else -1
+    v= binarySearch(S_[minDist[2]],P,Pslice) if minDist[2] != -1 else -1
+
+    minDist = (minDist[0],u,v)
+    #print "minDist:",minDist
     return minDist

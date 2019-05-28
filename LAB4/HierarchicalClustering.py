@@ -1,8 +1,39 @@
-from FastClosestPair import FastClosestPair 
+from FastClosestPair import * 
 from Coord import *
+from tqdm import tqdm
+
+# inserisce un centroide in P mantenendo l'odinamento per x
+def insertP(ls, n): 
+    index = -1
+    # Searching for the position 
+    for i in range(len(ls)): 
+        if ls[i].getX() > n.getX(): 
+            index = i 
+            break
+
+    if index == -1:
+        ls.append(n)
+        return ls,len(ls)-1
+    else:
+        new_list = ls[:index] + [n] + ls[index:]
+        return new_list,index
+
+def insertS(ls, n): 
+    index = -1
+    for i in range(len(ls)): 
+        if ls[i].getY() > n.getY(): 
+            index = i 
+            break
+
+    if index == -1:
+        ls.append(n)
+        return ls,len(ls)-1
+    else:
+        new_list = ls[:index] + [n] + ls[index:]
+        return new_list,index
 
 # cluster : set di punti
-def newCenter(cluster):
+def newCenter(cluster,idcenter=0):
     x = 0
     y = 0
     for point in cluster:
@@ -10,30 +41,94 @@ def newCenter(cluster):
         y = y + point.getY()
     x = x / len(cluster)
     y = y / len(cluster)
-    return Center(x,y)
+    return Center(x,y,idcenter)
 
 # P : [Point]
 # k : numero di cluster richiesti
 
 # point : oggetto di tipo Point -> getX,getY
-# Cluster : e' un set di Point
-# Centers : lista di centroidi -> Centers[i] e' il centroide di Clusters[i]
+# cluster : e' un set di Point
+# Centers : lista di centroidi -> Centers[i] e' il centroide di clusters[i]
 # cen : oggetto di tipo Center -> getX,getY
 
-def HierarchicalClustering(P,k):
-    Clusters = [] 
-    for point in P:
-        clu = {point}
-        Clusters.append(clu) # len(P) clusters, ognuno con 1 singolo punto
-    Centers = [Center(0,0) for j in range(len(Clusters))]
-    while len(Clusters) > k:
-        for index in range(len(Clusters)):
-            Centers[index] = newCenter(Clusters[index])
-            #print Centers
-        closestPoints = FastClosestPair(Centers,Centers,(0,len(Centers)-1))
+def Hierarchicalclustering(P,k):
+    clusters = [{point} for point in P]
+    centerx = [newCenter([P[p]],p) for p in range(len(P))]
+    counter = 0
+    centery = sorted(centerx,key=lambda y : y.getY())
+
+    for z in tqdm(range(k,len(P))):
+        #print "**********************************************************"
+        #print len(centerx),len(centery),len(clusters)
+        #for c_index in range(len(clusters)):
+        #    print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
+
+        closestPoints = FastClosestPair(centerx,centery,(0,len(clusters))) # (d,i,j) con i,j indici di centerx
+
+        #print closestPoints
+
+        # minDist = (float("inf"),-1,-1)
+        # for i in range(len(centerx)):
+        #     for j in range(len(centerx)):
+        #         if i < j:
+        #             ij = (euclide(centerx[i],centerx[j]),i,j)
+        #             minDist=minTuple(minDist,ij)
+        # print minDist
+
+        #if closestPoints[0] != minDist[0]:
+        #    print "qualcosa non vaaaa"
+        #    break
+
         index1 = closestPoints[1]
         index2 = closestPoints[2]
-        Clusters[index1] = Clusters[index1].union(Clusters[index2])
-        Clusters.remove(Clusters[index2])
-        Centers.remove(Centers[index2])
-    return Clusters
+        """
+        print closestPoints[0],index1,index2
+        print len(centerx),len(centery),len(clusters)
+        """
+        centerx1 = centerx[index1]
+        centery1 = centerx[index1]
+        cluster1 = clusters[index1]
+
+        centerx2 = centerx[index2]
+        centery2 = centerx[index2]
+        cluster2 = clusters[index2]
+        """
+        print euclide(centerx1,centerx2 )
+        for c_index in range(len(clusters)):
+            print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
+        """
+        clusters.remove(cluster1)
+        clusters.remove(cluster2)
+
+        centerx.remove(centerx1)
+        centerx.remove(centerx2)
+
+        centery.remove(centery1)
+        centery.remove(centery2)
+        """
+        print ""
+        for c_index in range(len(clusters)):
+            print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
+        print ""
+        print len(centerx),len(centery),len(clusters)
+        """
+        new_clusters = cluster1.union(cluster2)
+
+        new_center = newCenter(new_clusters,len(P)+counter)
+        counter+=1
+        centery,_=insertS(centery, new_center)
+        centerx,index = insertP(centerx, new_center)
+        clusters.insert(index, new_clusters)
+        """
+        print len(centerx),len(centery),len(clusters)
+
+        for c_index in range(len(clusters)):
+            print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
+        for c in centerx:
+            print c,
+        print ""
+        for c in centery:
+            print c,
+        print ""
+        """
+    return centerx,clusters

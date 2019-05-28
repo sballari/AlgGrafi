@@ -1,11 +1,28 @@
 from ParserCancerData import ParserCancerData
 from FastClosestPair import FastClosestPair
-from HierarchicalClustering import HierarchicalClustering
+from HierarchicalClustering import Hierarchicalclustering
 import random
+from Coord import Point
+from Circle import *
+import time
+#Data = ParserCancerData("unifiedCancerData_212.csv")
+"""
+for i in tqdm(range(100)):
+    Data = [Point(i,random.randint(0,100),random.randint(0,100),random.randint(0,100),random.randint(0,100)) for i in range(100)]
+    P = sorted(Data,key=lambda x : x.getX())
 
-Data = ParserCancerData("unifiedCancerData_212.csv")
-
+    centers,clusters= Hierarchicalclustering(P,20)
+"""
+Data = ParserCancerData("unifiedCancerData_1041.csv")
 P = sorted(Data,key=lambda x : x.getX())
-S = sorted(Data,key=lambda y : y.getY())
 
-print HierarchicalClustering(P,5)
+tm=time.time()
+centers,clusters= Hierarchicalclustering(P,9)
+print time.time()-tm
+
+draw = drawOnImage()
+for i in range (len(centers)):
+    draw.drawCircle(centers[i])
+    for point in clusters[i]:
+        draw.drawLine(centers[i],point)
+draw.save()
