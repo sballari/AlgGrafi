@@ -54,9 +54,11 @@ def newCenter(cluster,idcenter=0):
 def Hierarchicalclustering(P,k):
     clusters = [{point} for point in P]
     centerx = [newCenter([P[p]],p) for p in range(len(P))]
+    tmp = [(centerx[center],center) for center in range(len(centerx))]
+    tmp = sorted(tmp,key=lambda y : y[0].getY())
+    centery = [v[1] for v in tmp]
     counter = 0
-    centery = sorted(centerx,key=lambda y : y.getY())
-
+    
     for z in tqdm(range(k,len(P))):
         #print "**********************************************************"
         #print len(centerx),len(centery),len(clusters)
@@ -65,15 +67,15 @@ def Hierarchicalclustering(P,k):
 
         closestPoints = FastClosestPair(centerx,centery,(0,len(clusters))) # (d,i,j) con i,j indici di centerx
 
-        #print closestPoints
+        print closestPoints,
 
-        # minDist = (float("inf"),-1,-1)
-        # for i in range(len(centerx)):
-        #     for j in range(len(centerx)):
-        #         if i < j:
-        #             ij = (euclide(centerx[i],centerx[j]),i,j)
-        #             minDist=minTuple(minDist,ij)
-        # print minDist
+        #minDist = (float("inf"),-1,-1)
+        #for i in range(len(centerx)):
+        #    for j in range(len(centerx)):
+        #        if i < j:
+        #            ij = (euclide(centerx[i],centerx[j]),i,j)
+        #            minDist=minTuple(minDist,ij)
+        #print minDist
 
         #if closestPoints[0] != minDist[0]:
         #    print "qualcosa non vaaaa"
