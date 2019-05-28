@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"encoding/csv"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -62,14 +61,12 @@ func Parser(k int) ([]City, []Centroid) {
 			kMaxCity = append(kMaxCity, city)
 		} else {
 			//TODO si potrebbe fare con lista ordinata
-			biggest, pos := findMax(kMaxCity)
-			if city.Pop > biggest.Pop {
+			smallest, pos := findMin(kMaxCity)
+			if city.Pop > smallest.Pop {
 				kMaxCity[pos] = city
 			}
 		}
 	}
-
-	fmt.Println(kMaxCity)
 
 	var centroids []Centroid
 	for c := range kMaxCity {
@@ -82,20 +79,20 @@ func Parser(k int) ([]City, []Centroid) {
 	return cities, centroids
 }
 
-func findMax(kMaxs []City) (*City, int) {
-	if len(kMaxs) == 0 {
+func findMin(cs []City) (*City, int) {
+	if len(cs) == 0 {
 		return nil, 0
 	}
 
-	maxPop := kMaxs[0].Pop
-	maxPosition := 0
+	minPop := cs[0].Pop
+	minPosition := 0
 
-	for i := 1; i < len(kMaxs); i++ {
-		if kMaxs[i].Pop > maxPop {
-			maxPop = kMaxs[i].Pop
-			maxPosition = i
+	for i := 1; i < len(cs); i++ {
+		if cs[i].Pop < minPop {
+			minPop = cs[i].Pop
+			minPosition = i
 		}
 	}
-	return &(kMaxs[maxPosition]), maxPosition
+	return &(cs[minPosition]), minPosition
 
 }

@@ -2,12 +2,23 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 func main() {
 	fmt.Println("Main lanciato")
-	cities := Parser()
-	d, c1, c2 := SlowClosestPair(cities)
-	fmt.Printf("distanza: %f\tcitta1: %s\tcitta2: %s\n", d, c1.Name, c2.Name)
+	k := 50
+	q := 1000
+	cities, centroids := Parser(k)
+	//fmt.Println(len(centroids))
+
+	start := time.Now()
+	cluster, MU := KMeansClustering(cities, centroids, k, q)
+	elapsed := time.Since(start)
+
+	fmt.Printf("kmeans took %s\n", elapsed)
+
+	fmt.Println(len(cluster))
+	fmt.Println(len(MU))
 
 }
