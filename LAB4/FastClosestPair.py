@@ -50,35 +50,6 @@ def Split(S,P,PL,PR):
             SR.append(s)
     return SL,SR
 
-
-def binarySearch(s,P,Pslice):
-    l=Pslice[0]
-    r=Pslice[1]
-    if l + 1 == r: 
-        return l
-
-    else:
-        m = (l + r)/2
-        if s.getX() < P[m].getX():
-            return binarySearch(s,P,(l,m))
-        if s.getX() > P[m].getX():
-            return binarySearch(s,P,(m,r))
-        i=m-1
-        found = -1
-        while found==-1 and P[i].getX() == s.getX() and i >= l:
-            if s.idcenter == P[i].idcenter:
-                found = i
-            i=i-1
-        if found == -1:
-            i = m
-            while found == -1 and P[i].getX() == s.getX() and i < r:
-
-                if s.idcenter == P[i].idcenter:
-                    found = i
-                i=i+1
-
-        return found
-
 def minTuple(t1,t2):
     if t1[0] < t2[0]:
         return t1
