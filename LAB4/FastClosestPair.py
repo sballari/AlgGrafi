@@ -3,7 +3,6 @@ def FastClosestPair(P,S,Pslice):
     r=Pslice[1]
     n = r-l
     if n <= 3:
-        #print "----)"
         return SlowClosestPair(P,Pslice)
     else:
         m = (l + r)/2
@@ -11,11 +10,9 @@ def FastClosestPair(P,S,Pslice):
         PR = (m,r) #bound dx non incluso
         SL,SR = Split(S,P,PL,PR)
         t = minTuple(FastClosestPair(P,SL,PL),FastClosestPair(P,SR,PR))
-       # mid = 0.5 * (P[m].getX()+P[m+1].getX())
         mid = float(P[m].getX()+P[m-1].getX())/2
         minDist=minTuple(t,ClosestPairStrip(P,S,mid,t[0],Pslice))
-        #print "----)"
-        #print str(minDist)
+
         return minDist
 
 
@@ -23,11 +20,11 @@ def SlowClosestPair(P,Pslice):
     l = Pslice[0] 
     r = Pslice[1] 
     minDist = (float("inf"),-1,-1)
-    #print "intervallo",l,r
+
     for i in range(l,r-1): 
         for j in range (i+1 ,r): 
             ij = (euclide(P[i],P[j]),i,j)
-            #print i,j
+
             if ij[0] < minDist[0]:
                 minDist = ij
     return minDist
@@ -59,16 +56,14 @@ def minTuple(t1,t2):
 def ClosestPairStrip(P,S,mid,d,Pslice):
     S_ = []
     for s in S:
-        #print "si o no?",abs(P[s].getX()-mid) , d
         if abs(P[s].getX()-mid) < d:
             S_.append(s)
-        #else:
-        #    print "credo che elimenero' ",s
+
     minDist = (float("inf"),-1,-1)
 
     for u in range(len(S_)-1):
         for v in range(u+1,min(u+6,len(S_))):
             uv = (euclide(P[S_[u]],P[S_[v]]),S_[u],S_[v])
             minDist = minTuple(minDist,uv)
-    #print "minDist:",minDist
+
     return minDist

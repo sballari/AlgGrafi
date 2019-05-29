@@ -60,7 +60,6 @@ def newCenter(cluster,idcenter):
     return Center(x,y,idcenter) 
 
 def CalculateNewPS(P,S,clusters,center1,center2,count):
-    #y=center1
     new_cluster = clusters[center1].union(clusters[center2])
     new_center = newCenter(new_cluster,len(P)+count)
 
@@ -70,15 +69,11 @@ def CalculateNewPS(P,S,clusters,center1,center2,count):
     y1=min(yy1,yy2)
     y2=max(yy1,yy2)
 
-    #print str(new_center)
     x_center = binarySearchNewCenterP(new_center,P,center1,center2)
     y_center = binarySearchNewCenterS(new_center,P,S,y1,y2)
-    #print "center:",x_center,y_center
-    #print "y",y1,y2
+
     s=0
-    #"""
     while s < len(S)-1:
-        #print [str(P[l])+str(l) for l in S]
         if s == y_center:
             S[s]=x_center
         else:
@@ -92,11 +87,9 @@ def CalculateNewPS(P,S,clusters,center1,center2,count):
                 S[s]=S[s]-1
         s=s+1
     S.pop()
-    #print S
-    #print ""
+
     p=0
     while p < len(P)-1:
-        #print [str(point) for point in P]
         if p == x_center:
             P[p]=new_center
             clusters[p]=new_cluster 
@@ -110,14 +103,8 @@ def CalculateNewPS(P,S,clusters,center1,center2,count):
                 clusters[p]=clusters[p+1]
 
         p=p+1
-    #print [str(point) for point in P]
     P.pop()
     clusters.pop()
-    #print ""
-    #print [str(point) for point in P]
-    #print [str(s)+str(P[s]) for s in S]
-
-
 
 # P : [Point]
 # k : numero di cluster richiesti
@@ -133,21 +120,15 @@ def Hierarchicalclustering(P,k):
     tmp = [(centerx[center],center) for center in range(len(centerx))]
     tmp = sorted(tmp,key=lambda y : y[0].getY())
     centery = [v[1] for v in tmp]
-    #print "tmp",[str(tmp[i][0])+str(tmp[i][1]) for i in range(len(tmp))]
 
     counter = 0
-    #print "S",[str(centerx[s]) for s in centery]
 
-    for z in range(k,len(P)):
-        #print "**********************************************************"
-        #print len(centerx),len(centery),len(clusters)
-        #for c_index in range(len(clusters)):
-        #    print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
+    for z in tqdm(range(k,len(P))):
 
         closestPoints = FastClosestPair(centerx,centery,(0,len(clusters))) # (d,i,j) con i,j indici di centerx
-
-        print closestPoints
         """
+        print closestPoints,
+        
         minDist = (float("inf"),-1,-1)
         for i in range(len(centerx)):
             for j in range(len(centerx)):
@@ -156,21 +137,11 @@ def Hierarchicalclustering(P,k):
                     minDist=minTuple(minDist,ij)
         print minDist
         """
-        #if closestPoints[0] != minDist[0]:
-        #    print "qualcosa non vaaaa"
-        #    break
 
         index1 = min(closestPoints[1],closestPoints[2])
         index2 = max(closestPoints[1],closestPoints[2])
         
-        #for c in range(len(centerx)):
-        #    print "("+str(c)+str(centerx[c])+")",
-        #print ""
-        #for c in range(len(centery)):
-        #    print "("+str(c)+str(centerx[centery[c]])+")",
-        #print ""
-        #print len(centerx),len(centery),len(clusters)
         CalculateNewPS(centerx,centery,clusters,index1,index2,counter)
-        #print len(centerx),len(centery),len(clusters)
         counter+=1
+
     return centerx,clusters
