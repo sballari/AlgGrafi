@@ -2,38 +2,54 @@ from FastClosestPair import *
 from Coord import *
 from tqdm import tqdm
 
-# inserisce un centroide in P mantenendo l'odinamento per x
-def insertP(ls, n): 
-    index = -1
-    # Searching for the position 
-    for i in range(len(ls)): 
-        if ls[i].getX() > n.getX(): 
-            index = i 
-            break
-
-    if index == -1:
-        ls.append(n)
-        return ls,len(ls)-1
+def binarySearchNewCenterP(p,P,l,r):
+    if l + 1 == r:
+        return l 
     else:
-        new_list = ls[:index] + [n] + ls[index:]
-        return new_list,index
+        m = (l + r)/2
+        if p.getX() < P[m].getX():
+            return binarySearchNewCenterP(p,P,l,m)
+        if p.getX() >= P[m].getX():
+            return binarySearchNewCenterP(p,P,m,r)
 
-def insertS(ls, n): 
-    index = -1
-    for i in range(len(ls)): 
-        if ls[i].getY() > n.getY(): 
-            index = i 
-            break
-
-    if index == -1:
-        ls.append(n)
-        return ls,len(ls)-1
+def binarySearchNewCenterS(p,P,S,l,r):
+    if l + 1 == r:
+        return l 
     else:
-        new_list = ls[:index] + [n] + ls[index:]
-        return new_list,index
+        m = (l + r)/2
+        if p.getY() < P[S[m]].getY():
+            return binarySearchNewCenterS(p,P,S,l,m)
+        if p.getY() >= P[S[m]].getY():
+            return binarySearchNewCenterS(p,P,S,m,r)
+
+def binarySearchS(p,P,S,l,r):
+    if l + 1 == r:
+        return l 
+    else:
+        m = (l + r)/2
+        if p.getY() < P[S[m]].getY():
+            return binarySearchS(p,P,S,l,m)
+        if p.getY() > P[S[m]].getY():
+            return binarySearchS(p,P,S,m,r)
+        i=m-1
+        found = -1
+        while found==-1 and P[S[i]].getY() == p.getY() and i >= l:
+            if p.idcenter == P[S[i]].idcenter:
+                found = i
+            i=i-1
+        if found == -1:
+            i = m
+            while found == -1 and P[S[i]].getY() == p.getY() and i < r:
+
+                if p.idcenter == P[S[i]].idcenter:
+                    found = i
+                i=i+1
+
+        return found
+        
 
 # cluster : set di punti
-def newCenter(cluster,idcenter=0):
+def newCenter(cluster,idcenter):
     x = 0
     y = 0
     for point in cluster:
@@ -41,7 +57,54 @@ def newCenter(cluster,idcenter=0):
         y = y + point.getY()
     x = x / len(cluster)
     y = y / len(cluster)
-    return Center(x,y,idcenter)
+    return Center(x,y,idcenter) 
+
+def CalculateNewPS(P,S,clusters,center1,center2,count):
+    new_cluster = clusters[center1].union(clusters[center2])
+    new_center = newCenter(new_cluster,len(P)+count)
+
+    yy1=binarySearchS(P[center1],P,S,0,len(S))
+    yy2=binarySearchS(P[center2],P,S,0,len(S))
+
+    y1=min(yy1,yy2)
+    y2=max(yy1,yy2)
+
+    x_center = binarySearchNewCenterP(new_center,P,center1,center2)
+    y_center = binarySearchNewCenterS(new_center,P,S,y1,y2)
+
+    s=0
+    while s < len(S)-1:
+        if s == y_center:
+            S[s]=x_center
+        else:
+            if y1 <= s < y_center:
+                S[s]=S[s+1]
+            
+            if s >= y2:
+                S[s]=S[s+1]
+
+            if center1 < S[s] <=x_center or S[s]> center2:
+                S[s]=S[s]-1
+        s=s+1
+    S.pop()
+
+    p=0
+    while p < len(P)-1:
+        if p == x_center:
+            P[p]=new_center
+            clusters[p]=new_cluster 
+        else:
+            if center1 <= p < x_center:
+                P[p]=P[p+1]
+                clusters[p]=clusters[p+1]
+            
+            if p >= center2:
+                P[p]=P[p+1]
+                clusters[p]=clusters[p+1]
+
+        p=p+1
+    P.pop()
+    clusters.pop()
 
 # P : [Point]
 # k : numero di cluster richiesti
@@ -54,81 +117,31 @@ def newCenter(cluster,idcenter=0):
 def Hierarchicalclustering(P,k):
     clusters = [{point} for point in P]
     centerx = [newCenter([P[p]],p) for p in range(len(P))]
+    tmp = [(centerx[center],center) for center in range(len(centerx))]
+    tmp = sorted(tmp,key=lambda y : y[0].getY())
+    centery = [v[1] for v in tmp]
+
     counter = 0
-    centery = sorted(centerx,key=lambda y : y.getY())
 
     for z in tqdm(range(k,len(P))):
-        #print "**********************************************************"
-        #print len(centerx),len(centery),len(clusters)
-        #for c_index in range(len(clusters)):
-        #    print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
 
         closestPoints = FastClosestPair(centerx,centery,(0,len(clusters))) # (d,i,j) con i,j indici di centerx
-
-        #print closestPoints
-
-        # minDist = (float("inf"),-1,-1)
-        # for i in range(len(centerx)):
-        #     for j in range(len(centerx)):
-        #         if i < j:
-        #             ij = (euclide(centerx[i],centerx[j]),i,j)
-        #             minDist=minTuple(minDist,ij)
-        # print minDist
-
-        #if closestPoints[0] != minDist[0]:
-        #    print "qualcosa non vaaaa"
-        #    break
-
-        index1 = closestPoints[1]
-        index2 = closestPoints[2]
         """
-        print closestPoints[0],index1,index2
-        print len(centerx),len(centery),len(clusters)
+        print closestPoints,
+        
+        minDist = (float("inf"),-1,-1)
+        for i in range(len(centerx)):
+            for j in range(len(centerx)):
+                if i < j:
+                    ij = (euclide(centerx[i],centerx[j]),i,j)
+                    minDist=minTuple(minDist,ij)
+        print minDist
         """
-        centerx1 = centerx[index1]
-        centery1 = centerx[index1]
-        cluster1 = clusters[index1]
 
-        centerx2 = centerx[index2]
-        centery2 = centerx[index2]
-        cluster2 = clusters[index2]
-        """
-        print euclide(centerx1,centerx2 )
-        for c_index in range(len(clusters)):
-            print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
-        """
-        clusters.remove(cluster1)
-        clusters.remove(cluster2)
-
-        centerx.remove(centerx1)
-        centerx.remove(centerx2)
-
-        centery.remove(centery1)
-        centery.remove(centery2)
-        """
-        print ""
-        for c_index in range(len(clusters)):
-            print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
-        print ""
-        print len(centerx),len(centery),len(clusters)
-        """
-        new_clusters = cluster1.union(cluster2)
-
-        new_center = newCenter(new_clusters,len(P)+counter)
+        index1 = min(closestPoints[1],closestPoints[2])
+        index2 = max(closestPoints[1],closestPoints[2])
+        
+        CalculateNewPS(centerx,centery,clusters,index1,index2,counter)
         counter+=1
-        centery,_=insertS(centery, new_center)
-        centerx,index = insertP(centerx, new_center)
-        clusters.insert(index, new_clusters)
-        """
-        print len(centerx),len(centery),len(clusters)
 
-        for c_index in range(len(clusters)):
-            print c_index, [str(c) for c in clusters[c_index]], str(centerx[c_index])
-        for c in centerx:
-            print c,
-        print ""
-        for c in centery:
-            print c,
-        print ""
-        """
     return centerx,clusters
