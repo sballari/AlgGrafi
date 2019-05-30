@@ -10,9 +10,9 @@ import (
 )
 
 type City struct {
-	Id        int64
+	Id        int
 	Name      string
-	Pop       int64
+	Pop       int
 	Latitude  float64
 	Longitude float64
 }
@@ -22,7 +22,7 @@ type Centroid struct {
 	Longitude float64
 }
 
-func Parser(k int, n int) ([]City, []Centroid) {
+func Parser(k int, minPopulation int) ([]City, []Centroid) {
 	/*
 		k := numero dei centroidi da prendere
 	*/
@@ -33,7 +33,7 @@ func Parser(k int, n int) ([]City, []Centroid) {
 
 	reader.Read() //leggo a vuoto il primo valore (i titoli)
 
-	for i := 0; i < n; i++ {
+	for {
 		line, error := reader.Read()
 		if error == io.EOF {
 			break
@@ -42,32 +42,35 @@ func Parser(k int, n int) ([]City, []Centroid) {
 		}
 		var city City
 
-		id, _ := strconv.ParseInt(line[0], 10, 64)
-		name := line[1]
-		pop, _ := strconv.ParseInt(line[2], 10, 64)
-		latitude, _ := strconv.ParseFloat(line[3], 64)
-		longitude, _ := strconv.ParseFloat(line[4], 64)
+		pop, _ := strconv.Atoi(line[2])
 
-		city = City{
-			Id:        id,
-			Name:      name,
-			Pop:       pop,
-			Latitude:  latitude,
-			Longitude: longitude,
-		}
-		cities = append(cities, city)
+		if pop >= minPopulation {
+			id, _ := strconv.Atoi(line[0])
+			name := line[1]
+			latitude, _ := strconv.ParseFloat(line[3], 64)
+			longitude, _ := strconv.ParseFloat(line[4], 64)
 
-		if len(kMaxCity) < k {
-			kMaxCity = append(kMaxCity, city)
-		} else {
-			//TODO si potrebbe fare con lista ordinata
-			smallest, pos := findMin(kMaxCity)
-			if city.Pop > smallest.Pop {
-				kMaxCity[pos] = city
+			city = City{
+				Id:        id,
+				Name:      name,
+				Pop:       pop,
+				Latitude:  latitude,
+				Longitude: longitude,
+			}
+			cities = append(cities, city)
+
+			if len(kMaxCity) < k {
+				kMaxCity = append(kMaxCity, city)
+			} else {
+				//TODO si potrebbe fare con lista ordinata
+				smallest, pos := findMin(kMaxCity)
+				if city.Pop > smallest.Pop {
+					kMaxCity[pos] = city
+				}
 			}
 		}
 	}
-
+	//converto le k citta' piu' grandi in centroidi
 	var centroids []Centroid
 	for c := range kMaxCity {
 		centroid := Centroid{

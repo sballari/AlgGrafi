@@ -6,7 +6,7 @@ import (
 )
 
 /*
-	KMeansClustering parallelo
+	Seq parallelo
 	M : lista di k centroidi []Centroid
 	P : lista di n Citta' 	 []City
 	k : len(M)
@@ -47,7 +47,6 @@ func KMeansClustering(P []City, MU []Centroid, k int, q int) ([]int, []Centroid)
 			}(f)
 		}
 		wg.Wait()
-		//mainP(P, cluster, MU, k, "../data/imgs/"+strconv.Itoa(i)+"c.png")
 	}
 	return cluster, MU
 }
@@ -157,3 +156,39 @@ func pReduceClusterReturn(P []City, cluster []int, i int, j int, h int) pReduceR
 // 	parallelFor(op, i, mid, wg)
 // 	parallelFor(op, mid+1, j, wg)
 // }
+
+func KMeansClusteringSeq(P []City, MU []Centroid, k int, q int) ([]([]City), []Centroid) {
+	var n = len(P)
+
+	var clusters []([]City)
+
+	for i := 1; i <= q; i++ { //iterazioni di raffinamento (no punto fisso)
+		//fmt.Printf("iterazione %d\n", i)
+
+		//CLUSTER VUOTI
+		clusters = make([]([]City), k)
+		//ASSEGNAMENTO per ogni nodo in P
+		for j := 0; j < n; j++ {
+			l := nearestCentroidIndex(&P[j], MU)
+			clusters[l] = append(clusters[l], P[j]) //OK??
+		}
+
+		//AGGIORNAMENTO per ogni centroide f in MU
+		for f := 0; f < k; f++ {
+			center(f, clusters, MU)
+		}
+	}
+	return clusters, MU
+}
+
+func center(f int, clusters []([]City), MU []Centroid) {
+	var sumX float64
+	var sumY float64
+	for i := 0; i < len(clusters[f]); i++ {
+		sumX := sumX + clusters[f][i].Latitude
+		sumY := sumY + clusters[f][i].Longitude
+		MU[f].Latitude = sumX / (float64)(len(clusters[f]))
+		MU[f].Longitude = sumY / (float64)(len(clusters[f]))
+	}
+
+}
