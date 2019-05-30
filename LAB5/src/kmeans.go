@@ -6,7 +6,7 @@ import (
 )
 
 /*
-	KMeansClustering ...
+	KMeansClustering parallelo
 	M : lista di k centroidi []Centroid
 	P : lista di n Citta' 	 []City
 	k : len(M)
@@ -21,6 +21,7 @@ func KMeansClustering(P []City, MU []Centroid, k int, q int) ([]int, []Centroid)
 		//fmt.Printf("iterazione %d\n", i)
 		//ASSEGNAMENTO per ogni nodo in P
 		var wg sync.WaitGroup
+
 		wg.Add(n)
 		for j := 0; j < n; j++ { //it should be a parallel for
 			go func(j int) {
@@ -36,9 +37,10 @@ func KMeansClustering(P []City, MU []Centroid, k int, q int) ([]int, []Centroid)
 		for f := 0; f < k; f++ { //parallel for
 			go func(f int) {
 				defer wg.Done()
-				resultChannel := make(chan pReduceResult)
-				go pReduceCluster(P, cluster, 0, n-1, f, resultChannel)
-				pRedResult := <-resultChannel
+				// resultChannel := make(chan pReduceResult)
+				// go pReduceCluster(P, cluster, 0, n-1, f, resultChannel)
+				// pRedResult := <-resultChannel
+				pRedResult := pReduceClusterReturn(P, cluster, 0, n-1, f)
 
 				MU[f].Latitude = pRedResult.sumX / (float64)(pRedResult.size)
 				MU[f].Longitude = pRedResult.sumY / (float64)(pRedResult.size)
@@ -47,15 +49,14 @@ func KMeansClustering(P []City, MU []Centroid, k int, q int) ([]int, []Centroid)
 		wg.Wait()
 		//mainP(P, cluster, MU, k, "../data/imgs/"+strconv.Itoa(i)+"c.png")
 	}
-
 	return cluster, MU
 }
 
+/*	nearestCentroidIndex
+	descr: scorre tutti i centroidi in centroids e ritorna l'indice del centroide piu'
+	vicino alla citta' city
+*/
 func nearestCentroidIndex(city *City, centroids []Centroid) int {
-	/*
-		descr: scorre tutti i centroidi in centroids e ritorna l'indice del centroide piu'
-		vicino alla citta' city
-	*/
 	nearestIndex := -1
 	minDist := math.MaxFloat64
 
@@ -146,3 +147,13 @@ func pReduceClusterReturn(P []City, cluster []int, i int, j int, h int) pReduceR
 		return result
 	}
 }
+
+// func parallelFor(op func(int), i int, j int, wg sync.WaitGroup) {
+// 	if i == j {
+// 		op(i)
+// 		wg.Done()
+// 	}
+// 	mid := (i + j) / 2
+// 	parallelFor(op, i, mid, wg)
+// 	parallelFor(op, mid+1, j, wg)
+// }
