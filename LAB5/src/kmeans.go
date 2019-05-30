@@ -5,18 +5,20 @@ import (
 	"sync"
 )
 
+/*
+	KMeansClustering ...
+	M : lista di k centroidi []Centroid
+	P : lista di n Citta' 	 []City
+	k : len(M)
+	q : numero di iterazioni di raffinamento
+*/
 func KMeansClustering(P []City, MU []Centroid, k int, q int) ([]int, []Centroid) {
-	/*
-		M : lista di k centroidi []Centroid
-		P : lista di n Citta' 	 []City
-		k : len(M)
-		q : numero di iterazioni di raffinamento
-	*/
 	var n = len(P)
 	var cluster = make([]int, n) //cluster[i] = cluster a cui il punto i viene assegnato
 
 	for i := 1; i <= q; i++ { //iterazioni di raffinamento (no punto fisso)
 
+		//fmt.Printf("iterazione %d\n", i)
 		//ASSEGNAMENTO per ogni nodo in P
 		var wg sync.WaitGroup
 		wg.Add(n)
@@ -43,7 +45,9 @@ func KMeansClustering(P []City, MU []Centroid, k int, q int) ([]int, []Centroid)
 			}(f)
 		}
 		wg.Wait()
+		//mainP(P, cluster, MU, k, "../data/imgs/"+strconv.Itoa(i)+"c.png")
 	}
+
 	return cluster, MU
 }
 
@@ -82,17 +86,18 @@ func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan cha
 				size: 1,
 			}
 			fatherChan <- result
+
 		} else {
 			result := pReduceResult{sumX: 0, sumY: 0, size: 0}
 			fatherChan <- result
+
 		}
 	} else {
 		mid := (i + j) / 2
 
 		go pReduceCluster(P, cluster, i, mid, h, myChannel)
-		go pReduceCluster(P, cluster, mid+1, j, h, myChannel)
+		result2 := pReduceClusterReturn(P, cluster, mid+1, j, h)
 		result1 := <-myChannel
-		result2 := <-myChannel
 
 		result := pReduceResult{
 			sumX: result1.sumX + result2.sumX,
@@ -109,4 +114,35 @@ func eucDistance(c1 *City, c2 *Centroid) float64 {
 	deltaY := c1.Longitude - c2.Longitude
 	dist := math.Sqrt(math.Pow(deltaX, 2) + math.Pow(deltaY, 2))
 	return dist
+}
+
+func pReduceClusterReturn(P []City, cluster []int, i int, j int, h int) pReduceResult {
+	myChannel := make(chan pReduceResult)
+
+	if i == j {
+		if cluster[i] == h {
+			result := pReduceResult{
+				sumX: P[i].Latitude,
+				sumY: P[i].Longitude,
+				size: 1,
+			}
+			return result
+		} else {
+			result := pReduceResult{sumX: 0, sumY: 0, size: 0}
+			return result
+		}
+	} else {
+		mid := (i + j) / 2
+
+		go pReduceCluster(P, cluster, i, mid, h, myChannel)
+		result2 := pReduceClusterReturn(P, cluster, mid+1, j, h)
+		result1 := <-myChannel
+
+		result := pReduceResult{
+			sumX: result1.sumX + result2.sumX,
+			sumY: result1.sumY + result2.sumY,
+			size: result1.size + result2.size,
+		}
+		return result
+	}
 }

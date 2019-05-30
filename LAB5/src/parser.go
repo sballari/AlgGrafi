@@ -22,7 +22,7 @@ type Centroid struct {
 	Longitude float64
 }
 
-func Parser(k int) ([]City, []Centroid) {
+func Parser(k int, n int) ([]City, []Centroid) {
 	/*
 		k := numero dei centroidi da prendere
 	*/
@@ -33,7 +33,7 @@ func Parser(k int) ([]City, []Centroid) {
 
 	reader.Read() //leggo a vuoto il primo valore (i titoli)
 
-	for {
+	for i := 0; i < n; i++ {
 		line, error := reader.Read()
 		if error == io.EOF {
 			break
