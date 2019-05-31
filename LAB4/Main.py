@@ -5,7 +5,7 @@ import random
 from Coord import Point
 from Circle import *
 import time
-
+from kmeans import kmeans
 def get_spaced_colors(n):
     max_value = 16581375 #255**3
     interval = int(max_value / n)
@@ -63,7 +63,7 @@ def getncolors3(n):
 
 
 Data = ParserCancerData("unifiedCancerData_3108.csv")
-
+"""
 P = sorted(Data,key=lambda x : x.getX())
 
 tm=time.time()
@@ -73,6 +73,22 @@ print time.time()-tm
 colors=get_spaced_colors(len(centers))
 colors=getncolors(len(centers))
 colors2=getncolors2(len(centers))
+colors3=getncolors3(len(centers))
+
+print colors3
+draw = drawOnImage()
+for i in range (len(centers)):
+    draw.drawCircle(centers[i])
+    for point in clusters[i]:
+        draw.drawLine(centers[i],point,colors3[i])
+draw.save()
+"""
+
+Data = ParserCancerData("unifiedCancerData_3108.csv")
+tm=time.time()
+centers,clusters= kmeans(Data,15,5)
+print time.time()-tm
+
 colors3=getncolors3(len(centers))
 
 print colors3
