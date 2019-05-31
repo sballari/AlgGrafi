@@ -20,10 +20,11 @@ def euclide(p1,p2):
 
 def partition(P,centers):
     clusters=[[] for center in centers]
-    minDist=(float("inf"),-1)
     for p in P:
+        minDist=(float("inf"),-1)
         for center in range(len(centers)):
             dist = euclide(p,centers[center])
+
             if minDist[0] > dist:
                 minDist = (dist,center)
         clusters[minDist[1]].append(p)
@@ -31,10 +32,11 @@ def partition(P,centers):
 def kmeans(P,k,q):
     centers=random.sample(P, k)
 
+    centers= [Center(center.getX(),center.getY()) for center in centers]
+    
     while q > 0:
         clusters = partition(P,centers)
-        print clusters
         for c in range(len(clusters)):
-            centers[c]=newCenter(clusters[c])
-    
+            centers[c]=newCenter(clusters[c]) if len(clusters[c]) > 0 else centers[c]
+        q=q-1
     return centers,clusters

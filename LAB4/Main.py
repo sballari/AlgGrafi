@@ -51,7 +51,6 @@ def getncolors3(n):
 	colors3 = [[i,0,255-i] for i in range(0,255,5)]
 	colors = colors1+colors2+colors3
 
-	print len(colors)
 	chosen_colors=[]
 	for c in range(0,len(colors),(len(colors)/n)):
 		chosen_colors.append(colors[c])
@@ -61,40 +60,36 @@ def getncolors3(n):
 	random.shuffle(colors)
 	return colors
 
-
 Data = ParserCancerData("unifiedCancerData_3108.csv")
-"""
+
+k=9
+q=10
+colors=getncolors3(k)
+
+print "KmeansClustering"
+tm=time.time()
+centers,clusters= kmeans(Data,k,q)
+print "Time Elapsed: ",time.time()-tm
+
+draw = drawOnImage()
+for i in range (len(centers)):
+    draw.drawCircle(centers[i])
+    for point in clusters[i]:
+        draw.drawLine(centers[i],point,colors[i])
+draw.save("img/kmeans")
+
+print "HierarchicalClustering"
 P = sorted(Data,key=lambda x : x.getX())
 
 tm=time.time()
-centers,clusters= Hierarchicalclustering(P,15)
+centers,clusters= Hierarchicalclustering(P,k)
 print time.time()-tm
 
-colors=get_spaced_colors(len(centers))
-colors=getncolors(len(centers))
-colors2=getncolors2(len(centers))
-colors3=getncolors3(len(centers))
-
-print colors3
 draw = drawOnImage()
 for i in range (len(centers)):
     draw.drawCircle(centers[i])
     for point in clusters[i]:
-        draw.drawLine(centers[i],point,colors3[i])
-draw.save()
-"""
+        draw.drawLine(centers[i],point,colors[i])
+draw.save("img/hierarchical")
 
-Data = ParserCancerData("unifiedCancerData_3108.csv")
-tm=time.time()
-centers,clusters= kmeans(Data,15,5)
-print time.time()-tm
 
-colors3=getncolors3(len(centers))
-
-print colors3
-draw = drawOnImage()
-for i in range (len(centers)):
-    draw.drawCircle(centers[i])
-    for point in clusters[i]:
-        draw.drawLine(centers[i],point,colors3[i])
-draw.save()

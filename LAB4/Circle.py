@@ -18,6 +18,6 @@ class drawOnImage:
         y2 = coord2.getY()
         self.draw.line((x,y,x2,y2), fill = ImageColor.getrgb(color))
 
-    def save(self):
+    def save(self,name):
         #del self.draw
-        self.img.save("USA2.png", "PNG")
+        self.img.save(name+".png", "PNG")
