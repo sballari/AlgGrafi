@@ -62,13 +62,14 @@ def getncolors3(n):
 
 Data = ParserCancerData("unifiedCancerData_3108.csv")
 
-k=9
-q=10
+k=15
+q=5
 colors=getncolors3(k)
 
 print "KmeansClustering"
+contee = sorted(Data,key=lambda x : x.getPop())
 tm=time.time()
-centers,clusters= kmeans(Data,k,q)
+centers,clusters= kmeans(contee[-k:],contee,k,q)
 print "Time Elapsed: ",time.time()-tm
 
 draw = drawOnImage()
@@ -77,7 +78,7 @@ for i in range (len(centers)):
     for point in clusters[i]:
         draw.drawLine(centers[i],point,colors[i])
 draw.save("img/kmeans")
-
+"""
 print "HierarchicalClustering"
 P = sorted(Data,key=lambda x : x.getX())
 
@@ -91,5 +92,5 @@ for i in range (len(centers)):
     for point in clusters[i]:
         draw.drawLine(centers[i],point,colors[i])
 draw.save("img/hierarchical")
-
+"""
 
