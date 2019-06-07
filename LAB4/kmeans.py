@@ -29,8 +29,7 @@ def partition(P,centers):
                 minDist = (dist,center)
         clusters[minDist[1]].append(p)
     return clusters
-def kmeans(P,k,q):
-    centers=random.sample(P, k)
+def kmeans(centers,P,k,q):
 
     centers= [Center(center.getX(),center.getY()) for center in centers]
     

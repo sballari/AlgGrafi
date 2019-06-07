@@ -8,6 +8,9 @@ class Point:
     def getY(self):
         return self.tupla[2]
 
+    def getPop(self):
+        return self.tupla[3]
+
     def __str__(self):
         return str(self.tupla)
 
