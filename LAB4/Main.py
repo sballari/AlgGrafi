@@ -60,7 +60,7 @@ def getncolors3(n):
 	random.shuffle(colors)
 	return colors
 
-Data = ParserCancerData("unifiedCancerData_3108.csv")
+Data = ParserCancerData("unifiedCancerData_212.csv")
 
 k=15
 q=5
@@ -77,8 +77,8 @@ for i in range (len(centers)):
     draw.drawCircle(centers[i])
     for point in clusters[i]:
         draw.drawLine(centers[i],point,colors[i])
-draw.save("img/kmeans")
-"""
+draw.save("img/Domanda5")
+
 print "HierarchicalClustering"
 P = sorted(Data,key=lambda x : x.getX())
 
@@ -91,6 +91,6 @@ for i in range (len(centers)):
     draw.drawCircle(centers[i])
     for point in clusters[i]:
         draw.drawLine(centers[i],point,colors[i])
-draw.save("img/hierarchical")
-"""
+draw.save("img/Domanda4")
+
 

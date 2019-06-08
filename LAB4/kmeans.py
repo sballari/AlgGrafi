@@ -19,6 +19,10 @@ def euclide(p1,p2):
     return ((x1-x2)**2+(y1-y2)**2)**0.5
 
 def partition(P,centers):
+    #desc: crea i cluster
+    #P: punti da inserire nei cluster
+    #centers: centroidi
+    #tempo: O(len(P)*len(centers))
     clusters=[[] for center in centers]
     for p in P:
         minDist=(float("inf"),-1)
@@ -29,7 +33,14 @@ def partition(P,centers):
                 minDist = (dist,center)
         clusters[minDist[1]].append(p)
     return clusters
+    
 def kmeans(centers,P,k,q):
+    #desc: algoritmo per la divisione dei punti in cluster.
+    #centers: centri iniziali
+    #P: punti da clusterizzare
+    #k: numero di cluster
+    #q: numero di interazioni dell'algoritmo
+    #tempo: O(q*k*len(P)+k)
 
     centers= [Center(center.getX(),center.getY()) for center in centers]
     

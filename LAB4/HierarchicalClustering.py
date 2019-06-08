@@ -115,6 +115,10 @@ def CalculateNewPS(P,S,clusters,center1,center2,count):
 # cen : oggetto di tipo Center -> getX,getY
 
 def Hierarchicalclustering(P,k):
+    #desc
+    #P
+    #k
+    #tempo: O(n^2 log(n)) con n=len(P)
     clusters = [{point} for point in P]
     centerx = [newCenter([P[p]],p) for p in range(len(P))]
     tmp = [(centerx[center],center) for center in range(len(centerx))]
@@ -126,17 +130,6 @@ def Hierarchicalclustering(P,k):
     for z in tqdm(range(k,len(P))):
 
         closestPoints = FastClosestPair(centerx,centery,(0,len(clusters))) # (d,i,j) con i,j indici di centerx
-        """
-        print closestPoints,
-        
-        minDist = (float("inf"),-1,-1)
-        for i in range(len(centerx)):
-            for j in range(len(centerx)):
-                if i < j:
-                    ij = (euclide(centerx[i],centerx[j]),i,j)
-                    minDist=minTuple(minDist,ij)
-        print minDist
-        """
 
         index1 = min(closestPoints[1],closestPoints[2])
         index2 = max(closestPoints[1],closestPoints[2])

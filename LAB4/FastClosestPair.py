@@ -9,7 +9,7 @@ def FastClosestPair(P,S,Pslice):
         PL = (l,m) #bound dx non incluso
         PR = (m,r) #bound dx non incluso
         SL,SR = Split(S,P,PL,PR)
-        t = minTuple(FastClosestPair(P,SL,PL),FastClosestPair(P,SR,PR))
+        t = minTuple(FastClosestPair(P,SL,PL),FastClosestPair(P,SR,PR))#2T(n/2)
         mid = float(P[m].getX()+P[m-1].getX())/2
         minDist=minTuple(t,ClosestPairStrip(P,S,mid,t[0],Pslice))
 
