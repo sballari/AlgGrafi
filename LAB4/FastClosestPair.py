@@ -34,7 +34,7 @@ def euclide(p1,p2):
     x2 = p2.getX()
     y1 = p1.getY()
     y2 = p2.getY()
-    return ((x1-x2)**2+(y1-y2)**2)**0.5
+    return (float((x1-x2)**2+(y1-y2)**2))**0.5
     
 #suddivide Y in YL e YR
 def Split(S,P,PL,PR):

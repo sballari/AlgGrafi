@@ -72,15 +72,19 @@ def errore_distorsione(centers,clusters):
 		errori.append('%.2E' % Decimal(errore))
 	return errori, '%.2E' % Decimal(distorsione)
 	
-Data = ParserCancerData("unifiedCancerData_562.csv")
+Data = ParserCancerData("unifiedCancerData_212.csv")
 
-k=16
+k=9
 q=5
 colors=getncolors3(k)
 
 print "KmeansClustering"
 contee = sorted(Data,key=lambda x : x.getPop())
 tm=time.time()
+
+#print [str(i) for i in contee]
+#print [str(i) for i in contee[-k:]]
+
 centers,clusters= kmeans(contee[-k:],contee,k,q)
 print "Time Elapsed: ",time.time()-tm
 

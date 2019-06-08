@@ -126,7 +126,6 @@ def Hierarchicalclustering(P,k):
     centery = [v[1] for v in tmp]
 
     counter = 0
-
     for z in tqdm(range(k,len(P))):
 
         closestPoints = FastClosestPair(centerx,centery,(0,len(clusters))) # (d,i,j) con i,j indici di centerx
