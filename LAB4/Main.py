@@ -1,11 +1,13 @@
 from ParserCancerData import ParserCancerData
-from FastClosestPair import FastClosestPair
+from FastClosestPair import FastClosestPair, euclide
 from HierarchicalClustering import Hierarchicalclustering
 import random
 from Coord import Point
 from Circle import *
 import time
 from kmeans import kmeans
+from decimal import Decimal
+
 def get_spaced_colors(n):
     max_value = 16581375 #255**3
     interval = int(max_value / n)
@@ -60,9 +62,19 @@ def getncolors3(n):
 	random.shuffle(colors)
 	return colors
 
-Data = ParserCancerData("unifiedCancerData_212.csv")
+def errore_distorsione(centers,clusters):
+	errori = []
+	distorsione = 0
+	for center in range(len(centers)):
 
-k=15
+		errore = sum([point.getPop()*euclide(centers[center],point) for point in clusters[center]])
+		distorsione+= errore
+		errori.append('%.2E' % Decimal(errore))
+	return errori, '%.2E' % Decimal(distorsione)
+	
+Data = ParserCancerData("unifiedCancerData_562.csv")
+
+k=16
 q=5
 colors=getncolors3(k)
 
@@ -72,12 +84,15 @@ tm=time.time()
 centers,clusters= kmeans(contee[-k:],contee,k,q)
 print "Time Elapsed: ",time.time()-tm
 
+errore,distorsione=errore_distorsione(centers,clusters)
+print errore,distorsione
+
 draw = drawOnImage()
 for i in range (len(centers)):
     draw.drawCircle(centers[i])
     for point in clusters[i]:
         draw.drawLine(centers[i],point,colors[i])
-draw.save("img/Domanda5")
+draw.save("img/Domanda6K")
 
 print "HierarchicalClustering"
 P = sorted(Data,key=lambda x : x.getX())
@@ -86,11 +101,14 @@ tm=time.time()
 centers,clusters= Hierarchicalclustering(P,k)
 print time.time()-tm
 
+errore,distorsione=errore_distorsione(centers,clusters)
+print errore,distorsione
+
 draw = drawOnImage()
 for i in range (len(centers)):
     draw.drawCircle(centers[i])
     for point in clusters[i]:
         draw.drawLine(centers[i],point,colors[i])
-draw.save("img/Domanda4")
+draw.save("img/Domanda6H")
 
 
