@@ -1,6 +1,7 @@
 from FastClosestPair import * 
 from Coord import *
 from tqdm import tqdm
+from decimal import Decimal
 
 def binarySearchNewCenterP(p,P,l,r):
     if l + 1 == r:
@@ -114,11 +115,25 @@ def CalculateNewPS(P,S,clusters,center1,center2,count):
 # Centers : lista di centroidi -> Centers[i] e' il centroide di clusters[i]
 # cen : oggetto di tipo Center -> getX,getY
 
-def Hierarchicalclustering(P,k):
+def distorsione(centers,clusters):
+	errori = []
+	distorsione = 0
+	for center in range(len(centers)):
+
+		errore = sum([point.getPop()*(euclide(centers[center],point))**2 for point in clusters[center]])
+		distorsione+= errore
+		errori.append('%.2E' % Decimal(errore))
+	return distorsione, '%.2E' % Decimal(distorsione)
+	
+
+def Hierarchicalclustering(P,k,kmin=0,kmax=0):
+    
     #desc
     #P
     #k
     #tempo: O(n^2 log(n)) con n=len(P)
+
+    distorsioneArr = []
     clusters = [{point} for point in P]
     centerx = [newCenter([P[p]],p) for p in range(len(P))]
     tmp = [(centerx[center],center) for center in range(len(centerx))]
@@ -126,7 +141,7 @@ def Hierarchicalclustering(P,k):
     centery = [v[1] for v in tmp]
 
     counter = 0
-    for z in tqdm(range(k,len(P))):
+    while len(centerx) > k:
 
         closestPoints = FastClosestPair(centerx,centery,(0,len(clusters))) # (d,i,j) con i,j indici di centerx
 
@@ -136,4 +151,8 @@ def Hierarchicalclustering(P,k):
         CalculateNewPS(centerx,centery,clusters,index1,index2,counter)
         counter+=1
 
-    return centerx,clusters
+        if kmin <= len(centerx) <= kmax:
+            distnum, diststr= distorsione(centerx,clusters)
+            distorsioneArr.append(distnum)
+
+    return centerx,clusters,distorsioneArr[::-1]

@@ -8,6 +8,7 @@
 \usepackage{float}
 \usepackage{booktabs} % To thicken table lines
 \usepackage{adjustbox}
+\usepackage{caption}
 
 \setlength{\droptitle}{-10em}
 \pagestyle{empty}
@@ -17,6 +18,7 @@
 \date{June 2019}
 
 \begin{document}
+
 \maketitle
 
 \section*{Domanda 1}
@@ -45,5 +47,45 @@ Da quando appena esposto risulta evidente come \textit{kmeans} sia in termini as
 
 \section*{Domanda 5}
 \includegraphics[width=1.0\linewidth, valign=t]{figures/Domanda5}
+
+\section*{Domanda 9}
+Di seguito vengono riportati tre grafici, ognuno facente riferimento ad un dataset di dimensioni differenti (in sequenza 212, 562 e 1041 contee). 
+Ogni grafico esprime sull'asse delle ordinate il valore della metrica dispersione al variare del numero di cluster in output. \newline
+\subsection*{212 contee, clustering gerarchico e k-means}
+\begin{figure}[H]
+	\hspace*{-1cm}\begin{minipage}{0.55\linewidth}
+		\centering
+			\include{table212}
+	\end{minipage}
+	\begin{minipage}{0.7\linewidth}
+		\includegraphics[width=1.0\linewidth, valign=t]{figures/output562}
+		\caption*{Grafico dispersione del dataset con 212 contee.}
+	\end{minipage}
+\end{figure}
+\subsection*{562 contee, clustering gerarchico e k-means}
+
+\begin{figure}[H]
+	\hspace*{-1cm}\begin{minipage}{0.55\linewidth}
+		\centering
+        \include{table562} 
+    \end{minipage}
+        \begin{minipage}{0.7\linewidth}
+            \includegraphics[width=1.0\linewidth, valign=t]{figures/output212}
+			\caption*{Grafico dispersione del dataset con 562 contee.}
+		\end{minipage}
+\end{figure}
+\subsection*{1041 contee, clustering gerarchico e k-means }
+\begin{figure}[H]
+	\hspace*{-1cm}\begin{minipage}{0.55\linewidth}
+		\centering
+			\include{table1041}
+	\end{minipage}
+	\begin{minipage}{0.7\linewidth}
+		\includegraphics[width=1.0\linewidth, valign=t]{figures/output1041}
+		\caption*{Grafico dispersione del dataset con 1041 contee.}
+
+	\end{minipage}
+\end{figure}
+
 
 \end{document}

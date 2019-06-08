@@ -18,6 +18,17 @@ def euclide(p1,p2):
     y2 = p2.getY()
     return (float((x1-x2)**2+(y1-y2)**2))**0.5
 
+def errore_distorsione(centers,clusters):
+	errori = []
+	distorsione = 0
+	for center in range(len(centers)):
+
+		errore = sum([point.getPop()*(euclide(centers[center],point))**2 for point in clusters[center]])
+		distorsione+= errore
+		errori.append('%.2E' % Decimal(errore))
+	return errori, '%.2E' % Decimal(distorsione)
+	
+
 def partition(P,centers):
     #desc: crea i cluster
     #P: punti da inserire nei cluster
