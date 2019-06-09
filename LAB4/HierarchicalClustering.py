@@ -1,9 +1,11 @@
-from FastClosestPair import * 
-from Coord import *
-from tqdm import tqdm
-from decimal import Decimal
+from FastClosestPair import FastClosestPair
+from Coord import Point,Center
+from utility import newCenter,euclide
 
 def binarySearchNewCenterP(p,P,l,r):
+    #desc: esegue una ricerca binaria per trovare la posizione in cui inserire il nuovo centroide rispetto S
+    #tempo: O(log(n))
+
     if l + 1 == r:
         return l 
     else:
@@ -14,6 +16,9 @@ def binarySearchNewCenterP(p,P,l,r):
             return binarySearchNewCenterP(p,P,m,r)
 
 def binarySearchNewCenterS(p,P,S,l,r):
+    #desc: esegue una ricerca binaria per trovare la posizione in cui inserire il nuovo centroide rispetto S
+    #tempo: O(log(n))
+
     if l + 1 == r:
         return l 
     else:
@@ -24,6 +29,8 @@ def binarySearchNewCenterS(p,P,S,l,r):
             return binarySearchNewCenterS(p,P,S,m,r)
 
 def binarySearchS(p,P,S,l,r):
+    #desc: esegue una ricerca binaria per trovare la posizione del punto p nell'intervallo [l,r] in S
+    #tempo: O(log(n))
     if l + 1 == r:
         return l 
     else:
@@ -49,18 +56,10 @@ def binarySearchS(p,P,S,l,r):
         return found
         
 
-# cluster : set di punti
-def newCenter(cluster,idcenter):
-    x = 0
-    y = 0
-    for point in cluster:
-        x = x + point.getX() 
-        y = y + point.getY()
-    x = x / len(cluster)
-    y = y / len(cluster)
-    return Center(x,y,idcenter) 
 
 def CalculateNewPS(P,S,clusters,center1,center2,count):
+    #desc: elimina i centroidi center1 center2, inserisce il nuovo centroide e aggiorna gli array
+    #tempo: O(n)
     new_cluster = clusters[center1].union(clusters[center2])
     new_center = newCenter(new_cluster,len(P)+count)
 
@@ -107,33 +106,12 @@ def CalculateNewPS(P,S,clusters,center1,center2,count):
     P.pop()
     clusters.pop()
 
-# P : [Point]
-# k : numero di cluster richiesti
-
-# point : oggetto di tipo Point -> getX,getY
-# cluster : e' un set di Point
-# Centers : lista di centroidi -> Centers[i] e' il centroide di clusters[i]
-# cen : oggetto di tipo Center -> getX,getY
-
-def distorsione(centers,clusters):
-	errori = []
-	distorsione = 0
-	for center in range(len(centers)):
-
-		errore = sum([point.getPop()*(euclide(centers[center],point))**2 for point in clusters[center]])
-		distorsione+= errore
-		errori.append('%.2E' % Decimal(errore))
-	return distorsione, '%.2E' % Decimal(distorsione)
-	
-
 def Hierarchicalclustering(P,k,kmin=0,kmax=0):
-    
-    #desc
-    #P
-    #k
+    #desc: algoritmo per il calcolo di k centroidi
+    #P: insieme di punti
+    #k: numero di cluster finali
     #tempo: O(n^2 log(n)) con n=len(P)
 
-    distorsioneArr = []
     clusters = [{point} for point in P]
     centerx = [newCenter([P[p]],p) for p in range(len(P))]
     tmp = [(centerx[center],center) for center in range(len(centerx))]
@@ -141,69 +119,14 @@ def Hierarchicalclustering(P,k,kmin=0,kmax=0):
     centery = [v[1] for v in tmp]
 
     counter = 0
-    for z in tqdm(range(k,len(P))):	
-        
-        closestPoints = FastClosestPair(centerx,centery,(0,len(clusters))) # (d,i,j) con i,j indici di centerx
-        	
-        #print "minimo",closestPoints,
-        minDist = (float("inf"),-1,-1)	
-        for i in range(len(centerx)):	
-            for j in range(len(centerx)):	
-                if i < j:	
-                    ij = (euclide(centerx[i],centerx[j]),i,j)	
-                    minDist=minTuple(minDist,ij)	
-        #print minDist
+    while len(centerx) > k:	
 
+        closestPoints = FastClosestPair(centerx,centery,(0,len(clusters))) # (d,i,j) con i,j indici di centerx
+        
         index1 = min(closestPoints[1],closestPoints[2])
         index2 = max(closestPoints[1],closestPoints[2])
-        
-        if (minDist[1] != index1 or minDist[2] != index2):
-            print "zio ken il guerriero veneto!"
-
-        center1=centerx[index1]
-        center2=centerx[index2]
-        cluster1=clusters[index1]
-        cluster2=clusters[index2]
-        
-        cluster = cluster1.union(cluster2)
-        newcenter=newCenter(cluster,len(centerx)+counter)
 
         CalculateNewPS(centerx,centery,clusters,index1,index2,counter)
         counter+=1
 
-        newcenterx=sorted(centerx,key=lambda y : y.getX())
-        newcentery=sorted(centery,key=lambda y : centerx[y].getY())
-
-        if newcenterx != centerx:
-            print "noooooooooooo x"
-            break
-
-        if newcentery != centery:
-            print "noooooooooooo y"
-            break
-
-        i=0
-        while centerx[i].getX() != newcenter.getX() and centerx[i].getY() != newcenter.getY():
-            i+=1
-        #print centerx[i],newcenter
-        if (i-1>= 0 and centerx[i-1].getX() > newcenter.getX()):
-            print "posizione sbagliata x sinistra",centerx[i-1].getX() ,"<=", newcenter.getX()
-            break
-
-        if (i+1<len(centerx) and centerx[i+1].getX() < newcenter.getX()):
-            print "posizione sbagliata x destra",centerx[i+1].getX() ,">=", newcenter.getX()
-            break
-        i=centery.index(i)
-        if (i-1>= 0 and centerx[centery[i-1]].getY() > newcenter.getY()):
-            print "posizione sbagliata y sinistra",centerx[centery[i-1]].getY(),"<=" , newcenter.getY()
-            break
-        
-        if (i+1<len(centery) and centerx[centery[i+1]].getY() < newcenter.getY()):
-            print "posizione sbagliata y destra",centerx[centery[i+1]].getY() ,">=", newcenter.getY()
-            break
-        
-        if kmin <= len(centerx) <= kmax:
-            distnum, diststr= distorsione(centerx,clusters)
-            distorsioneArr.append(distnum)
-
-    return centerx,clusters,distorsioneArr[::-1]
+    return centerx,clusters

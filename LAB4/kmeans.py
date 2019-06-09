@@ -1,33 +1,6 @@
-from Coord import *
+from Coord import Center
 import random
-
-def newCenter(cluster):
-    x = 0
-    y = 0
-    for point in cluster:
-        x = x + point.getX() 
-        y = y + point.getY()
-    x = x / len(cluster)
-    y = y / len(cluster)
-    return Center(x,y) 
-
-def euclide(p1,p2):
-    x1 = p1.getX()
-    x2 = p2.getX()
-    y1 = p1.getY()
-    y2 = p2.getY()
-    return (float((x1-x2)**2+(y1-y2)**2))**0.5
-
-def errore_distorsione(centers,clusters):
-	errori = []
-	distorsione = 0
-	for center in range(len(centers)):
-
-		errore = sum([point.getPop()*(euclide(centers[center],point))**2 for point in clusters[center]])
-		distorsione+= errore
-		errori.append('%.2E' % Decimal(errore))
-	return errori, '%.2E' % Decimal(distorsione)
-	
+from utility import newCenter,errore_distorsione,euclide
 
 def partition(P,centers):
     #desc: crea i cluster

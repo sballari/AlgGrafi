@@ -1,3 +1,5 @@
+from utility import euclide
+
 def FastClosestPair(P,S,Pslice):
     l=Pslice[0]
     r=Pslice[1]
@@ -29,13 +31,7 @@ def SlowClosestPair(P,Pslice):
                 minDist = ij
     return minDist
 
-def euclide(p1,p2):
-    x1 = p1.getX()
-    x2 = p2.getX()
-    y1 = p1.getY()
-    y2 = p2.getY()
-    return (float((x1-x2)**2+(y1-y2)**2))**0.5
-    
+
 #suddivide Y in YL e YR
 def Split(S,P,PL,PR):
     SL = []
