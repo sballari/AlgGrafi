@@ -40,7 +40,7 @@
 \end{center}
 
 \section*{Domanda 3}
-Dati $q$ il numero di iterazioni di \textit{Kmeans}, $k$ il numero di clustering e $n$ la cardinalità dell'insieme dei punti, possiamo quantificare le seguenti complessità dei due algoritmi di clustering:
+Dati $q$ il numero di iterazioni di \textit{Kmeans}, $k$ il numero di cluster e $n$ la cardinalità dell'insieme dei punti, possiamo quantificare le seguenti complessità dei due algoritmi di clustering:
 \begin{itemize}
 	\item La complessità del clustering gerarchico è $O(n\,h(n))$, dove $h(n)$ è la complessità della ricerca dei punti più vicini.
 	      Questa ricerca è stata effettuata con la funzione \textit{FastestClosestPair}, la quale ha complessità $O(n\,log(n))$;
@@ -50,7 +50,7 @@ Dati $q$ il numero di iterazioni di \textit{Kmeans}, $k$ il numero di clustering
 
 \noindent Ipotizzando quindi $q$ e $k$ fattori molto piccoli, quindi trascurabili come segue $q \approx 1$ e $k \approx 1$, giungiamo alla conclusione che 
 la complessità del clustering gerarchico rimanga inalterata, mentre \textit{Kmeans} giunga a $O(n)$.\\
-Da quando appena esposto risulta evidente come \textit{Kmeans} sia in termini asintotici, e considerando $q$ e $k$ insignificanti, significativamente piu' efficienti.
+Da quanto appena esposto risulta evidente come \textit{Kmeans} sia, in termini asintotici, e considerando $q$ e $k$ insignificanti, significativamente più efficiente.
 
 \section*{Domanda 4}
 \begin{center}
@@ -68,7 +68,7 @@ Da quando appena esposto risulta evidente come \textit{Kmeans} sia in termini as
 	\end{figure}
 \end{center}
 \section*{Domanda 6}
-l'algoritmo di clustering gerarchico con nove cluster in output e duecentododici contee presenta un valore di dispersione pari a $1.9675E+11$.
+L'algoritmo di clustering gerarchico con 9 cluster in output e 212 contee presenta un valore di dispersione pari a $1.9675E+11$.\\
 Invece, Kmeans applicato al set di dati con 212 contee, con 5 iterazioni e 9 cluster è affetto da una distorsione pari a $9.5383E+10$.
 
 \section*{Domanda 7}
@@ -77,11 +77,11 @@ Invece, Kmeans applicato al set di dati con 212 contee, con 5 iterazioni e 9 clu
 	\vspace*{-0.5cm}
 	\centering
 	\includegraphics[width=1.0\linewidth]{figures/costa}
-	
+	\caption*{Città più popolose della costa occidentale.}
 \end{wrapfigure}
 Relativamente alla costa occidentale, il clustering Gerarchico si presenta con un cluster contenente tutti i punti presi in esame. Kmeans, invece, raggruppa in maniera più uniforme attuando un'alterazione minima rispetto ai centroidi di partenza.\\
 Considerando la geografia della costa occidentale, notiamo essere presenti 4 tra le 9 contee più popolose dell'intero paese.
-Questo porta Kmeans a partire e anche a finire con quattro centroidi in quella zona.
+Questo porta Kmeans a partire e anche a finire con 4 centroidi in quella zona.
 Il clustering gerarchico, invece, partendo con ogni contea come centroide non introduce nessuna precedenza alla costa occidentale (che in Kmeans è data dalla presenza di città molto popolose).\\
 
 \noindent Come evidenziato dalla \hyperlink{fig:test}{\textbf{tabella}}, il clustering Gerarchico migliora sensibilmente la propria distorsione all'aumentare del numero di cluster finale.
@@ -92,8 +92,8 @@ Ciò ci permette di affermare che l'elevata agglomerazione in un solo centroide 
 Kmeans richiede conoscenza a priori sulla topologia dei punti (in quanto i centroidi iniziali devono essere selezionati) e sul numero di cluster che si vuole ottenere.\\
 Queste due informazioni, specialmente la prima, introducono un bias molto forte sul risultato finale.
 Quindi riteniamo che l'algoritmo di clustering gerarchico sia quello che necessiti di meno supervisione umana, ma più controllo sulla bonta della soluzione finale.\\
-A dimostrazione di ciò, si vuole far notare come da prove empiriche emerge come con un piccolo numero di punti il clustering gerarchico attua pochi accorpamenti, e quindi proponga risultati con alta dispersione. In questi contesti risulta più efficiente Kmeans. Quest'ultimo infatti fornendogli il numero di cluster finali e un numero di iterazioni, anche non troppo alto, fornisce un risultato con dispersione inferiore. \\ 
-Il clustering gerarchico, invece, può essere interrotto non appena la distorsione supera una certa soglia.
+Al fine di capire l'importanza di controllare la bontà della soluzione finale generata da Kmeans, si vuole far notare come da prove empiriche emerga che con un piccolo numero di punti il clustering gerarchico attui pochi accorpamenti, proponendo risultati ad alta dispersione. In questi contesti risulta più efficace Kmeans. Se infatti a quest'ultimo vengono forniti il numero di cluster finali ed un numero di iterazioni, anche non troppo alto, si può ottenere un risultato con dispersione inferiore. \\ 
+Il clustering gerarchico, invece, può essere interrotto non appena la distorsione superi una data soglia.
 
 \section*{Domanda 9}
 Di seguito vengono riportati tre grafici, ognuno facente riferimento ad un dataset di dimensioni differenti (in sequenza 212, 562 e 1041 contee). 
