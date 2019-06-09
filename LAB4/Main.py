@@ -6,10 +6,11 @@ import time
 from kmeans import kmeans
 from utility import getncolors,errore_distorsione
 
-Data = ParserCancerData("unifiedCancerData_1041.csv")
-
+dataset = "1041"
 k=15
 q=5
+
+Data = ParserCancerData("unifiedCancerData_"+dataset+".csv")
 
 colors=getncolors(k)
 
