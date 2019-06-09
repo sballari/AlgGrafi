@@ -76,7 +76,7 @@ Invece, Kmeans applicato al set di dati con 212 contee, con 5 iterazioni e 9 clu
 \begin{wrapfigure}[12]{l}{3cm}
 	\vspace*{-0.5cm}
 	\centering
-	\includegraphics[width=1.0\linewidth]{figures/costa}
+	\includegraphics[width=1.0\linewidth]{figures/costa_bis}
 	\caption*{Città più popolose della costa occidentale.}
 \end{wrapfigure}
 Relativamente alla costa occidentale, il clustering Gerarchico si presenta con un cluster contenente tutti i punti presi in esame. Kmeans, invece, raggruppa in maniera più uniforme attuando un'alterazione minima rispetto ai centroidi di partenza.\\
@@ -96,7 +96,7 @@ Al fine di capire l'importanza di controllare la bontà della soluzione finale g
 Il clustering gerarchico, invece, può essere interrotto non appena la distorsione superi una data soglia.
 
 \section*{Domanda 9}
-Di seguito vengono riportati tre grafici, ognuno facente riferimento ad un dataset di dimensioni differenti (in sequenza 212, 562 e 1041 contee). 
+Di seguito vengono riportati tre grafici, ognuno facente riferimento ad un dataset di dimensioni differenti (in sequenza 212, 562 e 1041 contee). \\
 Ogni grafico esprime sull'asse delle ordinate il valore della metrica dispersione al variare del numero di cluster in output.\\
 \subsection*{212 contee, clustering gerarchico e Kmeans}
 \hypertarget{fig:test}{}
@@ -136,9 +136,9 @@ Ogni grafico esprime sull'asse delle ordinate il valore della metrica dispersion
 \end{figure}
 
 \section*{Domanda 10}
-Come si può osservare dai grafici riportati nella domanda nove, in tutte le istanze del dataset nessuno dei due algoritmi si comporta sempre meglio dell'altro al variare del valore di $k$.\\
-Nell'istanza da 212 contee notiamo come con bassi valori di $k$ entrambi gli algoritmi hanno alti valori di dispersione, con Kmeans che si comporta generalmente meglio, tra $k=10$ e $k=14$ abbiamo un comportamento altalenante, ed infine da $k=15$ in poi il gerarchico diventa stabilmente il migliore.\\
-Nell'istanza da 562 contee vediamo come fino a $k=14$ cluster Kmeans ottiene una dispersione migliore, da qui in poi il clustering gerarchico ottiene risultati risultati migliori per poi convergere con Kmeans nell'intervallo $k=[18,20]$ \\
+Come si può osservare dai grafici riportati nella domanda nove, in tutti i dataset nessuno dei due algoritmi riesce ad ottenere risultati migliori dell'altro al variare del valore di $k$.\\
+Nell'istanza da 212 contee notiamo come con bassi valori di $k$ entrambi gli algoritmi hanno alti valori di dispersione, con Kmeans che si comporta generalmente meglio, tra $k=[10,14]$ abbiamo un comportamento altalenante, ed infine da $k=15$ in poi il gerarchico diventa stabilmente il migliore.\\
+Nell'istanza da 562 contee vediamo come fino a $k=14$ cluster Kmeans ottiene una dispersione migliore, da qui in poi il clustering gerarchico ottiene risultati migliori per poi convergere con Kmeans nell'intervallo $k=[18,20]$.\\
 Nell'istanza da 1041 contee notiamo che i due algoritmi in termini di dispersione sono analoghi.
 \end{document}
 
