@@ -35,7 +35,7 @@
 	\begin{figure}[H]
 		\hspace*{1.5cm}\includegraphics[width=0.8\linewidth, valign=t]{figures/Domanda2}
 		\caption*{15 cluster ottenuti con clustering Kmeans su 3108 contee con 5 iterazioni.}
-				
+										
 	\end{figure}
 \end{center}
 
@@ -57,7 +57,7 @@ Da quando appena esposto risulta evidente come \textit{Kmeans} sia in termini as
 	\begin{figure}[H]
 		\hspace*{1.5cm}\includegraphics[width=0.8\linewidth, valign=t]{figures/Domanda4}
 		\caption*{9 cluster ottenuti con clustering gerarchico su 212 contee.}
-				
+										
 	\end{figure}
 \end{center}
 \section*{Domanda 5}
@@ -71,15 +71,20 @@ Da quando appena esposto risulta evidente come \textit{Kmeans} sia in termini as
 l'algoritmo di clustering gerarchico con nove cluster in output e duecentododici contee presenta un valore di dispersione pari a $1.9675E+11$.
 Invece, Kmeans applicato al set di dati con 212 contee, con 5 iterazioni e 9 cluster è affetto da una distorsione pari a $9.5383E+10$.
 
-\section*{Domanda 7} 
-\begin{wrapfigure}{l}{2.5cm}
-	\includegraphics[width=1.0\linewidth, valign=t]{figures/costa}
-\end{wrapfigure} 
-Relativamente alla costa occidentale, il clustering Gerarchico si presenta con un cluster contenente tutti i punti presi in esame. Kmeans, invece, raggruppa in maniera più uniforme attuando un'alterazione minima rispetto ai centroidi di partenza.
+\section*{Domanda 7}
+
+\begin{wrapfigure}[12]{l}{3cm}
+	\vspace*{-0.5cm}
+	\centering
+	\includegraphics[width=1.0\linewidth]{figures/costa}
+	
+\end{wrapfigure}
+Relativamente alla costa occidentale, il clustering Gerarchico si presenta con un cluster contenente tutti i punti presi in esame. Kmeans, invece, raggruppa in maniera più uniforme attuando un'alterazione minima rispetto ai centroidi di partenza.\\
 Considerando la geografia della costa occidentale, notiamo essere presenti 4 tra le 9 contee più popolose dell'intero paese.
 Questo porta Kmeans a partire e anche a finire con quattro centroidi in quella zona.
-Il clustering gerarchico, invece, partendo con ogni contea come centroide non introduce nessuna precedenza alla costa occidentale (che in Kmeans è data dalla presenza di citta' molto popolose).\\
-Come evidenziato dalla \hyperlink{fig:test}{\textbf{tabella}}, il clustering Gerarchico migliora sensibilmente la propria distorsione all'aumentare del numero di cluster finale.
+Il clustering gerarchico, invece, partendo con ogni contea come centroide non introduce nessuna precedenza alla costa occidentale (che in Kmeans è data dalla presenza di città molto popolose).\\
+
+\noindent Come evidenziato dalla \hyperlink{fig:test}{\textbf{tabella}}, il clustering Gerarchico migliora sensibilmente la propria distorsione all'aumentare del numero di cluster finale.
 Ciò ci permette di affermare che l'elevata agglomerazione in un solo centroide è da inputare ad una scarsa cardinalità dei cluster di output.
 
 
@@ -126,7 +131,7 @@ Ogni grafico esprime sull'asse delle ordinate il valore della metrica dispersion
 	\begin{minipage}{0.7\linewidth}
 		\includegraphics[width=1.0\linewidth, valign=t]{figures/output1041}
 		\caption*{Grafico dispersione del dataset con 1041 contee.}
-				
+										
 	\end{minipage}
 \end{figure}
 
