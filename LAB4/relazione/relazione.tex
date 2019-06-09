@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-\usepackage{graphicx}
+\usepackage{graphicx,wrapfig}
 \usepackage{amsmath}
 \usepackage{titling}
 \usepackage{pdflscape}
@@ -9,6 +9,7 @@
 \usepackage{booktabs} % To thicken table lines
 \usepackage{adjustbox}
 \usepackage{caption}
+\usepackage[colorlinks=false,hidelinks]{hyperref}
 
 \setlength{\droptitle}{-10em}
 \pagestyle{empty}
@@ -22,81 +23,117 @@
 \maketitle
 
 \section*{Domanda 1}
-Viene riportato il grafico ottenuto dall'esecuzione dell'algoritmo Gerarchico.\\
-\includegraphics[width=1.0\linewidth, valign=t]{figures/Domanda1}
+\begin{center}
+	\begin{figure}[H]
+		\hspace*{1.5cm}\includegraphics[width=0.8\linewidth, valign=t]{figures/Domanda1}
+		\caption*{15 cluster ottenuti con clustering gerarchico su 3108 contee.}
+	\end{figure}
+\end{center}
 
 \section*{Domanda 2}
-Viene riportato il grafico ottenuto dell'esecuzione dell'algoritmo Kmeans.\\
-\includegraphics[width=1.0\linewidth, valign=t]{figures/Domanda2}
+\begin{center}
+	\begin{figure}[H]
+		\hspace*{1.5cm}\includegraphics[width=0.8\linewidth, valign=t]{figures/Domanda2}
+		\caption*{15 cluster ottenuti con clustering Kmeans su 3108 contee con 5 iterazioni.}
+				
+	\end{figure}
+\end{center}
 
 \section*{Domanda 3}
-Dati $q$ il numero di iterazioni di \textit{kmeans}, $k$ il numero di clustering e $n$ la cardinalità dell'insieme dei punti, possiamo quantificare le seguenti complessità dei due algoritmi di clustering:
+Dati $q$ il numero di iterazioni di \textit{Kmeans}, $k$ il numero di clustering e $n$ la cardinalità dell'insieme dei punti, possiamo quantificare le seguenti complessità dei due algoritmi di clustering:
 \begin{itemize}
-\item La complessità del clustering gerarchico è $O(n\,h(n))$, dove $h(n)$ è la complessità della ricerca dei punti più vicini.
-Questa ricerca è stata effettuata con la funzione \textit{FastestClosestPair}, la quale ha complessità $O(n\,log(n))$;
-Quindi complessivamente il clustering gerarchico ha complessità $O(n^2\,log(n))$.
-\item La complessità di \textit{kmeans} invece è di $O(q\,n\,k)$. 
+	\item La complessità del clustering gerarchico è $O(n\,h(n))$, dove $h(n)$ è la complessità della ricerca dei punti più vicini.
+	      Questa ricerca è stata effettuata con la funzione \textit{FastestClosestPair}, la quale ha complessità $O(n\,log(n))$;
+	      Quindi complessivamente il clustering gerarchico ha complessità $O(n^2\,log(n))$.
+	\item La complessità di \textit{Kmeans} invece è di $O(q\,n\,k)$. 
 \end{itemize}
 
 \noindent Ipotizzando quindi $q$ e $k$ fattori molto piccoli, quindi trascurabili come segue $q \approx 1$ e $k \approx 1$, giungiamo alla conclusione che 
-la complessità del clustering gerarchico rimanga inalterata, mentre \textit{kmeans} giunga a $O(n)$.\\
-Da quando appena esposto risulta evidente come \textit{kmeans} sia in termini asintotici, e considerando $q$ e $k$ insignificanti, significativamente piu' efficienti.
+la complessità del clustering gerarchico rimanga inalterata, mentre \textit{Kmeans} giunga a $O(n)$.\\
+Da quando appena esposto risulta evidente come \textit{Kmeans} sia in termini asintotici, e considerando $q$ e $k$ insignificanti, significativamente piu' efficienti.
 
 \section*{Domanda 4}
-\includegraphics[width=1.0\linewidth, valign=t]{figures/Domanda4}
-
+\begin{center}
+	\begin{figure}[H]
+		\hspace*{1.5cm}\includegraphics[width=0.8\linewidth, valign=t]{figures/Domanda4}
+		\caption*{9 cluster ottenuti con clustering gerarchico su 212 contee.}
+				
+	\end{figure}
+\end{center}
 \section*{Domanda 5}
-\includegraphics[width=1.0\linewidth, valign=t]{figures/Domanda5}
-
+\begin{center}
+	\begin{figure}[H]
+		\hspace*{1.5cm}\includegraphics[width=0.8\linewidth, valign=t]{figures/Domanda5}
+		\caption*{9 cluster ottenuti con clustering Kmeans su 212 contee con 5 iterazioni.}
+	\end{figure}
+\end{center}
 \section*{Domanda 6}
+l'algoritmo di clustering gerarchico con nove cluster in output e duecentododici contee presenta un valore di dispersione pari a $1.9675E+11$.
+Invece, Kmeans applicato al set di dati con 212 contee, con 5 iterazioni e 9 cluster è affetto da una distorsione pari a $9.5383E+10$.
 
+\section*{Domanda 7} 
+\begin{wrapfigure}{l}{2.5cm}
+	\includegraphics[width=1.0\linewidth, valign=t]{figures/costa}
+\end{wrapfigure} 
+Relativamente alla costa occidentale, il clustering Gerarchico si presenta con un cluster contenente tutti i punti presi in esame. Kmeans, invece, raggruppa in maniera più uniforme attuando un'alterazione minima rispetto ai centroidi di partenza.
+Considerando la geografia della costa occidentale, notiamo essere presenti 4 tra le 9 contee più popolose dell'intero paese.
+Questo porta Kmeans a partire e anche a finire con quattro centroidi in quella zona.
+Il clustering gerarchico, invece, partendo con ogni contea come centroide non introduce nessuna precedenza alla costa occidentale (che in Kmeans è data dalla presenza di citta' molto popolose).\\
+Come evidenziato dalla \hyperlink{fig:test}{\textbf{tabella}}, il clustering Gerarchico migliora sensibilmente la propria distorsione all'aumentare del numero di cluster finale.
+Ciò ci permette di affermare che l'elevata agglomerazione in un solo centroide è da inputare ad una scarsa cardinalità dei cluster di output.
 
-\section*{Domanda 7}
-Relativamente alla costa occidentale, il clustering Gerarchico si presenta con 2 cluster uno dei quali contenente
-9 dei 10 punti presi in esame. Kmeans, invece, raggruppa in maniera più uniforme ponendo un'alterazione minima
-rispetto ai centroidi di partenza.
 
 \section*{Domanda 8}
-Kmeans?
+Kmeans richiede conoscenza a priori sulla topologia dei punti (in quanto i centroidi iniziali devono essere selezionati) e sul numero di cluster che si vuole ottenere.\\
+Queste due informazioni, specialmente la prima, introducono un bias molto forte sul risultato finale.
+Quindi riteniamo che l'algoritmo di clustering gerarchico sia quello che necessiti di meno supervisione umana, ma più controllo sulla bonta della soluzione finale.\\
+A dimostrazione di ciò, si vuole far notare come da prove empiriche emerge come con un piccolo numero di punti il clustering gerarchico attua pochi accorpamenti, e quindi proponga risultati con alta dispersione. In questi contesti risulta più efficiente Kmeans. Quest'ultimo infatti fornendogli il numero di cluster finali e un numero di iterazioni, anche non troppo alto, fornisce un risultato con dispersione inferiore. \\ 
+Il clustering gerarchico, invece, può essere interrotto non appena la distorsione supera una certa soglia.
 
 \section*{Domanda 9}
 Di seguito vengono riportati tre grafici, ognuno facente riferimento ad un dataset di dimensioni differenti (in sequenza 212, 562 e 1041 contee). 
-Ogni grafico esprime sull'asse delle ordinate il valore della metrica dispersione al variare del numero di cluster in output. \newline
-\subsection*{212 contee, clustering gerarchico e k-means}
+Ogni grafico esprime sull'asse delle ordinate il valore della metrica dispersione al variare del numero di cluster in output.\\
+\subsection*{212 contee, clustering gerarchico e Kmeans}
+\hypertarget{fig:test}{}
 \begin{figure}[H]
 	\hspace*{-1cm}\begin{minipage}{0.55\linewidth}
-		\centering
-			\include{table212}
+	\centering	
+	\include{table212}
 	\end{minipage}
 	\begin{minipage}{0.7\linewidth}
 		\includegraphics[width=1.0\linewidth, valign=t]{figures/output562}
 		\caption*{Grafico dispersione del dataset con 212 contee.}
 	\end{minipage}
 \end{figure}
-\subsection*{562 contee, clustering gerarchico e k-means}
+\subsection*{562 contee, clustering gerarchico e Kmeans}
 
 \begin{figure}[H]
 	\hspace*{-1cm}\begin{minipage}{0.55\linewidth}
-		\centering
-        \include{table562} 
-    \end{minipage}
-        \begin{minipage}{0.7\linewidth}
-            \includegraphics[width=1.0\linewidth, valign=t]{figures/output212}
-			\caption*{Grafico dispersione del dataset con 562 contee.}
-		\end{minipage}
+	\centering
+	\include{table562} 
+	\end{minipage}
+	\begin{minipage}{0.7\linewidth}
+		\includegraphics[width=1.0\linewidth, valign=t]{figures/output212}
+		\caption*{Grafico dispersione del dataset con 562 contee.}
+	\end{minipage}
 \end{figure}
-\subsection*{1041 contee, clustering gerarchico e k-means }
+\subsection*{1041 contee, clustering gerarchico e Kmeans }
 \begin{figure}[H]
 	\hspace*{-1cm}\begin{minipage}{0.55\linewidth}
-		\centering
-			\include{table1041}
+	\centering
+	\include{table1041}
 	\end{minipage}
 	\begin{minipage}{0.7\linewidth}
 		\includegraphics[width=1.0\linewidth, valign=t]{figures/output1041}
 		\caption*{Grafico dispersione del dataset con 1041 contee.}
-
+				
 	\end{minipage}
 \end{figure}
 
-
+\section*{Domanda 10}
+Come si può osservare dai grafici riportati nella domanda nove, in tutte le istanze del dataset nessuno dei due algoritmi si comporta sempre meglio dell'altro al variare del valore di $k$.\\
+Nell'istanza da 212 contee notiamo come con bassi valori di $k$ entrambi gli algoritmi hanno alti valori di dispersione, con Kmeans che si comporta generalmente meglio, tra $k=10$ e $k=14$ abbiamo un comportamento altalenante, ed infine da $k=15$ in poi il gerarchico diventa stabilmente il migliore.\\
+Nell'istanza da 562 contee vediamo come fino a $k=14$ cluster Kmeans ottiene una dispersione migliore, da qui in poi il clustering gerarchico ottiene risultati risultati migliori per poi convergere con Kmeans nell'intervallo $k=[18,20]$ \\
+Nell'istanza da 1041 contee notiamo che i due algoritmi in termini di dispersione sono analoghi.
 \end{document}
+

@@ -72,12 +72,12 @@ def errore_distorsione(centers,clusters):
 		errori.append('%.2E' % Decimal(errore))
 	return errori, '%.2E' % Decimal(distorsione)
 	
-Data = ParserCancerData("unifiedCancerData_3108.csv")
+Data = ParserCancerData("unifiedCancerData_1041.csv")
 
 k=15
 q=5
 colors=getncolors3(k)
-
+"""
 print "KmeansClustering"
 contee = sorted(Data,key=lambda x : x.getPop())
 tm=time.time()
@@ -97,12 +97,12 @@ for i in range (len(centers)):
     for point in clusters[i]:
         draw.drawLine(centers[i],point,colors[i])
 draw.save("img/Domanda2")
-
+"""
 print "HierarchicalClustering"
 P = sorted(Data,key=lambda x : x.getX())
 
 tm=time.time()
-centers,clusters= Hierarchicalclustering(P,k)
+centers,clusters,distorsione= Hierarchicalclustering(P,k)
 print time.time()-tm
 
 errore,distorsione=errore_distorsione(centers,clusters)
@@ -113,6 +113,6 @@ for i in range (len(centers)):
     draw.drawCircle(centers[i])
     for point in clusters[i]:
         draw.drawLine(centers[i],point,colors[i])
-draw.save("img/Domanda1")
+draw.save("img/prova")
 
 

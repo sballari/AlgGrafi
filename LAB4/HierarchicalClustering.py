@@ -141,16 +141,67 @@ def Hierarchicalclustering(P,k,kmin=0,kmax=0):
     centery = [v[1] for v in tmp]
 
     counter = 0
-    while len(centerx) > k:
-
+    for z in tqdm(range(k,len(P))):	
+        
         closestPoints = FastClosestPair(centerx,centery,(0,len(clusters))) # (d,i,j) con i,j indici di centerx
+        	
+        #print "minimo",closestPoints,
+        minDist = (float("inf"),-1,-1)	
+        for i in range(len(centerx)):	
+            for j in range(len(centerx)):	
+                if i < j:	
+                    ij = (euclide(centerx[i],centerx[j]),i,j)	
+                    minDist=minTuple(minDist,ij)	
+        #print minDist
 
         index1 = min(closestPoints[1],closestPoints[2])
         index2 = max(closestPoints[1],closestPoints[2])
         
+        if (minDist[1] != index1 or minDist[2] != index2):
+            print "zio ken il guerriero veneto!"
+
+        center1=centerx[index1]
+        center2=centerx[index2]
+        cluster1=clusters[index1]
+        cluster2=clusters[index2]
+        
+        cluster = cluster1.union(cluster2)
+        newcenter=newCenter(cluster,len(centerx)+counter)
+
         CalculateNewPS(centerx,centery,clusters,index1,index2,counter)
         counter+=1
 
+        newcenterx=sorted(centerx,key=lambda y : y.getX())
+        newcentery=sorted(centery,key=lambda y : centerx[y].getY())
+
+        if newcenterx != centerx:
+            print "noooooooooooo x"
+            break
+
+        if newcentery != centery:
+            print "noooooooooooo y"
+            break
+
+        i=0
+        while centerx[i].getX() != newcenter.getX() and centerx[i].getY() != newcenter.getY():
+            i+=1
+        #print centerx[i],newcenter
+        if (i-1>= 0 and centerx[i-1].getX() > newcenter.getX()):
+            print "posizione sbagliata x sinistra",centerx[i-1].getX() ,"<=", newcenter.getX()
+            break
+
+        if (i+1<len(centerx) and centerx[i+1].getX() < newcenter.getX()):
+            print "posizione sbagliata x destra",centerx[i+1].getX() ,">=", newcenter.getX()
+            break
+        i=centery.index(i)
+        if (i-1>= 0 and centerx[centery[i-1]].getY() > newcenter.getY()):
+            print "posizione sbagliata y sinistra",centerx[centery[i-1]].getY(),"<=" , newcenter.getY()
+            break
+        
+        if (i+1<len(centery) and centerx[centery[i+1]].getY() < newcenter.getY()):
+            print "posizione sbagliata y destra",centerx[centery[i+1]].getY() ,">=", newcenter.getY()
+            break
+        
         if kmin <= len(centerx) <= kmax:
             distnum, diststr= distorsione(centerx,clusters)
             distorsioneArr.append(distnum)
