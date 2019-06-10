@@ -54,8 +54,8 @@ func Parser(k int, minPopulation int) ([]City, []Centroid) {
 				Id:        id,
 				Name:      name,
 				Pop:       pop,
-				Latitude:  latitude,
-				Longitude: longitude,
+				Latitude:  radiantConvLat(latitude),
+				Longitude: radiantConvLat(longitude),
 			}
 			cities = append(cities, city)
 
@@ -74,12 +74,30 @@ func Parser(k int, minPopulation int) ([]City, []Centroid) {
 	var centroids []Centroid
 	for c := range kMaxCity {
 		centroid := Centroid{
-			Latitude:  kMaxCity[c].Latitude,
-			Longitude: kMaxCity[c].Longitude,
+			Latitude:  radiantConvLat(kMaxCity[c].Latitude),
+			Longitude: radiantConvLon(kMaxCity[c].Longitude),
 		}
 		centroids = append(centroids, centroid)
 	}
 	return cities, centroids
+}
+
+func radiantConvLat(lat_deg float64) float64 {
+	pi := 3.141592
+
+    lat_min := lat_deg - float64(int64(lat_deg))
+    lat_rad := pi * (float64(int64(lat_deg)) + 5.0 * lat_min/ 3.0) / 180.0
+
+    return lat_rad
+}
+
+func radiantConvLon(lon_deg float64) float64 {
+	pi := 3.141592
+
+	lon_min := lon_deg - float64(int64(lon_deg))
+	lon_rad := pi * (float64(int64(lon_deg)) + 5.0 * lon_min/ 3.0) / 180.0
+
+	return lon_rad
 }
 
 func findMin(cs []City) (*City, int) {

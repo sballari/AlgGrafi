@@ -57,10 +57,10 @@ func KMeansClustering(P []City, MU []Centroid, k int, q int) ([]int, []Centroid)
 */
 func nearestCentroidIndex(city *City, centroids []Centroid) int {
 	nearestIndex := -1
-	minDist := math.MaxFloat64
+	minDist := int64(math.MaxInt64) //DANGER
 
 	for i := 0; i < len(centroids); i++ {
-		dist := eucDistance(city, &centroids[i])
+		dist := GEO_Distance(city, &centroids[i])
 		if dist < minDist {
 			nearestIndex = i
 			minDist = dist
@@ -109,11 +109,21 @@ func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan cha
 
 }
 
-func eucDistance(c1 *City, c2 *Centroid) float64 {
-	deltaX := c1.Latitude - c2.Latitude
-	deltaY := c1.Longitude - c2.Longitude
-	dist := math.Sqrt(math.Pow(deltaX, 2) + math.Pow(deltaY, 2))
-	return dist
+// func eucDistance(c1 *City, c2 *Centroid) float64 {
+// 	deltaX := c1.Latitude - c2.Latitude
+// 	deltaY := c1.Longitude - c2.Longitude
+// 	dist := math.Sqrt(math.Pow(deltaX, 2) + math.Pow(deltaY, 2))
+// 	return dist
+
+func GEO_Distance(c1 *City, c2 *Centroid) int64 {    
+    RRR := 6378.388
+
+    q1 := math.Cos( c1.Longitude - c2.Longitude ) 
+    q2 := math.Cos( c1.Latitude - c2.Latitude )
+    q3 := math.Cos( c1.Latitude + c2.Latitude ) 
+    dij := int64 ( RRR * math.Acos( 0.5*((1.0+q1)*q2 - (1.0-q1)*q3) ) + 1.0)
+
+	return dij
 }
 
 func pReduceClusterReturn(P []City, cluster []int, i int, j int, h int) pReduceResult {
