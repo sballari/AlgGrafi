@@ -13,8 +13,10 @@ func main() {
 	k := 50
 	q := 100
 
-	citiesDts := make([]([]City), 6)
+	citiesDts := make([]([]City), 6) 
 	centroidDts := make([]([]Centroid), 6)
+
+	//250, 2.000, 5.000, 15.000, 50.000, e 100.000
 
 	citiesDts[0], centroidDts[0] = Parser(k, 250)
 	citiesDts[1], centroidDts[1] = Parser(k, 2000)
