@@ -1,7 +1,10 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
+	"log"
+	"os"
 	"time"
 )
 
@@ -13,7 +16,7 @@ func main() {
 	k := 50
 	q := 100
 
-	citiesDts := make([]([]City), 6) 
+	citiesDts := make([]([]City), 6)
 	centroidDts := make([]([]Centroid), 6)
 
 	//250, 2.000, 5.000, 15.000, 50.000, e 100.000
@@ -25,8 +28,8 @@ func main() {
 	citiesDts[4], centroidDts[4] = Parser(k, 50000)
 	citiesDts[5], centroidDts[5] = Parser(k, 100000)
 
-	timesPar := make([]time.Duration, 6)
-	timesSeq := make([]time.Duration, 6)
+	timesPar := make([]string, 6)
+	timesSeq := make([]string, 6)
 
 	for i := 1; i < 6; i++ {
 		fmt.Println("####################################")
@@ -35,14 +38,14 @@ func main() {
 		//parallelo
 		start := time.Now()
 		cluster, MUpar := KMeansClustering(citiesDts[i], centroidDts[i], k, q)
-		timesPar[i] = time.Since(start)
+		timesPar[i] = time.Since(start).String()
 		fmt.Print("time // = ")
 		fmt.Println(timesPar[i])
 
 		//sequenziale
 		start = time.Now()
 		clusters, MUseq := KMeansClusteringSeq(citiesDts[i], centroidDts[i], k, q)
-		timesSeq[i] = time.Since(start)
+		timesSeq[i] = time.Since(start).String()
 		fmt.Print("time Seq = ")
 		fmt.Println(timesSeq[i])
 
@@ -50,5 +53,22 @@ func main() {
 		//mainP(citiesDts[i], cluster, MUpar, k, "../data/imgs/"+strconv.Itoa(i)+".png")
 	}
 	fmt.Println("####################################")
+
+	var data = [][]string{timesPar, timesSeq}
+
+	file, err := os.Create("result.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	w := csv.NewWriter(file)
+
+	for _, value := range data {
+		if err := w.Write(value); err != nil {
+			log.Fatalln("Error writing record to csv: ", err)
+		}
+	}
+	w.Flush()
 
 }
