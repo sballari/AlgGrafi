@@ -1,21 +1,70 @@
 package main
 
 import (
+	"bufio"
 	"encoding/csv"
 	"fmt"
 	"log"
 	"os"
 	"time"
+	"io"
+	"strconv"
 )
 
+type Istance struct {
+	domanda int
+	n  int
+	k  int
+	it int
+	par int
+	seq int
+}
+
+func istance()[]Istance{
+	csvFile, _ := os.Open("../data/istance.csv")
+	reader := csv.NewReader(bufio.NewReader(csvFile))
+
+	var istances []Istance
+
+	for {
+		line, error := reader.Read()
+		if error == io.EOF {
+			break
+		} else if error != nil {
+			log.Fatal(error)
+		}
+
+		currentdomanda, _ := strconv.Atoi(line[0])
+		currentn, _ := strconv.Atoi(line[1])
+		currentk, _ := strconv.Atoi(line[2])
+		currentit, _ := strconv.Atoi(line[3])
+
+		var istance Istance
+
+		istance = Istance{
+			domanda : currentdomanda,
+			n : currentn,
+			k : currentk,
+			it : currentit,
+		}
+
+		istances = append(istances,istance)
+
+	}
+	return istances
+}
+
 func main() {
+	//var istances []Istance
+	//istances = istance()
+
 
 	fmt.Println("Main lanciato")
 	//fmt.Printf("GOMAXPROCS is %d\n", runtime.GOMAXPROCS(-1))
 
 	k := 50
 	q := 100
-
+	
 	citiesDts := make([]([]City), 6)
 	centroidDts := make([]([]Centroid), 6)
 
