@@ -16,6 +16,7 @@ type Istance struct {
 	n  int
 	k  int
 	it int
+	cutoff int
 	par int64
 	seq int64
 }
@@ -38,6 +39,7 @@ func istance()[]Istance{
 		currentn, _ := strconv.Atoi(line[1])
 		currentk, _ := strconv.Atoi(line[2])
 		currentit, _ := strconv.Atoi(line[3])
+		currentcutoff, _ := strconv.Atoi(line[4])
 
 		var istance Istance
 
@@ -46,6 +48,7 @@ func istance()[]Istance{
 			n : currentn,
 			k : currentk,
 			it : currentit,
+			cutoff : currentcutoff,
 		}
 
 		istances = append(istances,istance)
@@ -88,22 +91,25 @@ func main() {
 		citiesDts := make([]City, istances[i].n)
 		centroidDts := make([]Centroid, istances[i].k)
 		citiesDts, centroidDts = Parser(istances[i].k, istances[i].n)
+		istances[i].n = len(citiesDts)
 
 		//parallelo
 		start := time.Now()
-		_ , _ = KMeansClustering(citiesDts, centroidDts, istances[i].k, istances[i].it,0)
-		istances[i].par = time.Since(start).Nanoseconds()/100000
+		_ , _ = KMeansClustering(citiesDts, centroidDts, istances[i].k, istances[i].it,istances[i].cutoff)
+		istances[i].par = time.Since(start).Nanoseconds()/1000000
 
 		//sequenziale
 		start = time.Now()
 		_ , _ = KMeansClusteringSeq(citiesDts, centroidDts, istances[i].k, istances[i].it)
-		istances[i].seq = time.Since(start).Nanoseconds()/100000
+		istances[i].seq = time.Since(start).Nanoseconds()/1000000
 
 		// fmt.Println(len(cluster), len(MUpar), len(clusters), len(MUseq))
 		//mainP(citiesDts[i], cluster, MUpar, k, "../data/imgs/"+strconv.Itoa(i)+".png")
-		 var stristance string
-		 stristance = strconv.FormatInt(int64(istances[i].domanda),10)+" "+strconv.FormatInt(int64(istances[i].n),10)+" "+strconv.FormatInt(int64(istances[i].k),10)+" "+strconv.FormatInt(int64(istances[i].it),10)+" "+strconv.FormatInt(istances[i].par,10)+" "+strconv.FormatInt(istances[i].seq,10)
-		 
+		var stristance string
+		stristance = strconv.FormatInt(int64(istances[i].domanda),10)+" "+strconv.FormatInt(int64(istances[i].n),10)+" "
+		stristance = stristance+strconv.FormatInt(int64(istances[i].k),10)+" "+strconv.FormatInt(int64(istances[i].it),10)+" "
+		stristance = stristance+strconv.FormatInt(int64(istances[i].cutoff),10)+" "+strconv.FormatInt(istances[i].par,10)+" "
+		stristance = stristance+strconv.FormatInt(istances[i].seq,10)
 		str = append(str, stristance)
 		fmt.Println(stristance)
 	}
