@@ -91,7 +91,7 @@ func main() {
 
 		//parallelo
 		start := time.Now()
-		_ , _ = KMeansClustering(citiesDts, centroidDts, istances[i].k, istances[i].it,30)
+		_ , _ = KMeansClustering(citiesDts, centroidDts, istances[i].k, istances[i].it,0)
 		istances[i].par = time.Since(start).Nanoseconds()/100000
 
 		//sequenziale

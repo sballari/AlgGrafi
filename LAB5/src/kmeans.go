@@ -108,7 +108,7 @@ type pReduceResult struct {
 func pReduceCluster(P []City, cluster []int, i int, j int, h int,fatherChan chan pReduceResult,cutoff int) {   // T(n) = 2*T(n/2) + O(1)
 	myChannel := make(chan pReduceResult)
 
-	if (i+cutoff <= j) {
+	if (j-i <= cutoff ) {
 			var x float64 = 0 
 			var y float64 = 0
 			var count int = 0
