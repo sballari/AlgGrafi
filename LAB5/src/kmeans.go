@@ -14,7 +14,7 @@ import (
 	k : len(M)
 	q : numero di iterazioni di raffinamento
 */
-func KMeansClustering(P []City, MU []Centroid, k int, q int) ([]int, []Centroid) {
+func KMeansClustering(P []City, MU []Centroid, k int, q int, cutoff int) ([]int, []Centroid) {
 	var n = len(P)
 	var cluster = make([]int, n) //cluster[i] = cluster a cui il punto i viene assegnato
 	wgChannel := make(chan int)
@@ -54,7 +54,7 @@ func KMeansClustering(P []City, MU []Centroid, k int, q int) ([]int, []Centroid)
 			go func(f int, wgChannel chan int) {
 				
 				myChannel := make(chan pReduceResult)
-				go pReduceCluster(P, cluster, 0, n-1, f, myChannel)
+				go pReduceCluster(P, cluster, 0, n-1, f, myChannel,cutoff)
 				pRedResult := <- myChannel
 
 				MU[f].Latitude = pRedResult.sumX / (float64)(pRedResult.size)
@@ -105,10 +105,10 @@ type pReduceResult struct {
 	size int
 }
 
-func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan chan pReduceResult) {   // T(n) = 2*T(n/2) + O(1)
+func pReduceCluster(P []City, cluster []int, i int, j int, h int,fatherChan chan pReduceResult,cutoff int) {   // T(n) = 2*T(n/2) + O(1)
 	myChannel := make(chan pReduceResult)
 
-	if (i+30 <= j) {
+	if (i+cutoff <= j) {
 			var x float64 = 0 
 			var y float64 = 0
 			var count int = 0
@@ -128,8 +128,8 @@ func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan cha
 	} else {
 		mid := (i + j) / 2
 
-		go pReduceCluster(P, cluster, i, mid, h, myChannel)
-		go pReduceCluster(P, cluster, mid+1, j, h, myChannel)
+		go pReduceCluster(P, cluster, i, mid, h, myChannel,cutoff)
+		go pReduceCluster(P, cluster, mid+1, j, h, myChannel,cutoff)
 		//result2 := pReduceClusterReturn(P, cluster, mid+1, j, h)
 		result2 := <-myChannel
 		result1 := <-myChannel
@@ -149,7 +149,7 @@ func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan cha
 // 	dist := math.Sqrt(math.Pow(deltaX, 2) + math.Pow(deltaY, 2))
 // 	return dist
 
-func GEO_Distance(c1 *City, c2 *Centroid) int64 {    
+func GEO_Distance(c1 *City, c2 *Centroid) int64 {
     RRR := 6378.388
 
     q1 := math.Cos( c1.Longitude - c2.Longitude ) 
@@ -165,6 +165,7 @@ func GEO_Distance(c1 *City, c2 *Centroid) int64 {
 // i = bound sx di P
 // j = bound dx di P
 // h = centroide
+/*
 func pReduceClusterReturn(P []City, cluster []int, i int, j int, h int) pReduceResult {
 	myChannel := make(chan pReduceResult)
 
@@ -195,7 +196,7 @@ func pReduceClusterReturn(P []City, cluster []int, i int, j int, h int) pReduceR
 		return result
 	}
 }
-
+*/
 // func parallelFor(op func(int), i int, j int, wg sync.WaitGroup) {
 // 	if i == j {
 // 		op(i)
