@@ -53,7 +53,7 @@ func KMeansClustering(P []City, MU []Centroid, k int, q int, cutoff int) ([]int,
 		// wg.Add(k)
 
 		for f := 0; f < k; f++ { //parallel for
-			func(f int, wgChannel chan int) {
+			go func(f int, wgChannel chan int) {
 
 				myChannel := make(chan pReduceResult)
 				go pReduceCluster(P, cluster, 0, n-1, f, myChannel, cutoff)

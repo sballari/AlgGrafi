@@ -43,6 +43,19 @@ plt.legend()
 plt.savefig("domanda1")
 plt.clf()
 
+y3 = [float(y2[i])/float(y1[i]) for i in range(len(y2))]
+plt.plot(x2, y3, label = "sequential")  
+plt.xlabel('x - population')
+# Set the y axis label of the current axis.
+plt.ylabel('y - speedup')
+# Set a title of the current axes.
+plt.title('Domanda 1 speedup')
+# show a legend on the plot
+plt.legend()
+# Display a figure.
+plt.savefig("domanda1speedup")
+plt.clf()
+
 #domanda 2
 clu = [d[2] for d in graphic[1]]
 par1 = [d[5] for d in graphic[1]]
@@ -68,6 +81,19 @@ plt.legend()
 # Display a figure.
 plt.savefig("domanda2")
 
+plt.clf()
+
+y3 = [float(y2[i])/float(y1[i]) for i in range(len(y2))]
+plt.plot(x2, y3, label = "speedup")  
+plt.xlabel('x - cluster')
+# Set the y axis label of the current axis.
+plt.ylabel('y - speedup')
+# Set a title of the current axes.
+plt.title('Domanda 2 speedup')
+# show a legend on the plot
+plt.legend()
+# Display a figure.
+plt.savefig("domanda2speedup")
 plt.clf()
 
 #domanda 3
@@ -96,6 +122,19 @@ plt.legend()
 plt.savefig("domanda3")
 plt.clf()
 
+y3 = [float(y2[i])/float(y1[i]) for i in range(len(y2))]
+plt.plot(x2, y3, label = "speedup")  
+plt.xlabel('x - iteration')
+# Set the y axis label of the current axis.
+plt.ylabel('y - speedup')
+# Set a title of the current axes.
+plt.title('Domanda 3 speedup')
+# show a legend on the plot
+plt.legend()
+# Display a figure.
+plt.savefig("domanda3speedup")
+plt.clf()
+
 #domanda 4
 cutoff = [d[4] for d in graphic[3]]
 par3 = [d[5] for d in graphic[3]]
@@ -120,21 +159,16 @@ plt.legend()
 plt.savefig("domanda4")
 plt.clf()
 
-import numpy as np
-from scipy.interpolate import interp1d
+y3 = [float(seq3[i])/float(par3[i]) for i in range(len(par3))]
+plt.plot(x1, y3, label = "speedup")  
+plt.xlabel('x - cutoff')
+# Set the y axis label of the current axis.
+plt.ylabel('y - speedup')
+# Set a title of the current axes.
+plt.title('Domanda 14 speedup')
+# show a legend on the plot
+plt.legend()
+# Display a figure.
+plt.savefig("domanda4speedup")
 
-fig, ax = plt.subplots()
-ax.scatter(x1,y1, s=5, c="crimson")
 
-f = interp1d(x1, y1, kind='cubic')
-xdens = np.linspace(0, 39000, num=400)
-ydens = f(xdens)
-
-ax.plot(xdens, ydens, label="interpolation")
-ax.legend()
-ax2 = ax.twinx()
-yderiv =  np.diff(ydens)/np.diff(xdens)
-ax2.plot(xdens[:-1],yderiv, color="C2", label="derivative")
-
-ax2.legend()
-plt.show()
