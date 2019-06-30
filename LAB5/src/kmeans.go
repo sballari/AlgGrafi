@@ -4,7 +4,7 @@ import (
 	"math"
 	// "sync"
 	"time"
-	"fmt"
+	//"fmt"
 )
 
 /*
@@ -14,48 +14,50 @@ import (
 	k : len(M)
 	q : numero di iterazioni di raffinamento
 */
-func KMeansClustering(P []City, MU []Centroid, k int, q int, cutoff int) ([]int, []Centroid) {
+func KMeansClustering(P []City, MU []Centroid, k int, q int, cutoff int) ([]int, []Centroid, []time.Duration) {
 	var n = len(P)
 	var cluster = make([]int, n) //cluster[i] = cluster a cui il punto i viene assegnato
 	wgChannel := make(chan int)
-	var t2 time.Duration
-	var t3 time.Duration
-	for i := 1; i <= q; i++ { //iterazioni di raffinamento (no punto fisso)
+	t := make([]time.Duration, q)
+	var t_1 time.Duration
+	t_1 = 0
+
+	for i := 0; i < q; i++ { //iterazioni di raffinamento (no punto fisso)
 
 		//ASSEGNAMENTO per ogni nodo in P
 		// var wg sync.WaitGroup
 
 		// wg.Add(n)
-		
+
 		start := time.Now()
-		for j := 0; j < n; j++ { //it should be a parallel for
-			go func(j int,wgChannel chan int) {
-				l := nearestCentroidIndex(&P[j], MU)
-				cluster[j] = l //assegno a P[j] il cluster l
-				wgChannel <- 1
-				// wg.Done()
-				return
-			}(j,wgChannel)
-		}
-		// wg.Wait()
+		/*
+			for j := 0; j < n; j++ { //it should be a parallel for
+				go func(j int,wgChannel chan int) {
+					l := nearestCentroidIndex(&P[j], MU)
+					cluster[j] = l //assegno a P[j] il cluster l
+					wgChannel <- 1
+					// wg.Done()
+					return
+				}(j,wgChannel)
+			}
+			// wg.Wait()
 
-		for i:= 0; i < n; i++ {
-			 <- wgChannel	
-		}
-
-		t := time.Since(start)
-		t2 = t2 + t
+			for i:= 0; i < n; i++ {
+				 <- wgChannel
+			}
+		*/
+		cluster := make([]int, n)
+		nearestCentroid(P, MU, 0, n-1, cutoff, cluster)
 
 		//AGGIORNAMENTO per ogni centroide f in MU
 		// wg.Add(k)
 
-		start = time.Now()
 		for f := 0; f < k; f++ { //parallel for
-			go func(f int, wgChannel chan int) {
-				
+			func(f int, wgChannel chan int) {
+
 				myChannel := make(chan pReduceResult)
-				go pReduceCluster(P, cluster, 0, n-1, f, myChannel,cutoff)
-				pRedResult := <- myChannel
+				go pReduceCluster(P, cluster, 0, n-1, f, myChannel, cutoff)
+				pRedResult := <-myChannel
 
 				MU[f].Latitude = pRedResult.sumX / (float64)(pRedResult.size)
 				MU[f].Longitude = pRedResult.sumY / (float64)(pRedResult.size)
@@ -66,19 +68,32 @@ func KMeansClustering(P []City, MU []Centroid, k int, q int, cutoff int) ([]int,
 		}
 		// wg.Wait()
 
-		for i:= 0; i < k; i++ {
-			 <- wgChannel	
+		for i := 0; i < k; i++ {
+			<-wgChannel
 		}
 
-		t = time.Since(start)
-		t3 = t3 + t
-		
+		end := time.Since(start)
+		t[i] = end + t_1
+		t_1 = t[i]
 	}
-	fmt.Print("Fase 2: ")
-		fmt.Println(t2)
-	fmt.Print("Fase 3: ")
-		fmt.Println(t3)
-	return cluster, MU
+	//fmt.Print("Fase 2: ")
+	//	fmt.Println(t2)
+	//fmt.Print("Fase 3: ")
+	//	fmt.Println(t3)
+	return cluster, MU, t
+}
+
+func nearestCentroid(P []City, MU []Centroid, i int, j int, cutoff int, cluster []int) {
+	if j-i <= cutoff {
+		for z := i; z <= j; z++ {
+			l := nearestCentroidIndex(&P[z], MU)
+			cluster[z] = l
+		}
+	} else {
+		mid := (i + j) / 2
+		go nearestCentroid(P, MU, i, mid, cutoff, cluster)
+		go nearestCentroid(P, MU, mid+1, j, cutoff, cluster)
+	}
 }
 
 /*	nearestCentroidIndex
@@ -105,31 +120,31 @@ type pReduceResult struct {
 	size int
 }
 
-func pReduceCluster(P []City, cluster []int, i int, j int, h int,fatherChan chan pReduceResult,cutoff int) {   // T(n) = 2*T(n/2) + O(1)
+func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan chan pReduceResult, cutoff int) { // T(n) = 2*T(n/2) + O(1)
 	myChannel := make(chan pReduceResult)
-
-	if (j-i <= cutoff ) {
-			var x float64 = 0 
-			var y float64 = 0
-			var count int = 0
-			for z:=i; z <= j; z++ {
-				if cluster[z] == h {
-					x = x + P[i].Latitude
-					y = y + P[i].Longitude
-					count = count + 1
-				}
+	//fmt.Println(j-i)
+	if j-i <= cutoff {
+		var x float64 = 0
+		var y float64 = 0
+		var count int = 0
+		for z := i; z <= j; z++ {
+			if cluster[z] == h {
+				x = x + P[i].Latitude
+				y = y + P[i].Longitude
+				count = count + 1
 			}
-			result := pReduceResult{
-				sumX: x,
-				sumY: y,
-				size: count,
-			}
-			fatherChan <- result
+		}
+		result := pReduceResult{
+			sumX: x,
+			sumY: y,
+			size: count,
+		}
+		fatherChan <- result
 	} else {
 		mid := (i + j) / 2
 
-		go pReduceCluster(P, cluster, i, mid, h, myChannel,cutoff)
-		go pReduceCluster(P, cluster, mid+1, j, h, myChannel,cutoff)
+		go pReduceCluster(P, cluster, i, mid, h, myChannel, cutoff)
+		go pReduceCluster(P, cluster, mid+1, j, h, myChannel, cutoff)
 		//result2 := pReduceClusterReturn(P, cluster, mid+1, j, h)
 		result2 := <-myChannel
 		result1 := <-myChannel
@@ -150,12 +165,12 @@ func pReduceCluster(P []City, cluster []int, i int, j int, h int,fatherChan chan
 // 	return dist
 
 func GEO_Distance(c1 *City, c2 *Centroid) int64 {
-    RRR := 6378.388
+	RRR := 6378.388
 
-    q1 := math.Cos( c1.Longitude - c2.Longitude ) 
-    q2 := math.Cos( c1.Latitude - c2.Latitude )
-    q3 := math.Cos( c1.Latitude + c2.Latitude ) 
-    dij := int64 ( RRR * math.Acos( 0.5*((1.0+q1)*q2 - (1.0-q1)*q3) ) + 1.0)
+	q1 := math.Cos(c1.Longitude - c2.Longitude)
+	q2 := math.Cos(c1.Latitude - c2.Latitude)
+	q3 := math.Cos(c1.Latitude + c2.Latitude)
+	dij := int64(RRR*math.Acos(0.5*((1.0+q1)*q2-(1.0-q1)*q3)) + 1.0)
 
 	return dij
 }
@@ -186,7 +201,7 @@ func pReduceClusterReturn(P []City, cluster []int, i int, j int, h int) pReduceR
 
 		go pReduceCluster(P, cluster, i, mid, h, myChannel)
 		result2 := pReduceClusterReturn(P, cluster, mid+1, j, h)
-		result1 := <-myChannel // mi metto in attesa di pReduceCluster sul canale myChannel 
+		result1 := <-myChannel // mi metto in attesa di pReduceCluster sul canale myChannel
 
 		result := pReduceResult{
 			sumX: result1.sumX + result2.sumX,
@@ -207,13 +222,19 @@ func pReduceClusterReturn(P []City, cluster []int, i int, j int, h int) pReduceR
 // 	parallelFor(op, mid+1, j, wg)
 // }
 
-func KMeansClusteringSeq(P []City, MU []Centroid, k int, q int) ([]([]City), []Centroid) {
+func KMeansClusteringSeq(P []City, MU []Centroid, k int, q int) ([]([]City), []Centroid, []time.Duration) {
+
 	var n = len(P)
 
 	var clusters []([]City)
 
-	for i := 1; i <= q; i++ { //iterazioni di raffinamento (no punto fisso)
+	t := make([]time.Duration, q)
+	var t_1 time.Duration
+	t_1 = 0
+
+	for i := 0; i < q; i++ { //iterazioni di raffinamento (no punto fisso)
 		//fmt.Printf("iterazione %d\n", i)
+		start := time.Now()
 
 		//CLUSTER VUOTI
 		clusters = make([]([]City), k)
@@ -227,8 +248,12 @@ func KMeansClusteringSeq(P []City, MU []Centroid, k int, q int) ([]([]City), []C
 		for f := 0; f < k; f++ {
 			center(f, clusters, MU)
 		}
+
+		end := time.Since(start)
+		t[i] = end + t_1
+		t_1 = t[i]
 	}
-	return clusters, MU
+	return clusters, MU, t
 }
 
 func center(f int, clusters []([]City), MU []Centroid) {

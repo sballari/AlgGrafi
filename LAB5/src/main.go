@@ -4,24 +4,24 @@ import (
 	"bufio"
 	"encoding/csv"
 	"fmt"
+	"io"
 	"log"
 	"os"
-	"time"
-	"io"
 	"strconv"
+	"time"
 )
 
 type Istance struct {
 	domanda int
-	n  int
-	k  int
-	it int
-	cutoff int
-	par int64
-	seq int64
+	n       int
+	k       int
+	it      int
+	cutoff  int
+	par     int64
+	seq     int64
 }
 
-func istance()[]Istance{
+func istance() []Istance {
 	csvFile, _ := os.Open("../data/istance.csv")
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 
@@ -44,14 +44,14 @@ func istance()[]Istance{
 		var istance Istance
 
 		istance = Istance{
-			domanda : currentdomanda,
-			n : currentn,
-			k : currentk,
-			it : currentit,
-			cutoff : currentcutoff,
+			domanda: currentdomanda,
+			n:       currentn,
+			k:       currentk,
+			it:      currentit,
+			cutoff:  currentcutoff,
 		}
 
-		istances = append(istances,istance)
+		istances = append(istances, istance)
 
 	}
 	return istances
@@ -61,13 +61,12 @@ func main() {
 	var istances []Istance
 	istances = istance()
 
-
 	fmt.Println("Main lanciato")
 	//fmt.Printf("GOMAXPROCS is %d\n", runtime.GOMAXPROCS(-1))
 
 	//k := 50
 	//q := 100
-	
+
 	// citiesDts := make([]([]City), 6)
 	// centroidDts := make([]([]Centroid), 6)
 
@@ -88,28 +87,31 @@ func main() {
 		// fmt.Println("####################################")
 		// fmt.Printf("DATASET%d n=%d\n", i, len(citiesDts[i]))
 
-		citiesDts := make([]City, istances[i].n)
+		citiesDts := make([]City, 38184)
 		centroidDts := make([]Centroid, istances[i].k)
+		qpar := make([]time.Duration,istances[i].it)
 		citiesDts, centroidDts = Parser(istances[i].k, istances[i].n)
 		istances[i].n = len(citiesDts)
 
 		//parallelo
-		start := time.Now()
-		_ , _ = KMeansClustering(citiesDts, centroidDts, istances[i].k, istances[i].it,istances[i].cutoff)
-		istances[i].par = time.Since(start).Nanoseconds()/1000000
+		_, _ , qpar = KMeansClustering(citiesDts, centroidDts, istances[i].k, istances[i].it, istances[i].cutoff)
+		istances[i].par = qpar[istances[i].it-1].Nanoseconds() / 1000000
 
+		
 		//sequenziale
-		start = time.Now()
-		_ , _ = KMeansClusteringSeq(citiesDts, centroidDts, istances[i].k, istances[i].it)
-		istances[i].seq = time.Since(start).Nanoseconds()/1000000
+		qseq := make([]time.Duration,istances[i].it)
 
+		_, _, qseq = KMeansClusteringSeq(citiesDts, centroidDts, istances[i].k, istances[i].it)
+		istances[i].seq = qseq[istances[i].it-1].Nanoseconds() / 1000000
+
+		
 		// fmt.Println(len(cluster), len(MUpar), len(clusters), len(MUseq))
 		//mainP(citiesDts[i], cluster, MUpar, k, "../data/imgs/"+strconv.Itoa(i)+".png")
 		var stristance string
-		stristance = strconv.FormatInt(int64(istances[i].domanda),10)+" "+strconv.FormatInt(int64(istances[i].n),10)+" "
-		stristance = stristance+strconv.FormatInt(int64(istances[i].k),10)+" "+strconv.FormatInt(int64(istances[i].it),10)+" "
-		stristance = stristance+strconv.FormatInt(int64(istances[i].cutoff),10)+" "+strconv.FormatInt(istances[i].par,10)+" "
-		stristance = stristance+strconv.FormatInt(istances[i].seq,10)
+		stristance = strconv.FormatInt(int64(istances[i].domanda), 10) + " " + strconv.FormatInt(int64(istances[i].n), 10) + " "
+		stristance = stristance + strconv.FormatInt(int64(istances[i].k), 10) + " " + strconv.FormatInt(int64(istances[i].it), 10) + " "
+		stristance = stristance + strconv.FormatInt(int64(istances[i].cutoff), 10) + " " + strconv.FormatInt(istances[i].par, 10) + " "
+		stristance = stristance + strconv.FormatInt(istances[i].seq, 10)
 		str = append(str, stristance)
 		fmt.Println(stristance)
 	}
@@ -119,7 +121,7 @@ func main() {
 
 	file, err := os.Create("result.csv")
 	if err != nil {
-		log.Fatal(err)	
+		log.Fatal(err)
 	}
 	defer file.Close()
 
@@ -127,7 +129,7 @@ func main() {
 
 	for _, value := range str {
 		var temp []string
-		temp = append(temp,value)
+		temp = append(temp, value)
 		if err := w.Write(temp); err != nil {
 			log.Fatalln("Error writing record to csv: ", err)
 		}

@@ -69,6 +69,7 @@ func Parser(k int, minPopulation int) ([]City, []Centroid) {
 				}
 			}
 		}
+
 	}
 	//converto le k citta' piu' grandi in centroidi
 	var centroids []Centroid
@@ -85,17 +86,17 @@ func Parser(k int, minPopulation int) ([]City, []Centroid) {
 func radiantConvLat(lat_deg float64) float64 {
 	pi := 3.141592
 
-    lat_min := lat_deg - float64(int64(lat_deg))
-    lat_rad := pi * (float64(int64(lat_deg)) + 5.0 * lat_min/ 3.0) / 180.0
+	lat_min := lat_deg - float64(int64(lat_deg))
+	lat_rad := pi * (float64(int64(lat_deg)) + 5.0*lat_min/3.0) / 180.0
 
-    return lat_rad
+	return lat_rad
 }
 
 func radiantConvLon(lon_deg float64) float64 {
 	pi := 3.141592
 
 	lon_min := lon_deg - float64(int64(lon_deg))
-	lon_rad := pi * (float64(int64(lon_deg)) + 5.0 * lon_min/ 3.0) / 180.0
+	lon_rad := pi * (float64(int64(lon_deg)) + 5.0*lon_min/3.0) / 180.0
 
 	return lon_rad
 }
