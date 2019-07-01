@@ -14,12 +14,12 @@ import (
 	k : len(M)
 	q : numero di iterazioni di raffinamento
 */
-func KMeansClustering(P []City, MU []Centroid, k int, q int, cutoff int) ([]int, []Centroid, []time.Duration) {
+func KMeansClustering(P []City, MU []Centroid, k int, q int, cutoff int) ([]int, []Centroid, []int64) {
 	var n = len(P)
 	var cluster = make([]int, n) //cluster[i] = cluster a cui il punto i viene assegnato
 	wgChannel := make(chan int)
-	t := make([]time.Duration, q)
-	var t_1 time.Duration
+	t := make([]int64, q)
+	var t_1 int64
 	t_1 = 0
 
 	for i := 0; i < q; i++ { //iterazioni di raffinamento (no punto fisso)
@@ -72,7 +72,7 @@ func KMeansClustering(P []City, MU []Centroid, k int, q int, cutoff int) ([]int,
 			<-wgChannel
 		}
 
-		end := time.Since(start)
+		end := time.Since(start).Nanoseconds()/1000000
 		t[i] = end + t_1
 		t_1 = t[i]
 	}
@@ -222,14 +222,14 @@ func pReduceClusterReturn(P []City, cluster []int, i int, j int, h int) pReduceR
 // 	parallelFor(op, mid+1, j, wg)
 // }
 
-func KMeansClusteringSeq(P []City, MU []Centroid, k int, q int) ([]([]City), []Centroid, []time.Duration) {
+func KMeansClusteringSeq(P []City, MU []Centroid, k int, q int) ([]([]City), []Centroid, []int64) {
 
 	var n = len(P)
 
 	var clusters []([]City)
 
-	t := make([]time.Duration, q)
-	var t_1 time.Duration
+	t := make([]int64, q)
+	var t_1 int64
 	t_1 = 0
 
 	for i := 0; i < q; i++ { //iterazioni di raffinamento (no punto fisso)
@@ -249,7 +249,7 @@ func KMeansClusteringSeq(P []City, MU []Centroid, k int, q int) ([]([]City), []C
 			center(f, clusters, MU)
 		}
 
-		end := time.Since(start)
+		end := time.Since(start).Nanoseconds() / 1000000
 		t[i] = end + t_1
 		t_1 = t[i]
 	}

@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"time"
+	//"time"
 )
 
 type Istance struct {
@@ -89,22 +89,22 @@ func main() {
 
 		citiesDts := make([]City, 38184)
 		centroidDts := make([]Centroid, istances[i].k)
-		qpar := make([]time.Duration,istances[i].it)
+		qpar := make([]int64, istances[i].it)
 		citiesDts, centroidDts = Parser(istances[i].k, istances[i].n)
 		istances[i].n = len(citiesDts)
 
 		//parallelo
-		_, _ , qpar = KMeansClustering(citiesDts, centroidDts, istances[i].k, istances[i].it, istances[i].cutoff)
-		istances[i].par = qpar[istances[i].it-1].Nanoseconds() / 1000000
+		_, _, qpar = KMeansClustering(citiesDts, centroidDts, istances[i].k, istances[i].it, istances[i].cutoff)
+		istances[i].par = qpar[istances[i].it-1]
+		fmt.Println(qpar)
 
-		
 		//sequenziale
-		qseq := make([]time.Duration,istances[i].it)
+		qseq := make([]int64, istances[i].it)
 
 		_, _, qseq = KMeansClusteringSeq(citiesDts, centroidDts, istances[i].k, istances[i].it)
-		istances[i].seq = qseq[istances[i].it-1].Nanoseconds() / 1000000
+		fmt.Println(qseq)
+		istances[i].seq = qseq[istances[i].it-1]
 
-		
 		// fmt.Println(len(cluster), len(MUpar), len(clusters), len(MUseq))
 		//mainP(citiesDts[i], cluster, MUpar, k, "../data/imgs/"+strconv.Itoa(i)+".png")
 		var stristance string
