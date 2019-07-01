@@ -2,8 +2,6 @@ package main
 
 import (
 	"math"
-
-	// "sync"
 	"time"
 )
 
@@ -28,33 +26,10 @@ func KMeansClustering(P []City, centroids []Centroid, k int, q int, cutoff int) 
 	for i := 0; i < q; i++ { //iterazioni di raffinamento (no punto fisso)
 
 		//ASSEGNAMENTO per ogni nodo in P
-		// var wg sync.WaitGroup
-
-		// wg.Add(n)
-
 		start := time.Now()
-		/*
-			for j := 0; j < n; j++ { //it should be a parallel for
-				go func(j int,wgChannel chan int) {
-					l := nearestCentroidIndex(&P[j], MU)
-					cluster[j] = l //assegno a P[j] il cluster l
-					wgChannel <- 1
-					// wg.Done()
-					return
-				}(j,wgChannel)
-			}
-			// wg.Wait()
-
-			for i:= 0; i < n; i++ {
-				 <- wgChannel
-			}
-		*/
-
 		nearestCentroid(P, MU, 0, n-1, cutoff, cluster)
 
-		//fmt.Println(cluster)
 		//AGGIORNAMENTO per ogni centroide f in MU
-		// wg.Add(k)
 
 		for f := 0; f < k; f++ { //parallel for
 			go func(f int, wgChannel chan int) {
@@ -64,12 +39,11 @@ func KMeansClustering(P []City, centroids []Centroid, k int, q int, cutoff int) 
 					MU[f].Latitude = pRedResult.sumX / (float64)(pRedResult.size)
 					MU[f].Longitude = pRedResult.sumY / (float64)(pRedResult.size)
 				}
-				// wg.Done()
+
 				wgChannel <- 1
 				return
 			}(f, wgChannel)
 		}
-		// wg.Wait()
 
 		for i := 0; i < k; i++ {
 			<-wgChannel
@@ -79,11 +53,6 @@ func KMeansClustering(P []City, centroids []Centroid, k int, q int, cutoff int) 
 		t[i] = end + t1
 		t1 = t[i]
 	}
-	//fmt.Print("Fase 2: ")
-	//	fmt.Println(t2)
-	//fmt.Print("Fase 3: ")
-	//	fmt.Println(t3)
-	//fmt.Println(cluster)
 	return cluster, MU, t
 }
 
@@ -95,8 +64,6 @@ func nearestCentroid(P []City, MU []Centroid, i int, j int, cutoff int, cluster 
 		}
 	} else {
 		mid := (i + j) / 2
-		//go nearestCentroid(P, MU, i, mid, cutoff, cluster)
-		//nearestCentroid(P, MU, mid+1, j, cutoff, cluster)
 
 		c := make(chan struct{})
 		go func() {
@@ -134,11 +101,11 @@ type pReduceResult struct {
 
 func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan chan pReduceResult, cutoff int) { // T(n) = 2*T(n/2) + O(1)
 	myChannel := make(chan pReduceResult)
-	//fmt.Println(j-i)
+
 	if j-i <= cutoff {
-		var x float64 = 0
-		var y float64 = 0
-		var count int = 0
+		var x float64
+		var y float64
+		var count int
 		for z := i; z <= j; z++ {
 			if cluster[z] == h {
 				x = x + P[z].Latitude
@@ -157,7 +124,7 @@ func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan cha
 
 		go pReduceCluster(P, cluster, i, mid, h, myChannel, cutoff)
 		result2 := pReduceClusterReturn(P, cluster, mid+1, j, h, cutoff)
-		//result2 := pReduceClusterReturn(P, cluster, mid+1, j, h)
+
 		result1 := <-myChannel
 
 		result := pReduceResult{
@@ -168,12 +135,6 @@ func pReduceCluster(P []City, cluster []int, i int, j int, h int, fatherChan cha
 		fatherChan <- result
 	}
 }
-
-// func eucDistance(c1 *City, c2 *Centroid) float64 {
-// 	deltaX := c1.Latitude - c2.Latitude
-// 	deltaY := c1.Longitude - c2.Longitude
-// 	dist := math.Sqrt(math.Pow(deltaX, 2) + math.Pow(deltaY, 2))
-// 	return dist
 
 func GEO_Distance(c1 *City, c2 *Centroid) int64 {
 	RRR := 6378.388
@@ -228,16 +189,6 @@ func pReduceClusterReturn(P []City, cluster []int, i int, j int, h int, cutoff i
 	return result
 }
 
-// func parallelFor(op func(int), i int, j int, wg sync.WaitGroup) {
-// 	if i == j {
-// 		op(i)
-// 		wg.Done()
-// 	}
-// 	mid := (i + j) / 2
-// 	parallelFor(op, i, mid, wg)
-// 	parallelFor(op, mid+1, j, wg)
-// }
-
 func KMeansClusteringSeq(P []City, MU []Centroid, k int, q int) ([]([]City), []Centroid, []int64) {
 
 	var n = len(P)
@@ -249,19 +200,19 @@ func KMeansClusteringSeq(P []City, MU []Centroid, k int, q int) ([]([]City), []C
 	t1 = 0
 
 	for i := 0; i < q; i++ { //iterazioni di raffinamento (no punto fisso)
-		//fmt.Printf("iterazione %d\n", i)
+
 		start := time.Now()
 
 		//CLUSTER VUOTI
 		clusters = make([]([]City), k)
 		//ASSEGNAMENTO per ogni nodo in P
-		ind := make([]int, n)
+
 		for j := 0; j < n; j++ {
 			l := nearestCentroidIndex(&P[j], MU)
-			ind[j] = l
+
 			clusters[l] = append(clusters[l], P[j]) //OK??
 		}
-		//fmt.Println(ind)
+
 		//AGGIORNAMENTO per ogni centroide f in MU
 		for f := 0; f < k; f++ {
 			center(f, clusters, MU)

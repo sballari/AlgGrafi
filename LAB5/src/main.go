@@ -22,7 +22,7 @@ type Istance struct {
 }
 
 func istance() []Istance {
-	csvFile, _ := os.Open("../data/istance.csv")
+	csvFile, _ := os.Open("data/istance.csv")
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 
 	var istances []Istance
@@ -62,52 +62,26 @@ func main() {
 	istances = istance()
 
 	fmt.Println("Main lanciato")
-	//fmt.Printf("GOMAXPROCS is %d\n", runtime.GOMAXPROCS(-1))
 
-	//k := 50
-	//q := 100
-
-	// citiesDts := make([]([]City), 6)
-	// centroidDts := make([]([]Centroid), 6)
-
-	//250, 2.000, 5.000, 15.000, 50.000, e 100.000
-
-	// citiesDts[0], centroidDts[0] = Parser(k, 250)
-	// citiesDts[1], centroidDts[1] = Parser(k, 2000)
-	// citiesDts[2], centroidDts[2] = Parser(k, 5000)
-	// citiesDts[3], centroidDts[3] = Parser(k, 15000)
-	// citiesDts[4], centroidDts[4] = Parser(k, 50000)
-	// citiesDts[5], centroidDts[5] = Parser(k, 100000)
-
-	// timesPar := make([]string, 6)
-	// timesSeq := make([]string, 6)
 	var str []string
 
 	for i := 0; i < len(istances); i++ {
-		// fmt.Println("####################################")
-		// fmt.Printf("DATASET%d n=%d\n", i, len(citiesDts[i]))
 
 		citiesDts := make([]City, 38184)
 		centroidDts := make([]Centroid, istances[i].k)
-		//qpar := make([]int64, istances[i].it)
+
 		citiesDts, centroidDts = Parser(istances[i].k, istances[i].n)
 		istances[i].n = len(citiesDts)
-		//cluster []int
+
 		//parallelo
-		_, cluster1, qpar := KMeansClustering(citiesDts, centroidDts, istances[i].k, istances[i].it, istances[i].cutoff)
+		_, _, qpar := KMeansClustering(citiesDts, centroidDts, istances[i].k, istances[i].it, istances[i].cutoff)
 		istances[i].par = qpar[istances[i].it-1]
-		//fmt.Println(qpar)
-		fmt.Println(cluster1)
 
 		//sequenziale
 
-		_, cluster2, qseq := KMeansClusteringSeq(citiesDts, centroidDts, istances[i].k, istances[i].it)
-		fmt.Println(cluster2)
-		//fmt.Println(qseq)
+		_, _, qseq := KMeansClusteringSeq(citiesDts, centroidDts, istances[i].k, istances[i].it)
 		istances[i].seq = qseq[istances[i].it-1]
 
-		// fmt.Println(len(cluster), len(MUpar), len(clusters), len(MUseq))
-		//mainP(citiesDts[i], cluster, MUpar, k, "../data/imgs/"+strconv.Itoa(i)+".png")
 		var stristance string
 		stristance = strconv.FormatInt(int64(istances[i].domanda), 10) + " " + strconv.FormatInt(int64(istances[i].n), 10) + " "
 		stristance = stristance + strconv.FormatInt(int64(istances[i].k), 10) + " " + strconv.FormatInt(int64(istances[i].it), 10) + " "
@@ -117,8 +91,6 @@ func main() {
 		fmt.Println(stristance)
 	}
 	fmt.Println("####################################")
-
-	//var data = [][]string{timesPar, timesSeq}
 
 	file, err := os.Create("result.csv")
 	if err != nil {

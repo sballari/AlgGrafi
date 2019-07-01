@@ -26,7 +26,7 @@ func Parser(k int, minPopulation int) ([]City, []Centroid) {
 	/*
 		k := numero dei centroidi da prendere
 	*/
-	csvFile, _ := os.Open("../data/cities-and-towns-of-usa.csv")
+	csvFile, _ := os.Open("data/cities-and-towns-of-usa.csv")
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 	var cities []City
 	var kMaxCity []City
@@ -83,22 +83,22 @@ func Parser(k int, minPopulation int) ([]City, []Centroid) {
 	return cities, centroids
 }
 
-func radiantConvLat(lat_deg float64) float64 {
+func radiantConvLat(latdeg float64) float64 {
 	pi := 3.141592
 
-	lat_min := lat_deg - float64(int64(lat_deg))
-	lat_rad := pi * (float64(int64(lat_deg)) + 5.0*lat_min/3.0) / 180.0
+	latmin := latdeg - float64(int64(latdeg))
+	latrad := pi * (float64(int64(latdeg)) + 5.0*latmin/3.0) / 180.0
 
-	return lat_rad
+	return latrad
 }
 
-func radiantConvLon(lon_deg float64) float64 {
+func radiantConvLon(londeg float64) float64 {
 	pi := 3.141592
 
-	lon_min := lon_deg - float64(int64(lon_deg))
-	lon_rad := pi * (float64(int64(lon_deg)) + 5.0*lon_min/3.0) / 180.0
+	lonmin := londeg - float64(int64(londeg))
+	lonrad := pi * (float64(int64(londeg)) + 5.0*lonmin/3.0) / 180.0
 
-	return lon_rad
+	return lonrad
 }
 
 func findMin(cs []City) (*City, int) {
