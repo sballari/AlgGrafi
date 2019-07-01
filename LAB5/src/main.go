@@ -89,20 +89,21 @@ func main() {
 
 		citiesDts := make([]City, 38184)
 		centroidDts := make([]Centroid, istances[i].k)
-		qpar := make([]int64, istances[i].it)
+		//qpar := make([]int64, istances[i].it)
 		citiesDts, centroidDts = Parser(istances[i].k, istances[i].n)
 		istances[i].n = len(citiesDts)
-
+		//cluster []int
 		//parallelo
-		_, _, qpar = KMeansClustering(citiesDts, centroidDts, istances[i].k, istances[i].it, istances[i].cutoff)
+		_, cluster1, qpar := KMeansClustering(citiesDts, centroidDts, istances[i].k, istances[i].it, istances[i].cutoff)
 		istances[i].par = qpar[istances[i].it-1]
-		fmt.Println(qpar)
+		//fmt.Println(qpar)
+		fmt.Println(cluster1)
 
 		//sequenziale
-		qseq := make([]int64, istances[i].it)
 
-		_, _, qseq = KMeansClusteringSeq(citiesDts, centroidDts, istances[i].k, istances[i].it)
-		fmt.Println(qseq)
+		_, cluster2, qseq := KMeansClusteringSeq(citiesDts, centroidDts, istances[i].k, istances[i].it)
+		fmt.Println(cluster2)
+		//fmt.Println(qseq)
 		istances[i].seq = qseq[istances[i].it-1]
 
 		// fmt.Println(len(cluster), len(MUpar), len(clusters), len(MUseq))

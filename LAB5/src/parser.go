@@ -75,8 +75,8 @@ func Parser(k int, minPopulation int) ([]City, []Centroid) {
 	var centroids []Centroid
 	for c := range kMaxCity {
 		centroid := Centroid{
-			Latitude:  radiantConvLat(kMaxCity[c].Latitude),
-			Longitude: radiantConvLon(kMaxCity[c].Longitude),
+			Latitude:  kMaxCity[c].Latitude,
+			Longitude: kMaxCity[c].Longitude,
 		}
 		centroids = append(centroids, centroid)
 	}
